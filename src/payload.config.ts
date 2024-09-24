@@ -15,6 +15,8 @@ import { Categories } from './collections/Categories'
 import { Tags } from './collections/Tags'
 import { Blog } from './collections/Blog'
 import { FormSubmission } from './collections/Formsubmission'
+import {Eventi} from './collections/Eventi'
+import { Prenotazioni } from './collections/Prenotazioni'
 
 
 
@@ -45,13 +47,10 @@ export default buildConfig({
     },
  
   },
-  collections: [ Blog, Categories, Tags,FormSubmission, Media, Users],
+  collections: [ Eventi , Blog, Categories, Tags, Prenotazioni, FormSubmission, Media, Users],
   localization: {
     locales: [
-      {
-        label: 'English',
-        code: 'en',
-      },
+     
       {
         label: 'Italiano',
         code: 'it',
@@ -60,7 +59,7 @@ export default buildConfig({
         rtl: true,
       },
     ],
-    defaultLocale: 'en',
+    defaultLocale: 'it',
     fallback: true,
   },
   editor: lexicalEditor({}),

@@ -11,9 +11,11 @@ export interface Config {
     users: UserAuthOperations;
   };
   collections: {
+    eventi: Eventi;
     blog: Blog;
     categories: Category;
     tags: Tag;
+    prenotazioni: Prenotazioni;
     'form-submissions': FormSubmission;
     media: Media;
     users: User;
@@ -21,7 +23,7 @@ export interface Config {
     'payload-migrations': PayloadMigration;
   };
   globals: {};
-  locale: 'en' | 'it';
+  locale: 'it';
   user: User & {
     collection: 'users';
   };
@@ -38,6 +40,22 @@ export interface UserAuthOperations {
     email: string;
     password: string;
   };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "eventi".
+ */
+export interface Eventi {
+  id: number;
+  data: string;
+  fasceOrarie: {
+    fasciaOraria: 'mattina' | 'pomeriggio' | 'sera';
+    bigliettiDisponibili: number;
+    bigliettiPrenotati: number;
+    id?: string | null;
+  }[];
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -106,6 +124,19 @@ export interface Media {
   height?: number | null;
   focalX?: number | null;
   focalY?: number | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "prenotazioni".
+ */
+export interface Prenotazioni {
+  id: number;
+  dataPrenotazione: string;
+  fasciaOraria: 'mattina' | 'pomeriggio' | 'sera';
+  utente: string;
+  evento: number | Eventi;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
