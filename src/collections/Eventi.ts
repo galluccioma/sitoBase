@@ -2,58 +2,54 @@
 import type { CollectionConfig } from 'payload'
 export const Eventi: CollectionConfig = {
 
-        slug: 'eventi',
-        access: {
-            read: () => true, // Permetti a tutti di leggere
-            create:()=> true,
-          },
+  slug: 'eventi',
+  access: {
+        read: () => true, // Permetti a tutti di leggere
+        create:()=> true,
+      },
+
+    fields: [
+      {
+        name: "titolo",
+        type: "text",
+        required: true
+      },
+      {
+        name: "descrizione",
+        type: "textarea"
+      },
+      {
+        name: "fasceOrarie",
+        type: "array",
         fields: [
           {
-            name: 'data',
-            type: 'date',
-            required: true,
+            name: "fasciaOraria",
+            type: "select",
+            options: ["mattina", "pomeriggio", "sera"],
+            required: true
           },
           {
-            name: 'fasceOrarie',
-            type: 'array',
+            name: "bigliettiDisponibili",
+            type: "number",
             required: true,
-            fields: [
-              {
-                name: 'fasciaOraria',
-                type: 'select',
-                options: [
-                  {
-                    label: 'Mattina',
-                    value: 'mattina',
-                  },
-                  {
-                    label: 'Pomeriggio',
-                    value: 'pomeriggio',
-                  },
-                  {
-                    label: 'Sera',
-                    value: 'sera',
-                  },
-                ],
-                required: true,
-              },
-              {
-                name: 'bigliettiDisponibili',
-                type: 'number',
-                defaultValue: 25,
-                required: true,
-              },
-              {
-                name: 'bigliettiPrenotati',
-                type: 'number',
-                defaultValue: 0,
-                required: true,
-              },
-            ],
-          },
-        ],
+            min: 0,
+            max: 100
+          }
+        ]
+      },
+      {
+        name: "giorniAttivi",
+        type: "array",
+        fields: [
+          {
+            name: "giorno",
+            type: "select",
+            options: ["lunedì", "martedì", "mercoledì", "giovedì", "venerdì"],
+            required: true
+          }
+        ]
       }
-      
-      
-      
+    ]
+  }
+  
   

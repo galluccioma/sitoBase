@@ -47,13 +47,21 @@ export interface UserAuthOperations {
  */
 export interface Eventi {
   id: number;
-  data: string;
-  fasceOrarie: {
-    fasciaOraria: 'mattina' | 'pomeriggio' | 'sera';
-    bigliettiDisponibili: number;
-    bigliettiPrenotati: number;
-    id?: string | null;
-  }[];
+  titolo: string;
+  descrizione?: string | null;
+  fasceOrarie?:
+    | {
+        fasciaOraria: 'mattina' | 'pomeriggio' | 'sera';
+        bigliettiDisponibili: number;
+        id?: string | null;
+      }[]
+    | null;
+  giorniAttivi?:
+    | {
+        giorno: 'lunedì' | 'martedì' | 'mercoledì' | 'giovedì' | 'venerdì';
+        id?: string | null;
+      }[]
+    | null;
   updatedAt: string;
   createdAt: string;
 }
