@@ -34,6 +34,7 @@ export const Prenotazioni: CollectionConfig = {
       relationTo: 'eventi',
       required: true,
     },
+    
   ],
   hooks: {
     afterChange: [

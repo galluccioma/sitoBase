@@ -7,6 +7,11 @@ export const Eventi: CollectionConfig = {
     read: () => true,
     create: () => true,
   },
+  admin: {
+    useAsTitle: "titolo",
+    defaultColumns: ['titolo', 'descrizione', 'fasceOrarie', 'giorniAttivi'],
+   
+  },
   fields: [
     {
       name: "titolo",
