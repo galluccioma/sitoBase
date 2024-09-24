@@ -2,6 +2,10 @@
 import type { CollectionConfig } from 'payload'
 export const Prenotazioni: CollectionConfig = {
     slug: 'prenotazioni',
+    access: {
+        read: () => true, // Permetti a tutti di leggere
+        create:()=> true,
+      },
     fields: [
       {
         name: 'dataPrenotazione',

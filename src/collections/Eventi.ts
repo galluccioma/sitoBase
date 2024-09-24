@@ -3,6 +3,10 @@ import type { CollectionConfig } from 'payload'
 export const Eventi: CollectionConfig = {
 
         slug: 'eventi',
+        access: {
+            read: () => true, // Permetti a tutti di leggere
+            create:()=> true,
+          },
         fields: [
           {
             name: 'data',
