@@ -29,6 +29,16 @@ export const Prenotazioni: CollectionConfig = {
       required: true,
     },
     {
+      name: 'email',
+      type: 'text',
+      required: true,
+    },
+    {
+      name: 'numeroDiTelefono',
+      type: 'text',
+      required: true,
+    },
+    {
       name: 'carrello', // Campo array per gestire i biglietti prenotati
       type: 'array',
       required: true,

@@ -142,6 +142,8 @@ export interface Prenotazioni {
   dataPrenotazione: string;
   fasciaOraria: 'mattina' | 'pomeriggio' | 'sera';
   utente: string;
+  email: string;
+  numeroDiTelefono: string;
   carrello: {
     biglietto: number | Biglietti;
     quantità: number;
