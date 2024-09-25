@@ -145,7 +145,6 @@ export interface Prenotazioni {
   carrello: {
     biglietto: number | Biglietti;
     quantità: number;
-    fasciaOraria: string;
     id?: string | null;
   }[];
   updatedAt: string;

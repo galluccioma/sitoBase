@@ -45,11 +45,6 @@ export const Prenotazioni: CollectionConfig = {
           required: true,
           min: 1, // Quantità minima di 1 biglietto per evento
         },
-        {
-          name: 'fasciaOraria', // Nuovo campo per memorizzare la fascia oraria
-          type: 'text',
-          required: true,
-        },
       ],
     },
   ],
