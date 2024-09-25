@@ -29,14 +29,14 @@ export const Prenotazioni: CollectionConfig = {
       required: true,
     },
     {
-      name: 'biglietti', // Campo array per gestire i biglietti prenotati
+      name: 'carrello', // Campo array per gestire i biglietti prenotati
       type: 'array',
       required: true,
       fields: [
         {
-          name: 'evento',
+          name: 'biglietto',
           type: 'relationship',
-          relationTo: 'eventi',
+          relationTo: 'biglietti',
           required: true,
         },
         {
@@ -53,52 +53,5 @@ export const Prenotazioni: CollectionConfig = {
       ],
     },
   ],
-  hooks: {
-    afterChange: [
-      async ({ doc, operation }) => {
-        if (operation === 'create') {
-          const { biglietti, fasciaOraria } = doc;
-
-          try {
-            // Processa ogni biglietto nella prenotazione
-            for (const biglietto of biglietti) {
-              const { evento, quantità } = biglietto;
-
-              // Trova l'evento associato
-              const eventoDoc = await payload.findByID({
-                collection: 'eventi',
-                id: evento,
-              });
-
-              if (!eventoDoc || !eventoDoc.fasceOrarie) {
-                throw new Error(`Evento with ID ${evento} not found or has no fasceOrarie`);
-              }
-
-              // Trova la fascia oraria corrispondente e aggiorna i biglietti disponibili
-              const updatedFasceOrarie = eventoDoc.fasceOrarie.map(fascia => {
-                if (fascia.fasciaOraria === fasciaOraria) {
-                  return {
-                    ...fascia,
-                    bigliettiDisponibili: Math.max(0, fascia.bigliettiDisponibili - quantità),
-                  };
-                }
-                return fascia;
-              });
-
-              // Aggiorna l'evento con la nuova disponibilità
-              await payload.update({
-                collection: 'eventi',
-                id: evento,
-                data: {
-                  fasceOrarie: updatedFasceOrarie,
-                },
-              });
-            }
-          } catch (error) {
-            console.error('Error updating ticket availability:', error);
-          }
-        }
-      },
-    ] as CollectionAfterChangeHook[],
-  },
+ 
 };

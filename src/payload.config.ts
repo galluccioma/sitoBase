@@ -15,7 +15,7 @@ import { Categories } from './collections/Categories'
 import { Tags } from './collections/Tags'
 import { Blog } from './collections/Blog'
 import { FormSubmission } from './collections/Formsubmission'
-import {Eventi} from './collections/Eventi'
+import {Biglietti} from './collections/Biglietti'
 import { Prenotazioni } from './collections/Prenotazioni'
 
 
@@ -47,7 +47,7 @@ export default buildConfig({
     },
  
   },
-  collections: [ Eventi , Blog, Categories, Tags, Prenotazioni, FormSubmission, Media, Users],
+  collections: [ Biglietti , Blog, Categories, Tags, Prenotazioni, FormSubmission, Media, Users],
   localization: {
     locales: [
      

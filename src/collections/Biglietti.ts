@@ -1,8 +1,8 @@
 // Eventi.ts
 import type { CollectionConfig } from 'payload';
 
-export const Eventi: CollectionConfig = {
-  slug: 'eventi',
+export const Biglietti: CollectionConfig = {
+  slug: 'biglietti',
   access: {
     read: () => true,
     create: () => true,

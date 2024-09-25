@@ -11,7 +11,7 @@ export interface Config {
     users: UserAuthOperations;
   };
   collections: {
-    eventi: Eventi;
+    biglietti: Biglietti;
     blog: Blog;
     categories: Category;
     tags: Tag;
@@ -43,9 +43,9 @@ export interface UserAuthOperations {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "eventi".
+ * via the `definition` "biglietti".
  */
-export interface Eventi {
+export interface Biglietti {
   id: number;
   titolo: string;
   descrizione?: string | null;
@@ -142,8 +142,8 @@ export interface Prenotazioni {
   dataPrenotazione: string;
   fasciaOraria: 'mattina' | 'pomeriggio' | 'sera';
   utente: string;
-  biglietti: {
-    evento: number | Eventi;
+  carrello: {
+    biglietto: number | Biglietti;
     quantità: number;
     fasciaOraria: string;
     id?: string | null;
