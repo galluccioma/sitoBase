@@ -29,53 +29,68 @@ export const Prenotazioni: CollectionConfig = {
       required: true,
     },
     {
-      name: 'evento',
-      type: 'relationship',
-      relationTo: 'eventi',
+      name: 'biglietti', // Campo array per gestire i biglietti prenotati
+      type: 'array',
       required: true,
+      fields: [
+        {
+          name: 'evento',
+          type: 'relationship',
+          relationTo: 'eventi',
+          required: true,
+        },
+        {
+          name: 'quantità',
+          type: 'number',
+          required: true,
+          min: 1, // Quantità minima di 1 biglietto per evento
+        },
+      ],
     },
-    
   ],
   hooks: {
     afterChange: [
       async ({ doc, operation }) => {
-        // Solo per l'operazione di creazione
         if (operation === 'create') {
-          const { evento, fasciaOraria } = doc;
+          const { biglietti, fasciaOraria } = doc;
 
           try {
-            // Trova l'evento associato alla prenotazione
-            const eventoDoc = await payload.findByID({
-              collection: 'eventi',
-              id: evento,
-            });
+            // Processa ogni biglietto nella prenotazione
+            for (const biglietto of biglietti) {
+              const { evento, quantità } = biglietto;
 
-            // Assicurati che l'evento esista e che le fasceOrarie non siano null o undefined
-            if (!eventoDoc || !eventoDoc.fasceOrarie) {
-              throw new Error(`Evento with ID ${evento} not found or has no fasceOrarie`);
-            }
+              // Trova l'evento associato
+              const eventoDoc = await payload.findByID({
+                collection: 'eventi',
+                id: evento,
+              });
 
-            // Trova la fascia oraria selezionata
-            const updatedFasceOrarie = eventoDoc.fasceOrarie.map(fascia => {
-              if (fascia.fasciaOraria === fasciaOraria) {
-                return {
-                  ...fascia,
-                  bigliettiDisponibili: Math.max(0, fascia.bigliettiDisponibili - 1),
-                };
+              if (!eventoDoc || !eventoDoc.fasceOrarie) {
+                throw new Error(`Evento with ID ${evento} not found or has no fasceOrarie`);
               }
-              return fascia; // Mantieni invariata la fascia oraria non selezionata
-            });
 
-            // Aggiorna l'evento con il nuovo numero di biglietti disponibili
-            await payload.update({
-              collection: 'eventi',
-              id: evento,
-              data: {
-                fasceOrarie: updatedFasceOrarie,
-              },
-            });
+              // Trova la fascia oraria corrispondente e aggiorna i biglietti disponibili
+              const updatedFasceOrarie = eventoDoc.fasceOrarie.map(fascia => {
+                if (fascia.fasciaOraria === fasciaOraria) {
+                  return {
+                    ...fascia,
+                    bigliettiDisponibili: Math.max(0, fascia.bigliettiDisponibili - quantità),
+                  };
+                }
+                return fascia;
+              });
+
+              // Aggiorna l'evento con la nuova disponibilità
+              await payload.update({
+                collection: 'eventi',
+                id: evento,
+                data: {
+                  fasceOrarie: updatedFasceOrarie,
+                },
+              });
+            }
           } catch (error) {
-            console.error('Error updating tickets:', error);
+            console.error('Error updating ticket availability:', error);
           }
         }
       },
