@@ -142,13 +142,12 @@ export interface Prenotazioni {
   dataPrenotazione: string;
   fasciaOraria: 'mattina' | 'pomeriggio' | 'sera';
   utente: string;
-  biglietti?:
-    | {
-        evento: number | Eventi;
-        quantità: number;
-        id?: string | null;
-      }[]
-    | null;
+  biglietti: {
+    evento: number | Eventi;
+    quantità: number;
+    fasciaOraria: string;
+    id?: string | null;
+  }[];
   updatedAt: string;
   createdAt: string;
 }
