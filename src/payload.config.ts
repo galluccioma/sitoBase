@@ -100,8 +100,8 @@ export default buildConfig({
   ],
 
   email: nodemailerAdapter({
-    defaultFromAddress: 'info@payloadcms.com',
-    defaultFromName: 'Payload',
+    defaultFromAddress: 'galluccioma@gmail.com',
+    defaultFromName: 'Muses',
     // Nodemailer transportOptions
     transportOptions: {
       host: process.env.SMTP_HOST,
