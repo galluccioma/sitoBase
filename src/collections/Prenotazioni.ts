@@ -1,11 +1,15 @@
-import type { CollectionConfig, CollectionAfterChangeHook } from 'payload';
-import payload from 'payload';
+import type { CollectionConfig} from 'payload';
 
 export const Prenotazioni: CollectionConfig = {
   slug: 'prenotazioni',
   access: {
     read: () => true,
     create: () => true,
+  },
+  admin: {
+    useAsTitle: "id",
+    defaultColumns: ['dataPrenotazione', 'stato', 'utente', 'email'],
+   
   },
   fields: [
     {
@@ -27,16 +31,15 @@ export const Prenotazioni: CollectionConfig = {
       name: 'utente',
       type: 'text',
       required: true,
+      defaultValue:'Prenotazione in cassa'
     },
     {
       name: 'email',
       type: 'text',
-      required: true,
     },
     {
       name: 'numeroDiTelefono',
       type: 'text',
-      required: true,
     },
     {
       name: 'carrello', // Campo array per gestire i biglietti prenotati
@@ -47,16 +50,87 @@ export const Prenotazioni: CollectionConfig = {
           name: 'biglietto',
           type: 'relationship',
           relationTo: 'biglietti',
-          required: true,
         },
         {
           name: 'quantità',
           type: 'number',
-          required: true,
           min: 1, // Quantità minima di 1 biglietto per evento
+          
         },
       ],
     },
+    {
+      name: 'stato',
+      type: 'radio',
+      options: [
+        {
+          value: 'nuovo',
+          label: 'Nuovo',
+        },
+        {
+          value: 'confermato',
+          label: 'Confermato',
+        },
+        {
+          value: 'respinto',
+          label: 'Respinto',
+        },
+      ],
+      defaultValue: 'nuovo',
+      admin: {
+        position: 'sidebar',
+      }
+    },
   ],
  
+  hooks: {
+    afterChange: [
+      async ({ operation, doc, req }) => {
+        if (operation === 'update') {
+          const previousState = doc.previous ? doc.previous.stato : null;
+          const currentState = doc.stato;
+
+          // Controlla se lo stato è passato a "confermato"
+          if (previousState !== 'confermato' && currentState === 'confermato') {
+            try {
+              // Recupera tutti gli utenti admin
+              const adminUsers = await req.payload.find({
+                collection: 'users', // Assicurati che 'users' sia il nome della tua collezione utenti
+                where: {
+                  role: {
+                    equals: 'admin', // Cambia questo in base alla struttura dei tuoi ruoli
+                  },
+                },
+              });
+
+              // Estrai gli indirizzi email degli admin
+              const adminEmails = adminUsers.docs.map(user => user.email).filter(email => email);
+
+              // Invia email a tutti gli admin
+              await req.payload.sendEmail({
+                to: adminEmails,
+                from: 'galluccioma@gmail.com',
+                replyTo: 'galluccioma@gmail.com',
+                subject: 'Prenotazione Confermata',
+                html: `<h1>Una nuova prenotazione è stata confermata!</h1>
+                       <p>Dettagli della prenotazione:</p>
+                       <ul>
+                         <li>Utente: ${doc.utente}</li>
+                         <li>Email: ${doc.email}</li>
+                         <li>Data Prenotazione: ${doc.dataPrenotazione}</li>
+                         <li>Fascia Oraria: ${doc.fasciaOraria}</li>
+                         <li>Numero di Telefono: ${doc.numeroDiTelefono}</li>
+                       </ul>
+                       <p>Grazie!</p>`,
+              });
+            } catch (error) {
+              console.error('Error sending email:', error);
+            }
+          }
+        }
+      },
+    ],
+  },
+  
+
 };

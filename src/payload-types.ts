@@ -142,13 +142,14 @@ export interface Prenotazioni {
   dataPrenotazione: string;
   fasciaOraria: 'mattina' | 'pomeriggio' | 'sera';
   utente: string;
-  email: string;
-  numeroDiTelefono: string;
+  email?: string | null;
+  numeroDiTelefono?: string | null;
   carrello: {
-    biglietto: number | Biglietti;
-    quantità: number;
+    biglietto?: (number | null) | Biglietti;
+    quantità?: number | null;
     id?: string | null;
   }[];
+  stato?: ('nuovo' | 'confermato' | 'respinto') | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -170,6 +171,7 @@ export interface FormSubmission {
  */
 export interface User {
   id: number;
+  role: 'admin' | 'user';
   updatedAt: string;
   createdAt: string;
   email: string;
