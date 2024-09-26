@@ -19,6 +19,10 @@ export const Biglietti: CollectionConfig = {
       required: true
     },
     {
+      name: "prezzo",
+      type: "number",
+    },
+    {
       name: "descrizione",
       type: "textarea"
     },

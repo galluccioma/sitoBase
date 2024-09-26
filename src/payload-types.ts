@@ -48,6 +48,7 @@ export interface UserAuthOperations {
 export interface Biglietti {
   id: number;
   titolo: string;
+  prezzo?: number | null;
   descrizione?: string | null;
   fasceOrarie?:
     | {
@@ -149,6 +150,7 @@ export interface Prenotazioni {
     quantità?: number | null;
     id?: string | null;
   }[];
+  totaleCarrello?: number | null;
   stato?: ('nuovo' | 'confermato' | 'respinto') | null;
   updatedAt: string;
   createdAt: string;

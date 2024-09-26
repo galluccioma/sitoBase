@@ -9,7 +9,7 @@ export const Prenotazioni: CollectionConfig = {
   },
   admin: {
     useAsTitle: "id",
-    defaultColumns: ['dataPrenotazione', 'stato', 'utente', 'email'],
+    defaultColumns: ['dataPrenotazione', 'stato', 'totaleCarrello', 'utente', 'email'],
    
   },
   fields: [
@@ -61,6 +61,10 @@ export const Prenotazioni: CollectionConfig = {
       ],
     },
     {
+      name: "totaleCarrello",
+      type: "number",
+    },
+    {
       name: 'stato',
       type: 'radio',
       options: [
@@ -104,12 +108,9 @@ export const Prenotazioni: CollectionConfig = {
 
             // Estrai gli indirizzi email degli admin
             const adminEmails = adminUsers.docs.map(user => user.email).filter(email => email);
-
             // Invia email a tutti gli admin
             await req.payload.sendEmail({
-              to: [
-                adminEmails,
-              ],
+              to: [adminEmails,],
               from: defaultMail,
               replyTo: defaultMail,
               subject: 'Hai ricevuto una nuova prenotazione',
@@ -124,10 +125,37 @@ export const Prenotazioni: CollectionConfig = {
                      </ul>
                      <p>Ricordati di confermare la prenotazione!</p>`,
             });
+           ///Invio mail con info pagamento
+            await req.payload.sendEmail({
+              to: [
+                doc.email,
+              ],
+              from: defaultMail,
+              replyTo: defaultMail,
+              subject: 'Grazie per la tua prenotazione',
+              html: `<h1>Grazie per aver prenotato online i tuoi posti</h1>
+                     <p>Riepilogo della prenotazione:</p>
+                     <ul>
+                       <li>Utente: ${doc.utente}</li>
+                       <li>Email: ${doc.email}</li>
+                       <li>Data Prenotazione: ${doc.dataPrenotazione}</li>
+                       <li>Fascia Oraria: ${doc.fasciaOraria}</li>
+                       <li>Numero di Telefono: ${doc.numeroDiTelefono}</li>
+                     </ul>
+                     <p> in allegato i dati per il bonifico:
+
+                      I dati per il bonifico:
+                      acquisto ticket Muses 
+
+                      cifra 70,00€
+                      Intestazione: Associazione Atelier Kadalù
+                      IBAN: IT73R0617046320000001557342
+                      Causale: N.1 buono regalo 2 Mùses Lab</p>`,
+            });
           } catch (error) {
             console.error('Error sending email:', error);
-          }
-        }
+          }; 
+        };
 
       // Hook per l'invio della mail di CONFERMA
 
