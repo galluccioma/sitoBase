@@ -1,4 +1,6 @@
 import { CollectionConfig, FieldHook } from 'payload';
+import payload from 'payload';
+
 import {
   HTMLConverterFeature,
   lexicalEditor,
