@@ -1,7 +1,8 @@
-import type { CollectionConfig} from 'payload';
-const defaultMail='galluccioma@gmail.com';
+import type { CollectionConfig } from 'payload';
 
-//FASCIA ORARIA AUTOMATICA
+const defaultMail = 'galluccioma@gmail.com';
+
+// FASCIA ORARIA AUTOMATICA
 const getFasciaOrariaDefault = () => {
   const currentHour = new Date().getHours(); // Ottieni l'ora corrente
   if (currentHour < 13) {
@@ -13,6 +14,14 @@ const getFasciaOrariaDefault = () => {
   }
 };
 
+// Define the ItemType interface for items in the carrello
+interface ItemType {
+  biglietto: {
+    title: string; // Assuming biglietto has a title
+  };
+  quantità: number; // Assuming quantità is a number
+}
+
 export const Prenotazioni: CollectionConfig = {
   slug: 'prenotazioni',
   access: {
@@ -22,11 +31,10 @@ export const Prenotazioni: CollectionConfig = {
   admin: {
     useAsTitle: "id",
     defaultColumns: ['dataPrenotazione', 'stato', 'totaleCarrello', 'utente', 'email'],
-   
   },
   fields: [
     {
-      name: 'carrello', // Campo array per gestire i biglietti prenotati
+      name: 'carrello',
       type: 'array',
       required: true,
       fields: [
@@ -39,11 +47,9 @@ export const Prenotazioni: CollectionConfig = {
           name: 'quantità',
           type: 'number',
           min: 1, // Quantità minima di 1 biglietto per evento
-          
         },
       ],
     },
-    
     {
       name: 'dataPrenotazione',
       type: 'date',
@@ -65,7 +71,7 @@ export const Prenotazioni: CollectionConfig = {
       name: 'utente',
       type: 'text',
       required: true,
-      defaultValue:'Prenotazione in cassa'
+      defaultValue: 'Prenotazione in cassa',
     },
     {
       name: 'email',
@@ -95,40 +101,38 @@ export const Prenotazioni: CollectionConfig = {
       defaultValue: 'nuovo',
       admin: {
         position: 'sidebar',
-      }
+      },
     },
     {
       name: "totaleCarrello",
       type: "number",
       admin: {
         position: 'sidebar',
-      }
+      },
     },
   ],
- 
   hooks: {
     afterChange: [
       async ({ operation, doc, req }) => {
-
-
-      // Hook per l'invio della mail alla creazione della prenotazione
+        // Hook per l'invio della mail alla creazione della prenotazione
         if (operation === 'create') {
           try {
             // Recupera tutti gli utenti admin
             const adminUsers = await req.payload.find({
-              collection: 'users', // Assicurati che 'users' sia il nome della tua collezione utenti
+              collection: 'users',
               where: {
                 role: {
-                  equals: 'admin', // Cambia questo in base alla struttura dei tuoi ruoli
+                  equals: 'admin',
                 },
               },
             });
 
             // Estrai gli indirizzi email degli admin
             const adminEmails = adminUsers.docs.map(user => user.email).filter(email => email);
+
             // Invia email a tutti gli admin
             await req.payload.sendEmail({
-              to: [adminEmails,],
+              to: adminEmails,
               from: defaultMail,
               replyTo: defaultMail,
               subject: 'Hai ricevuto una nuova prenotazione',
@@ -141,19 +145,17 @@ export const Prenotazioni: CollectionConfig = {
                        <li>Fascia Oraria: ${doc.fasciaOraria}</li>
                        <li>Numero di Telefono: ${doc.numeroDiTelefono}</li>
                      </ul>
-                     <p>Ricordati di confermare o annulare la prenotazione una volta ricevuto il pagamento</p>`,
+                     <p>Ricordati di confermare o annullare la prenotazione una volta ricevuto il pagamento</p>`,
             });
-             // Crea una stringa per la causale del bonifico
-          const causale = doc.carrello.map(item => {
-            return `${item.biglietto.title} (Quantità: ${item.quantità})`; // Usa il titolo del biglietto
-          }).join(", "); // Unisce le informazioni in una stringa
-          
-           ///Invio mail con info pagamento
+
+            // Crea una stringa per la causale del bonifico
+            const causale = doc.carrello.map((item: ItemType) => {  // Explicitly typed item
+              return `${item.biglietto.title} (Quantità: ${item.quantità})`; // Usa il titolo del biglietto
+            }).join(", "); // Unisce le informazioni in una stringa
+
+            // Invio mail con info pagamento
             await req.payload.sendEmail({
-              to: [
-                doc.email,
-              ],
-              
+              to: [doc.email],
               from: defaultMail,
               replyTo: defaultMail,
               subject: 'Grazie per la tua prenotazione',
@@ -166,25 +168,22 @@ export const Prenotazioni: CollectionConfig = {
                        <li>Fascia Oraria: ${doc.fasciaOraria}</li>
                        <li>Numero di Telefono: ${doc.numeroDiTelefono}</li>
                      </ul>
-                     <p> in allegato i dati per il bonifico:
-
-                      I dati per il bonifico:
-                      acquisto ticket Muses 
-                       <ul>
-                     <li> cifra: ${doc.totaleCarrello} €</li>
-                     <li> Intestazione: Associazione Atelier Kadalù</li>
-                    <li>  IBAN: IT73R0617046320000001557342</li>
-                    <li>  Causale:Aquisto Ticket Mùses</li>
-                    </ul>
-                    </p>`,
+                     <p>In allegato i dati per il bonifico:</p>
+                     <p>I dati per il bonifico:
+                     <ul>
+                     <li>Cifra: ${doc.totaleCarrello} €</li>
+                     <li>Intestazione: Associazione Atelier Kadalù</li>
+                     <li>IBAN: IT73R0617046320000001557342</li>
+                     <li>Causale: Aquisto Ticket Mùses</li>
+                     </ul>
+                     </p>`,
             });
           } catch (error) {
             console.error('Error sending email:', error);
-          }; 
-        };
+          }
+        }
 
-      // Hook per l'invio della mail di CONFERMA
-
+        // Hook per l'invio della mail di CONFERMA
         if (operation === 'update') {
           const previousState = doc.previous ? doc.previous.stato : null;
           const currentState = doc.stato;
@@ -194,10 +193,10 @@ export const Prenotazioni: CollectionConfig = {
             try {
               // Recupera tutti gli utenti admin
               const adminUsers = await req.payload.find({
-                collection: 'users', // Assicurati che 'users' sia il nome della tua collezione utenti
+                collection: 'users',
                 where: {
                   role: {
-                    equals: 'admin', // Cambia questo in base alla struttura dei tuoi ruoli
+                    equals: 'admin',
                   },
                 },
               });
@@ -208,7 +207,7 @@ export const Prenotazioni: CollectionConfig = {
               // Invia email a tutti gli admin
               await req.payload.sendEmail({
                 to: [
-                  adminEmails,
+                  ...adminEmails, // Spread operator to flatten the array
                   doc.email,
                 ],
                 from: defaultMail,
@@ -232,8 +231,5 @@ export const Prenotazioni: CollectionConfig = {
         }
       },
     ],
-    
   },
-  
-
 };
