@@ -140,18 +140,18 @@ export interface Media {
  */
 export interface Prenotazioni {
   id: number;
-  dataPrenotazione: string;
-  fasciaOraria: 'mattina' | 'pomeriggio' | 'sera';
-  utente: string;
-  email?: string | null;
-  numeroDiTelefono?: string | null;
   carrello: {
     biglietto?: (number | null) | Biglietti;
     quantità?: number | null;
     id?: string | null;
   }[];
-  totaleCarrello?: number | null;
+  dataPrenotazione: string;
+  fasciaOraria: 'mattina' | 'pomeriggio' | 'sera';
+  utente: string;
+  email?: string | null;
+  numeroDiTelefono?: string | null;
   stato?: ('nuovo' | 'confermato' | 'respinto') | null;
+  totaleCarrello?: number | null;
   updatedAt: string;
   createdAt: string;
 }

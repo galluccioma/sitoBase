@@ -1,6 +1,18 @@
 import type { CollectionConfig} from 'payload';
 const defaultMail='galluccioma@gmail.com';
 
+//FASCIA ORARIA AUTOMATICA
+const getFasciaOrariaDefault = () => {
+  const currentHour = new Date().getHours(); // Ottieni l'ora corrente
+  if (currentHour < 13) {
+    return 'mattina'; // Prima delle 12
+  } else if (currentHour < 18) {
+    return 'pomeriggio'; // Tra le 12 e le 18
+  } else {
+    return 'sera'; // Dopo le 18
+  }
+};
+
 export const Prenotazioni: CollectionConfig = {
   slug: 'prenotazioni',
   access: {
@@ -13,35 +25,6 @@ export const Prenotazioni: CollectionConfig = {
    
   },
   fields: [
-    {
-      name: 'dataPrenotazione',
-      type: 'date',
-      required: true,
-    },
-    {
-      name: 'fasciaOraria',
-      type: 'select',
-      options: [
-        { label: 'Mattina', value: 'mattina' },
-        { label: 'Pomeriggio', value: 'pomeriggio' },
-        { label: 'Sera', value: 'sera' },
-      ],
-      required: true,
-    },
-    {
-      name: 'utente',
-      type: 'text',
-      required: true,
-      defaultValue:'Prenotazione in cassa'
-    },
-    {
-      name: 'email',
-      type: 'text',
-    },
-    {
-      name: 'numeroDiTelefono',
-      type: 'text',
-    },
     {
       name: 'carrello', // Campo array per gestire i biglietti prenotati
       type: 'array',
@@ -60,9 +43,37 @@ export const Prenotazioni: CollectionConfig = {
         },
       ],
     },
+    
     {
-      name: "totaleCarrello",
-      type: "number",
+      name: 'dataPrenotazione',
+      type: 'date',
+      required: true,
+      defaultValue: new Date(),
+    },
+    {
+      name: 'fasciaOraria',
+      type: 'select',
+      options: [
+        { label: 'Mattina', value: 'mattina' },
+        { label: 'Pomeriggio', value: 'pomeriggio' },
+        { label: 'Sera', value: 'sera' },
+      ],
+      required: true,
+      defaultValue: getFasciaOrariaDefault(), // Imposta il valore predefinito in base all'ora
+    },
+    {
+      name: 'utente',
+      type: 'text',
+      required: true,
+      defaultValue:'Prenotazione in cassa'
+    },
+    {
+      name: 'email',
+      type: 'text',
+    },
+    {
+      name: 'numeroDiTelefono',
+      type: 'text',
     },
     {
       name: 'stato',
@@ -82,6 +93,13 @@ export const Prenotazioni: CollectionConfig = {
         },
       ],
       defaultValue: 'nuovo',
+      admin: {
+        position: 'sidebar',
+      }
+    },
+    {
+      name: "totaleCarrello",
+      type: "number",
       admin: {
         position: 'sidebar',
       }
@@ -123,13 +141,19 @@ export const Prenotazioni: CollectionConfig = {
                        <li>Fascia Oraria: ${doc.fasciaOraria}</li>
                        <li>Numero di Telefono: ${doc.numeroDiTelefono}</li>
                      </ul>
-                     <p>Ricordati di confermare la prenotazione!</p>`,
+                     <p>Ricordati di confermare o annulare la prenotazione una volta ricevuto il pagamento</p>`,
             });
+             // Crea una stringa per la causale del bonifico
+          const causale = doc.carrello.map(item => {
+            return `${item.biglietto.title} (Quantità: ${item.quantità})`; // Usa il titolo del biglietto
+          }).join(", "); // Unisce le informazioni in una stringa
+          
            ///Invio mail con info pagamento
             await req.payload.sendEmail({
               to: [
                 doc.email,
               ],
+              
               from: defaultMail,
               replyTo: defaultMail,
               subject: 'Grazie per la tua prenotazione',
@@ -146,11 +170,13 @@ export const Prenotazioni: CollectionConfig = {
 
                       I dati per il bonifico:
                       acquisto ticket Muses 
-
-                      cifra 70,00€
-                      Intestazione: Associazione Atelier Kadalù
-                      IBAN: IT73R0617046320000001557342
-                      Causale: N.1 buono regalo 2 Mùses Lab</p>`,
+                       <ul>
+                     <li> cifra: ${doc.totaleCarrello} €</li>
+                     <li> Intestazione: Associazione Atelier Kadalù</li>
+                    <li>  IBAN: IT73R0617046320000001557342</li>
+                    <li>  Causale:Aquisto Ticket Mùses</li>
+                    </ul>
+                    </p>`,
             });
           } catch (error) {
             console.error('Error sending email:', error);
