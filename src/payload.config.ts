@@ -22,7 +22,8 @@ import { Tags } from './collections/Tags' // Collezione tag
 import { Blog } from './collections/Blog' // Collezione articoli del blog
 import { FormSubmission } from './collections/Formsubmission' // Collezione per invii di moduli
 import { Biglietti } from './collections/Biglietti' // Collezione biglietti
-import { Prenotazioni } from './collections/Prenotazioni' // Collezione prenotazioni
+import { Prenotazioni } from './collections/Prenotazioni'
+import { Mostre } from './collections/Mostre'  // Collezione Mostre
 
 // Determina il percorso corrente del file
 const filename = fileURLToPath(import.meta.url)
@@ -52,14 +53,16 @@ export default buildConfig({
   },
   
   collections: [
+    Prenotazioni,// Collezione per le prenotazioni
+    FormSubmission, // Collezione degli invii del modulo
     Biglietti,    // Collezione per i biglietti
+     
+    Mostre,        // Collezione mostre
     Blog,        // Collezione per il blog
     Categories,  // Collezione delle categorie
     Tags,        // Collezione dei tag
-    Prenotazioni,// Collezione per le prenotazioni
-    FormSubmission, // Collezione degli invii del modulo
     Media,       // Collezione per i media
-    Users        // Collezione utenti
+    Users,        // Collezione utenti
   ],
   
   

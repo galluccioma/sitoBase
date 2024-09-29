@@ -54,7 +54,7 @@ export const Prenotazioni: CollectionConfig = {
       name: 'dataPrenotazione',
       type: 'date',
       required: true,
-      defaultValue: new Date(),
+      defaultValue: new Date().toISOString(),
     },
     {
       name: 'fasciaOraria',
@@ -112,6 +112,50 @@ export const Prenotazioni: CollectionConfig = {
     },
   ],
   hooks: {
+    beforeChange: [
+      async ({ data, req }) => {
+        try {
+          // Recupera il carrello con i biglietti e le quantità
+          const carrello = data.carrello;
+      
+          // Variabile per accumulare il totale
+          let totaleCarrello = 0;
+      
+          // Itera su ogni biglietto nel carrello
+          for (const item of carrello) {
+            // Recupera il biglietto per ottenere il prezzo
+            const biglietto = await req.payload.findByID({
+              collection: 'biglietti',
+              id: item.biglietto,
+            });
+    
+            // Verifica se il biglietto esiste e ha un prezzo valido
+            if (!biglietto || biglietto.prezzo == null) {
+              throw new Error(`Il biglietto con ID ${item.biglietto} non esiste o non ha un prezzo valido.`);
+            }
+    
+            // Calcola il totale per questo biglietto
+            const prezzoBiglietto = biglietto.prezzo;
+            const quantità = item.quantità;
+    
+            // Somma il prezzo per la quantità
+            totaleCarrello += prezzoBiglietto * quantità;
+          }
+    
+          // Applica lo sconto (se presente)
+          if (data.sconto && data.sconto > 0) {
+            totaleCarrello = totaleCarrello * (1 - data.sconto / 100);
+          }
+    
+          // Aggiorna il totale nel documento
+          data.totaleCarrello = totaleCarrello;
+        } catch (error) {
+          console.error('Errore nel calcolo del totale:', error);
+          throw new Error('Errore nel calcolo del totale del carrello.');
+        }
+      },
+    ],
+    
     afterChange: [
       async ({ operation, doc, req }) => {
         // Hook per l'invio della mail alla creazione della prenotazione

@@ -12,6 +12,10 @@ export const Biglietti: CollectionConfig = {
     defaultColumns: ['titolo', 'descrizione', 'fasceOrarie', 'giorniAttivi'],
    
   },
+  labels: {
+    singular: 'Biglietto',
+    plural: 'Biglietti',
+  },
   fields: [
     {
       name: "titolo",

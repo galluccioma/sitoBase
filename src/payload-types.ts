@@ -11,12 +11,13 @@ export interface Config {
     users: UserAuthOperations;
   };
   collections: {
+    prenotazioni: Prenotazioni;
+    'form-submissions': FormSubmission;
     biglietti: Biglietti;
+    mostre: Mostre;
     blog: Blog;
     categories: Category;
     tags: Tag;
-    prenotazioni: Prenotazioni;
-    'form-submissions': FormSubmission;
     media: Media;
     users: User;
     'payload-preferences': PayloadPreference;
@@ -40,6 +41,27 @@ export interface UserAuthOperations {
     email: string;
     password: string;
   };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "prenotazioni".
+ */
+export interface Prenotazioni {
+  id: number;
+  carrello: {
+    biglietto?: (number | null) | Biglietti;
+    quantità?: number | null;
+    id?: string | null;
+  }[];
+  dataPrenotazione: string;
+  fasciaOraria: 'mattina' | 'pomeriggio' | 'sera';
+  utente: string;
+  email?: string | null;
+  numeroDiTelefono?: string | null;
+  stato?: ('nuovo' | 'confermato' | 'respinto') | null;
+  totaleCarrello?: number | null;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -68,15 +90,29 @@ export interface Biglietti {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "blog".
+ * via the `definition` "form-submissions".
  */
-export interface Blog {
+export interface FormSubmission {
+  id: number;
+  email?: string | null;
+  message?: string | null;
+  source?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "mostre".
+ */
+export interface Mostre {
   id: number;
   slug: string;
   status?: ('draft' | 'published') | null;
   category?: (number | null) | Category;
   tags?: (number | Tag)[] | null;
   title: string;
+  dataInizio?: string | null;
+  dataFine?: string | null;
   description: string;
   content?: {
     root: {
@@ -136,34 +172,33 @@ export interface Media {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "prenotazioni".
+ * via the `definition` "blog".
  */
-export interface Prenotazioni {
+export interface Blog {
   id: number;
-  carrello: {
-    biglietto?: (number | null) | Biglietti;
-    quantità?: number | null;
-    id?: string | null;
-  }[];
-  dataPrenotazione: string;
-  fasciaOraria: 'mattina' | 'pomeriggio' | 'sera';
-  utente: string;
-  email?: string | null;
-  numeroDiTelefono?: string | null;
-  stato?: ('nuovo' | 'confermato' | 'respinto') | null;
-  totaleCarrello?: number | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "form-submissions".
- */
-export interface FormSubmission {
-  id: number;
-  email?: string | null;
-  message?: string | null;
-  source?: string | null;
+  slug: string;
+  status?: ('draft' | 'published') | null;
+  category?: (number | null) | Category;
+  tags?: (number | Tag)[] | null;
+  title: string;
+  description: string;
+  content?: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  content_html?: string | null;
+  image?: number | Media | null;
   updatedAt: string;
   createdAt: string;
 }
