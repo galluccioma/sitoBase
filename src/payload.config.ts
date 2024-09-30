@@ -19,7 +19,7 @@ import { Users } from './collections/Users' // Collezione utenti
 import { Media } from './collections/Media' // Collezione media
 import { Categories } from './collections/Categories' // Collezione categorie
 import { Tags } from './collections/Tags' // Collezione tag
-import { Blog } from './collections/Blog' // Collezione articoli del blog
+import { Notizie } from './collections/Notizie' // Collezione articoli del blog
 import { FormSubmission } from './collections/Formsubmission' // Collezione per invii di moduli
 import { Biglietti } from './collections/Biglietti' // Collezione biglietti
 import { Prenotazioni } from './collections/Prenotazioni'
@@ -58,7 +58,7 @@ export default buildConfig({
     Biglietti,    // Collezione per i biglietti
      
     Mostre,        // Collezione mostre
-    Blog,        // Collezione per il blog
+    Notizie,        // Collezione per il blog
     Categories,  // Collezione delle categorie
     Tags,        // Collezione dei tag
     Media,       // Collezione per i media

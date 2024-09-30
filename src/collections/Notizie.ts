@@ -15,8 +15,8 @@ const formatSlug: FieldHook = async ({ value, data }) => {
 };
 
 
-export const Blog: CollectionConfig = {
-  slug: 'blog', // Nome della collezione nel database e URL
+export const Notizie: CollectionConfig = {
+  slug: 'notizie', // Nome della collezione nel database e URL
   admin: {
     useAsTitle: "title",
     defaultColumns: ['title', 'category', 'image', 'tags', 'status'],
