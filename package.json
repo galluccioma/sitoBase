@@ -13,6 +13,7 @@
     "generate:types": "payload generate:types"
   },
   "dependencies": {
+    "@payloadcms/db-mongodb": "3.0.0-beta.58",
     "@payloadcms/db-postgres": "3.0.0-beta.58",
     "@payloadcms/email-nodemailer": "^3.0.0-beta.58",
     "@payloadcms/next": "3.0.0-beta.58",

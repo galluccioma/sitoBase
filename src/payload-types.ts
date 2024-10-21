@@ -15,7 +15,7 @@ export interface Config {
     'form-submissions': FormSubmission;
     biglietti: Biglietti;
     mostre: Mostre;
-    blog: Blog;
+    notizie: Notizie;
     categories: Category;
     tags: Tag;
     media: Media;
@@ -47,9 +47,9 @@ export interface UserAuthOperations {
  * via the `definition` "prenotazioni".
  */
 export interface Prenotazioni {
-  id: number;
+  id: string;
   carrello: {
-    biglietto?: (number | null) | Biglietti;
+    biglietto?: (string | null) | Biglietti;
     quantità?: number | null;
     id?: string | null;
   }[];
@@ -68,7 +68,7 @@ export interface Prenotazioni {
  * via the `definition` "biglietti".
  */
 export interface Biglietti {
-  id: number;
+  id: string;
   titolo: string;
   prezzo?: number | null;
   descrizione?: string | null;
@@ -93,7 +93,7 @@ export interface Biglietti {
  * via the `definition` "form-submissions".
  */
 export interface FormSubmission {
-  id: number;
+  id: string;
   email?: string | null;
   message?: string | null;
   source?: string | null;
@@ -105,11 +105,11 @@ export interface FormSubmission {
  * via the `definition` "mostre".
  */
 export interface Mostre {
-  id: number;
+  id: string;
   slug: string;
   status?: ('draft' | 'published') | null;
-  category?: (number | null) | Category;
-  tags?: (number | Tag)[] | null;
+  category?: (string | null) | Category;
+  tags?: (string | Tag)[] | null;
   title: string;
   dataInizio?: string | null;
   dataFine?: string | null;
@@ -130,7 +130,7 @@ export interface Mostre {
     [k: string]: unknown;
   } | null;
   content_html?: string | null;
-  image?: number | Media | null;
+  image?: string | Media | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -139,7 +139,7 @@ export interface Mostre {
  * via the `definition` "categories".
  */
 export interface Category {
-  id: number;
+  id: string;
   categorie?: string | null;
 }
 /**
@@ -147,7 +147,7 @@ export interface Category {
  * via the `definition` "tags".
  */
 export interface Tag {
-  id: number;
+  id: string;
   tag?: string | null;
 }
 /**
@@ -155,8 +155,8 @@ export interface Tag {
  * via the `definition` "media".
  */
 export interface Media {
-  id: number;
-  alt: string;
+  id: string;
+  alt?: string | null;
   prefix?: string | null;
   updatedAt: string;
   createdAt: string;
@@ -172,14 +172,14 @@ export interface Media {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "blog".
+ * via the `definition` "notizie".
  */
-export interface Blog {
-  id: number;
+export interface Notizie {
+  id: string;
   slug: string;
   status?: ('draft' | 'published') | null;
-  category?: (number | null) | Category;
-  tags?: (number | Tag)[] | null;
+  category?: (string | null) | Category;
+  tags?: (string | Tag)[] | null;
   title: string;
   description: string;
   content?: {
@@ -198,7 +198,7 @@ export interface Blog {
     [k: string]: unknown;
   } | null;
   content_html?: string | null;
-  image?: number | Media | null;
+  image?: string | Media | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -207,7 +207,7 @@ export interface Blog {
  * via the `definition` "users".
  */
 export interface User {
-  id: number;
+  id: string;
   role: 'admin' | 'user';
   updatedAt: string;
   createdAt: string;
@@ -225,10 +225,10 @@ export interface User {
  * via the `definition` "payload-preferences".
  */
 export interface PayloadPreference {
-  id: number;
+  id: string;
   user: {
     relationTo: 'users';
-    value: number | User;
+    value: string | User;
   };
   key?: string | null;
   value?:
@@ -248,7 +248,7 @@ export interface PayloadPreference {
  * via the `definition` "payload-migrations".
  */
 export interface PayloadMigration {
-  id: number;
+  id: string;
   name?: string | null;
   batch?: number | null;
   updatedAt: string;

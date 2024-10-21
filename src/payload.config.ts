@@ -1,14 +1,22 @@
-// Import generali
-import path from 'path' // Gestione dei percorsi
-import { fileURLToPath } from 'url' // Converti URL in percorsi file (utile per gli ambienti ESM)
-import sharp from 'sharp' // Libreria per la manipolazione delle immagini
+//Database
+import { postgresAdapter } from '@payloadcms/db-postgres'
+import { mongooseAdapter } from '@payloadcms/db-mongodb'
+//Lingue
+import { it } from 'payload/i18n/it'
+import { en } from 'payload/i18n/en'
 
-// Import Payload e i suoi plugin
-import { buildConfig } from 'payload' // Funzione per costruire la configurazione di Payload
+
+//Storage
+import { s3Storage } from '@payloadcms/storage-s3'
+//Mail
 import { nodemailerAdapter } from '@payloadcms/email-nodemailer'
-import { postgresAdapter } from '@payloadcms/db-postgres' // Adattatore per PostgreSQL
-import { lexicalEditor } from '@payloadcms/richtext-lexical' // Editor di testo avanzato
-import { s3Storage } from '@payloadcms/storage-s3' // Plugin per l'archiviazione su Amazon S3
+
+//Plugin
+import { lexicalEditor } from '@payloadcms/richtext-lexical'
+import path from 'path'
+import sharp from 'sharp'
+import { buildConfig } from 'payload'
+import { fileURLToPath } from 'url'
 
 // Import dei componenti personalizzati
 import { Logo } from './components/WhiteLabel' // Logo personalizzato per l'amministrazione
@@ -68,17 +76,23 @@ export default buildConfig({
   
   editor: lexicalEditor({}), // Configurazione per l'editor di testo Lexical
   
-  secret: process.env.PAYLOAD_SECRET || '', // Segreto del server, caricato dalle variabili d'ambiente
-
+  secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
-    outputFile: path.resolve(dirname, 'payload-types.ts'), // Genera file TypeScript con i tipi di Payload
+    outputFile: path.resolve(dirname, 'payload-types.ts'),
+  },
+  // db: postgresAdapter({
+  //   pool: {
+  //     connectionString: process.env.POSTGRES_URI || ''
+  //   }
+  // }),
+  db: mongooseAdapter({
+    url: process.env.MONGODB_URI || '',
+  }),
+
+  i18n: {
+    supportedLanguages: { it, en},
   },
 
-  db: postgresAdapter({
-    pool: {
-      connectionString: process.env.POSTGRES_URL, // Connessione a PostgreSQL, caricato dall'ambiente
-    },
-  }),
 
   sharp, // Usato per la gestione delle immagini (sharp)
 
