@@ -49,8 +49,8 @@ export interface UserAuthOperations {
 export interface Prenotazioni {
   id: string;
   carrello: {
-    biglietto?: (string | null) | Biglietti;
-    quantità?: number | null;
+    biglietto: string | Biglietti;
+    quantità: number;
     id?: string | null;
   }[];
   dataPrenotazione: string;
@@ -58,7 +58,7 @@ export interface Prenotazioni {
   utente: string;
   email?: string | null;
   numeroDiTelefono?: string | null;
-  stato?: ('nuovo' | 'attesa_pagamento' | 'abbandonato' | 'respinto' | 'completato') | null;
+  stato?: ('nuovo' | 'attesa_pagamento' | 'carrello' | 'respinto' | 'completato') | null;
   usato?: boolean | null;
   totaleCarrello?: number | null;
   updatedAt: string;

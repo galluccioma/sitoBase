@@ -44,11 +44,14 @@ export const Prenotazioni: CollectionConfig = {
           name: 'biglietto',
           type: 'relationship',
           relationTo: 'biglietti',
+          required: true,
         },
         {
           name: 'quantità',
           type: 'number',
           min: 1, // Quantità minima di 1 biglietto per evento
+          defaultValue:1,
+          required: true,
         },
       ],
     },
@@ -79,10 +82,12 @@ export const Prenotazioni: CollectionConfig = {
     {
       name: 'email',
       type: 'text',
+      defaultValue: 'Prenotazione in cassa',
     },
     {
       name: 'numeroDiTelefono',
       type: 'text',
+      defaultValue: 'Prenotazione in cassa',
     },
     {
       name: 'stato',
@@ -113,6 +118,7 @@ export const Prenotazioni: CollectionConfig = {
       type: "number",
       admin: {
         position: 'sidebar',
+        readOnly: true,
       },
     },
     
