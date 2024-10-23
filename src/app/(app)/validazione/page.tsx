@@ -1,10 +1,14 @@
-"use client";  // Aggiungi questa linea
-
 import React, { useState } from 'react';
+
+interface Prenotazione {
+  id: string;
+  stato: string;
+  utente: string;
+}
 
 const Validazione: React.FC = () => {
   const [id, setId] = useState('');
-  const [prenotazione, setPrenotazione] = useState<any>(null);
+  const [prenotazione, setPrenotazione] = useState<Prenotazione | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
