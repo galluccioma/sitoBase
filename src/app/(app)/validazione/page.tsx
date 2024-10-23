@@ -62,8 +62,8 @@ const Validazione: React.FC = () => {
   };
 
   return (
-    <section className='bg-white text-black h-full w-full flex items-center justify-center'>
-      <h1 className='text-red-500'>Validazione Prenotazione</h1>
+    <section className=' flex flex-col items-center justify-center bg-white text-black h-[100vh] w-full'>
+      <h1 className='text-xl font-boldS'>Validazione Prenotazione</h1>
       <input
         type="text"
         placeholder="Inserisci ID prenotazione"
