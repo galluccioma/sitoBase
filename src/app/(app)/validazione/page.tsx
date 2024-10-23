@@ -20,7 +20,6 @@ const Validazione: React.FC = () => {
     try {
       const response = await fetch(`/api/prenotazioni/${id}`);
       
-      // Verifica se la risposta è OK
       if (!response.ok) {
         throw new Error('Prenotazione non trovata.');
       }
@@ -35,6 +34,11 @@ const Validazione: React.FC = () => {
   };
 
   const handleUpdate = async () => {
+    if (!prenotazione) {
+      setError('Nessuna prenotazione da aggiornare.');
+      return;
+    }
+
     try {
       const response = await fetch(`/api/prenotazioni/${prenotazione.id}`, {
         method: 'PATCH',
@@ -42,17 +46,16 @@ const Validazione: React.FC = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          stato: 'completato', // Cambia lo stato a 'completato'
+          stato: 'completato', 
         }),
       });
 
-      // Verifica se la risposta è OK
       if (!response.ok) {
         throw new Error('Errore durante l\'aggiornamento dello stato.');
       }
 
       // Aggiorna lo stato locale della prenotazione
-      setPrenotazione(prev => ({ ...prev, stato: 'completato' }));
+      setPrenotazione(prev => prev ? { ...prev, stato: 'completato' } : prev);
     } catch (err: any) {
       setError(err.message || 'Errore durante l\'aggiornamento dello stato.');
     }
