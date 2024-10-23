@@ -24,7 +24,7 @@ export interface Config {
     'payload-migrations': PayloadMigration;
   };
   globals: {};
-  locale: null;
+  locale: 'en' | 'it';
   user: User & {
     collection: 'users';
   };
@@ -58,7 +58,8 @@ export interface Prenotazioni {
   utente: string;
   email?: string | null;
   numeroDiTelefono?: string | null;
-  stato?: ('nuovo' | 'confermato' | 'respinto') | null;
+  stato?: ('nuovo' | 'attesa_pagamento' | 'abbandonato' | 'respinto' | 'completato') | null;
+  usato?: boolean | null;
   totaleCarrello?: number | null;
   updatedAt: string;
   createdAt: string;

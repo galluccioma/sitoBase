@@ -1,5 +1,5 @@
 //Database
-import { postgresAdapter } from '@payloadcms/db-postgres'
+//import { postgresAdapter } from '@payloadcms/db-postgres'
 import { mongooseAdapter } from '@payloadcms/db-mongodb'
 //Lingue
 import { it } from 'payload/i18n/it'
@@ -91,6 +91,24 @@ export default buildConfig({
 
   i18n: {
     supportedLanguages: { it, en},
+  },
+  
+  localization: {
+    locales: [
+      {
+        label: 'English',
+        code: 'en',
+      },
+      {
+        label: 'Italiano',
+        code: 'it',
+        // opt-in to setting default text-alignment on Input fields to rtl (right-to-left)
+        // when current locale is rtl
+        rtl: true,
+      },
+    ],
+    defaultLocale: 'it',
+    fallback: true,
   },
 
 

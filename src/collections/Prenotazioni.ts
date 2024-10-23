@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload';
+import { sendAdminNotification, sendClientConfirmation, sendStatusUpdate } from '../mail/emailService';
 
 const defaultMail = 'galluccioma@gmail.com';
 
@@ -30,9 +31,10 @@ export const Prenotazioni: CollectionConfig = {
   },
   admin: {
     useAsTitle: "id",
-    defaultColumns: ['dataPrenotazione', 'stato', 'totaleCarrello', 'utente', 'email'],
+    defaultColumns: ['dataPrenotazione', 'stato', 'usato', 'totaleCarrello',  'utente', 'email'],
   },
   fields: [
+    
     {
       name: 'carrello',
       type: 'array',
@@ -50,6 +52,7 @@ export const Prenotazioni: CollectionConfig = {
         },
       ],
     },
+    
     {
       name: 'dataPrenotazione',
       type: 'date',
@@ -85,23 +88,25 @@ export const Prenotazioni: CollectionConfig = {
       name: 'stato',
       type: 'radio',
       options: [
-        {
-          value: 'nuovo',
-          label: 'Nuovo',
-        },
-        {
-          value: 'confermato',
-          label: 'Confermato',
-        },
-        {
-          value: 'respinto',
-          label: 'Respinto',
-        },
+        { value: 'nuovo', label: 'Nuovo' },
+        { value: 'attesa_pagamento', label: 'Attesa Pagamento' },
+        { value: 'abbandonato', label: 'Abbandonato' },
+        { value: 'respinto', label: 'Respinto' },
+        { value: 'completato', label: 'Completato' },
       ],
       defaultValue: 'nuovo',
       admin: {
         position: 'sidebar',
       },
+    },
+    {
+      name: 'usato',
+          type: 'checkbox', 
+          label: 'Biglietto usato',
+          defaultValue: false,
+          admin: {
+            position: 'sidebar',
+          },
     },
     {
       name: "totaleCarrello",
@@ -110,6 +115,7 @@ export const Prenotazioni: CollectionConfig = {
         position: 'sidebar',
       },
     },
+    
   ],
   hooks: {
     beforeChange: [
@@ -157,122 +163,17 @@ export const Prenotazioni: CollectionConfig = {
     ],
     
     afterChange: [
-      async ({ operation, doc, req }) => {
+      async ({ operation, doc, previousDoc, req }) => {
         // Hook per l'invio della mail alla creazione della prenotazione
         if (operation === 'create') {
-          try {
-            // Recupera tutti gli utenti admin
-            const adminUsers = await req.payload.find({
-              collection: 'users',
-              where: {
-                role: {
-                  equals: 'admin',
-                },
-              },
-            });
-
-            // Estrai gli indirizzi email degli admin
-            const adminEmails = adminUsers.docs.map(user => user.email).filter(email => email);
-
-            // Invia email a tutti gli admin
-            await req.payload.sendEmail({
-              to: adminEmails,
-              from: defaultMail,
-              replyTo: defaultMail,
-              subject: 'Hai ricevuto una nuova prenotazione',
-              html: `<h1>Una nuova prenotazione è stata inviata!</h1>
-                     <p>Dettagli della prenotazione:</p>
-                     <ul>
-                       <li>Utente: ${doc.utente}</li>
-                       <li>Email: ${doc.email}</li>
-                       <li>Data Prenotazione: ${doc.dataPrenotazione}</li>
-                       <li>Fascia Oraria: ${doc.fasciaOraria}</li>
-                       <li>Numero di Telefono: ${doc.numeroDiTelefono}</li>
-                     </ul>
-                     <p>Ricordati di confermare o annullare la prenotazione una volta ricevuto il pagamento</p>`,
-            });
-
-            // Crea una stringa per la causale del bonifico
-            const causale = doc.carrello.map((item: ItemType) => {  // Explicitly typed item
-              return `${item.biglietto.title} (Quantità: ${item.quantità})`; // Usa il titolo del biglietto
-            }).join(", "); // Unisce le informazioni in una stringa
-
-            // Invio mail con info pagamento
-            await req.payload.sendEmail({
-              to: [doc.email],
-              from: defaultMail,
-              replyTo: defaultMail,
-              subject: 'Grazie per la tua prenotazione',
-              html: `<h1>Grazie per aver prenotato online i tuoi posti</h1>
-                     <p>Riepilogo della prenotazione:</p>
-                     <ul>
-                       <li>Utente: ${doc.utente}</li>
-                       <li>Email: ${doc.email}</li>
-                       <li>Data Prenotazione: ${doc.dataPrenotazione}</li>
-                       <li>Fascia Oraria: ${doc.fasciaOraria}</li>
-                       <li>Numero di Telefono: ${doc.numeroDiTelefono}</li>
-                     </ul>
-                     <p>In allegato i dati per il bonifico:</p>
-                     <p>I dati per il bonifico:
-                     <ul>
-                     <li>Cifra: ${doc.totaleCarrello} €</li>
-                     <li>Intestazione: Associazione Atelier Kadalù</li>
-                     <li>IBAN: IT73R0617046320000001557342</li>
-                     <li>Causale: Aquisto Ticket Mùses</li>
-                     </ul>
-                     </p>`,
-            });
-          } catch (error) {
-            console.error('Error sending email:', error);
-          }
+          await sendAdminNotification({ doc, req });
+          await sendClientConfirmation({ doc, req });
         }
-
         // Hook per l'invio della mail di CONFERMA
-        if (operation === 'update') {
-          const previousState = doc.previous ? doc.previous.stato : null;
-          const currentState = doc.stato;
-
-          // Controlla se lo stato è passato a "confermato"
-          if (previousState !== 'confermato' && currentState === 'confermato') {
-            try {
-              // Recupera tutti gli utenti admin
-              const adminUsers = await req.payload.find({
-                collection: 'users',
-                where: {
-                  role: {
-                    equals: 'admin',
-                  },
-                },
-              });
-
-              // Estrai gli indirizzi email degli admin
-              const adminEmails = adminUsers.docs.map(user => user.email).filter(email => email);
-
-              // Invia email a tutti gli admin
-              await req.payload.sendEmail({
-                to: [
-                  ...adminEmails, // Spread operator to flatten the array
-                  doc.email,
-                ],
-                from: defaultMail,
-                replyTo: defaultMail,
-                subject: 'Prenotazione Confermata',
-                html: `<h1>Una nuova prenotazione è stata confermata!</h1>
-                       <p>Dettagli della prenotazione:</p>
-                       <ul>
-                         <li>Utente: ${doc.utente}</li>
-                         <li>Email: ${doc.email}</li>
-                         <li>Data Prenotazione: ${doc.dataPrenotazione}</li>
-                         <li>Fascia Oraria: ${doc.fasciaOraria}</li>
-                         <li>Numero di Telefono: ${doc.numeroDiTelefono}</li>
-                       </ul>
-                       <p>Grazie!</p>`,
-              });
-            } catch (error) {
-              console.error('Error sending email:', error);
-            }
-          }
-        }
+       // Controllo del cambiamento di stato
+       if (previousDoc?.stato !== doc.stato) {
+        await sendStatusUpdate({ doc, req });
+      }
       },
     ],
   },
