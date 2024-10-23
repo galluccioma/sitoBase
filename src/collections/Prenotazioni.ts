@@ -90,7 +90,7 @@ export const Prenotazioni: CollectionConfig = {
       options: [
         { value: 'nuovo', label: 'Nuovo' },
         { value: 'attesa_pagamento', label: 'Attesa Pagamento' },
-        { value: 'abbandonato', label: 'Abbandonato' },
+        { value: 'carrello', label: 'Carrello' },
         { value: 'respinto', label: 'Respinto' },
         { value: 'completato', label: 'Completato' },
       ],
