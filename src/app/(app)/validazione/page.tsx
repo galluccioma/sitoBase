@@ -134,7 +134,7 @@ const Validazione: React.FC = () => {
         />
         <div className="mt-4">
           <h2 className="text-lg font-bold">Scansione Codice QR</h2>
-          <input type="image/*" capture="environment" onChange={handleFileUpload} className="mt-2" />
+          <input type="file" accept="image/*" capture="environment" onChange={handleFileUpload} className="mt-2" />
         </div>
         <button
           onClick={() => handleSearch(id)}
