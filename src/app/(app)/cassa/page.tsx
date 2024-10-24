@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { QRCodeSVG } from 'qrcode.react';
 import jsQR from 'jsqr'; // Importa la libreria jsQR
-import ProtectedLayout from '@/access/adminAuth.tsx';
+import ProtectedLayout from '@/access/adminAuth';
 
 interface Biglietto {
   id: string;
