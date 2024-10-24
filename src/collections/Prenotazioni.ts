@@ -26,10 +26,38 @@ interface ItemType {
 
 export const Prenotazioni: CollectionConfig = {
   slug: 'prenotazioni',
+  auth: true,
   access: {
-    read: () => true,
-    create: () => true,
+    read: ({ req }) => {
+      const origin = req.headers.get('origin'); // Usa il metodo .get()
+      if (origin === 'https://musesaccademia.pages.dev') {
+        return true;  // Consente l'accesso
+      }
+      return false;  // Rifiuta l'accesso per altri domini
+    },
+    create: ({ req }) => {
+      const origin = req.headers.get('origin'); // Usa il metodo .get()
+      if (origin === 'https://musesaccademia.pages.dev') {
+        return true;
+      }
+      return false;
+    },
+    update: ({ req }) => {
+      const origin = req.headers.get('origin'); // Usa il metodo .get()
+      if (origin === 'https://musesaccademia.pages.dev') {
+        return true;
+      }
+      return false;
+    },
+    delete: ({ req }) => {
+      const origin = req.headers.get('origin'); // Usa il metodo .get()
+      if (origin === 'https://musesaccademia.pages.dev') {
+        return true;
+      }
+      return false;
+    },
   },
+
   admin: {
     useAsTitle: "id",
     defaultColumns: ['dataPrenotazione', 'stato', 'usato', 'totaleCarrello',  'utente', 'email'],

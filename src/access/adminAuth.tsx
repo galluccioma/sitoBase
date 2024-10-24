@@ -1,8 +1,12 @@
-// useAuth.ts
-import { useEffect, useState } from 'react';
+// ProtectedLayout.tsx
+import React, { ReactNode, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation'; // Assicurati che il percorso sia corretto
 
-const useAuth = () => {
+interface ProtectedLayoutProps {
+  children: ReactNode;
+}
+
+const ProtectedLayout: React.FC<ProtectedLayoutProps> = ({ children }) => {
   const [loadingAuth, setLoadingAuth] = useState(true);
   const router = useRouter();
 
@@ -44,7 +48,16 @@ const useAuth = () => {
     checkAuth();
   }, [router]); // Ricarica se il router cambia
 
-  return { loadingAuth };
+  // Mostra un caricamento durante il controllo dell'autenticazione
+  if (loadingAuth) {
+    return (
+      <div className="flex items-center justify-center h-[100vh]">
+        <h2 className="text-xl">Controllo accesso in corso...</h2>
+      </div>
+    );
+  }
+
+  return <>{children}</>; // Renderizza i figli solo se l'utente è autenticato
 };
 
-export default useAuth;
+export default ProtectedLayout;
