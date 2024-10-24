@@ -1,6 +1,8 @@
 import { PayloadRequest } from 'payload';
 
 const defaultMail = 'galluccioma@gmail.com';
+import QRCode from 'qrcode'; // Importazione corretta della libreria QRCode
+
 
 // Funzione per inviare una mail generica
 const sendEmail = async ({
@@ -27,29 +29,55 @@ const sendEmail = async ({
   }
 };
 
-// Funzione per inviare una notifica all'amministratore (invio a defaultMail)
-export const sendAdminNotification = async ({ doc, req }: { doc: any, req: PayloadRequest }) => {
-  const subject = 'Hai ricevuto una nuova prenotazione';
+// Funzione per generare un QR code come immagine base64
+const generateQRCode = async (data: string): Promise<string> => {
+  try {
+    const qrCode = await QRCode.toDataURL(data, {
+      width: 180,
+      margin: 1,
+      color: {
+        dark: '#000000',  // Colore del QR code
+        light: '#ffffff',  // Colore dello sfondo
+      },
+    });
+    return qrCode; // Ritorna l'immagine QR code in formato base64
+  } catch (error) {
+    console.error('Errore nella generazione del QR Code:', error);
+    throw error;
+  }
+};
+
+// Funzione per inviare una email di riepilogo
+export const sendSummaryEmail = async ({ doc, req, state }: { doc: any, req: PayloadRequest, state: string }) => {
+  const subject = `Riepilogo Prenotazione - Stato: ${state}`;
+  const causale = doc.carrello.map((item: any) => `${item.biglietto.title} (Quantità: ${item.quantità})`).join(", ");
   const html = `
-    <h1>Una nuova prenotazione è stata inviata!</h1>
-    <p>Dettagli della prenotazione:</p>
+    <h1>Dettagli della tua prenotazione:</h1>
     <ul>
       <li>Utente: ${doc.utente}</li>
       <li>Email: ${doc.email}</li>
       <li>Data Prenotazione: ${doc.dataPrenotazione}</li>
       <li>Fascia Oraria: ${doc.fasciaOraria}</li>
       <li>Numero di Telefono: ${doc.numeroDiTelefono}</li>
+      <li>Cifra: ${doc.totaleCarrello} €</li>
     </ul>
-    <p>Ricordati di confermare o annullare la prenotazione una volta ricevuto il pagamento</p>
+    <p>I dati per il bonifico:</p>
+    <ul>
+      <li>Cifra: ${doc.totaleCarrello} €</li>
+      <li>Intestazione: Associazione Atelier Kadalù</li>
+      <li>IBAN: IT73R0617046320000001557342</li>
+      <li>Causale: ${causale}</li>
   `;
 
-  await sendEmail({ to: defaultMail, subject, html, req });
+  await sendEmail({ to: doc.email, subject, html, req });
+  await sendEmail({ to: defaultMail, subject, html, req }); // Invia anche all'amministratore
 };
 
-// Funzione per inviare una mail di conferma al cliente
-export const sendClientConfirmation = async ({ doc, req }: { doc: any, req: PayloadRequest }) => {
+// Funzione per inviare email di conferma con QR code
+export const sendClientConfirmationWithQRCode = async ({ doc, req }: { doc: any, req: PayloadRequest }) => {
   const subject = 'Grazie per la tua prenotazione';
-  const causale = doc.carrello.map((item: any) => `${item.biglietto.title} (Quantità: ${item.quantità})`).join(", ");
+  const qrCodeUrl = await generateQRCode(doc.id);
+  
   const html = `
     <h1>Grazie per aver prenotato online i tuoi posti</h1>
     <p>Riepilogo della prenotazione:</p>
@@ -60,26 +88,28 @@ export const sendClientConfirmation = async ({ doc, req }: { doc: any, req: Payl
       <li>Fascia Oraria: ${doc.fasciaOraria}</li>
       <li>Numero di Telefono: ${doc.numeroDiTelefono}</li>
     </ul>
-    <p>I dati per il bonifico:</p>
-    <ul>
-      <li>Cifra: ${doc.totaleCarrello} €</li>
-      <li>Intestazione: Associazione Atelier Kadalù</li>
-      <li>IBAN: IT73R0617046320000001557342</li>
-      <li>Causale: ${causale}</li>
-    </ul>
+    <h3>Il tuo QR Code:</h3>
+    <img src="${qrCodeUrl}" alt="QR Code per la tua prenotazione" />
   `;
 
   await sendEmail({ to: doc.email, subject, html, req });
 };
 
-// Funzione per notificare il cambio di stato
-export const sendStatusUpdate = async ({ doc, req }: { doc: any, req: PayloadRequest }) => {
-    const subject = 'Aggiornamento dello stato della tua prenotazione';
-    const html = `
-      <h1>Lo stato della tua prenotazione è stato aggiornato</h1>
-      <p>Il nuovo stato è: <strong>${doc.stato}</strong></p>
-      <p>Grazie per aver scelto il nostro servizio!</p>
-    `;
-  
-    await sendEmail({ to: doc.email, subject, html, req });
+// Funzione per inviare email di notifica di mancato pagamento
+export const sendPaymentFailureNotification = async ({ doc, req }: { doc: any, req: PayloadRequest }) => {
+  const subject = 'Notifica di Mancato Pagamento';
+  const html = `
+    <h1>Attenzione: Mancato Pagamento</h1>
+    <p>La tua prenotazione non è stata completata a causa di un mancato pagamento.</p>
+    <p>Dettagli della prenotazione:</p>
+    <ul>
+      <li>Utente: ${doc.utente}</li>
+      <li>Email: ${doc.email}</li>
+      <li>Data Prenotazione: ${doc.dataPrenotazione}</li>
+      <li>Fascia Oraria: ${doc.fasciaOraria}</li>
+    </ul>
+    
+  `;
+
+  await sendEmail({ to: doc.email, subject, html, req });
 };

@@ -1,5 +1,6 @@
 import type { CollectionConfig } from 'payload';
-import { sendAdminNotification, sendClientConfirmation, sendStatusUpdate } from '../mail/emailService';
+import { sendSummaryEmail, sendClientConfirmationWithQRCode, sendPaymentFailureNotification  } from '../mail/emailService';
+
 
 const defaultMail = 'galluccioma@gmail.com';
 
@@ -170,17 +171,23 @@ export const Prenotazioni: CollectionConfig = {
     
     afterChange: [
       async ({ operation, doc, previousDoc, req }) => {
-        // Hook per l'invio della mail alla creazione della prenotazione
         if (operation === 'create') {
-          await sendAdminNotification({ doc, req });
-          await sendClientConfirmation({ doc, req });
+          // Invio della mail per nuova prenotazione
+          await sendSummaryEmail({ doc, req, state: doc.stato });
+        } else if (operation === 'update') {
+          if (doc.stato === 'completato') {
+            // Invio della mail di conferma con QR code
+            await sendClientConfirmationWithQRCode({ doc, req });
+          } else if (doc.stato === 'respinto') {
+            // Invio della mail di mancato pagamento
+            await sendPaymentFailureNotification({ doc, req });
+          } else if (doc.stato === 'attesa_pagamento') {
+            // Invio della mail di riepilogo per attesa pagamento
+            await sendSummaryEmail({ doc, req, state: doc.stato });
+          }
         }
-        // Hook per l'invio della mail di CONFERMA
-       // Controllo del cambiamento di stato
-       if (previousDoc?.stato !== doc.stato) {
-        await sendStatusUpdate({ doc, req });
-      }
       },
     ],
+    
   },
 };
