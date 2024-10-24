@@ -1,82 +1,86 @@
 'use client'
 
-import React, { useState } from 'react'
-import { QRCodeSVG } from 'qrcode.react'
-import jsQR from 'jsqr' // Importa la libreria jsQR
+import React, { useState, useEffect } from 'react';
+import { QRCodeSVG } from 'qrcode.react';
+import jsQR from 'jsqr'; // Importa la libreria jsQR
+import useAuth from '@/access/useAuth';
+import { useRouter } from 'next/navigation'; // Importa il router dall'App Router
 
 interface Biglietto {
-  id: string
-  titolo: string
-  prezzo: number
+  id: string;
+  titolo: string;
+  prezzo: number;
 }
 
 interface Carrello {
-  biglietto: Biglietto
-  quantità: number
-  id: string
+  biglietto: Biglietto;
+  quantità: number;
+  id: string;
 }
 
 interface Prenotazione {
-  id: string
-  stato: string
-  utente: string
-  usato: boolean
-  numeroDiTelefono: string
-  email: string
-  fasciaOraria: string
-  biglietti: Biglietto[]
-  carrello: Carrello[]
+  id: string;
+  stato: string;
+  utente: string;
+  usato: boolean;
+  numeroDiTelefono: string;
+  email: string;
+  fasciaOraria: string;
+  biglietti: Biglietto[];
+  carrello: Carrello[];
 }
 
 const Validazione: React.FC = () => {
-  const [id, setId] = useState('')
-  const [prenotazione, setPrenotazione] = useState<Prenotazione | null>(null)
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState('')
-  const [qrData, setQrData] = useState<string | null>(null)
+  const [id, setId] = useState('');
+  const [prenotazione, setPrenotazione] = useState<Prenotazione | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [qrData, setQrData] = useState<string | null>(null);
+  const { loadingAuth } = useAuth(); // Utilizza l'hook per il controllo dell'autenticazione
+  const router = useRouter(); // Inizializza il router
 
   // Funzione per gestire il caricamento del file
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0]
-    if (!file) return
+    const file = event.target.files?.[0];
+    if (!file) return;
 
-    const reader = new FileReader()
+    const reader = new FileReader();
     reader.onload = (e) => {
-      const imageData = e.target?.result
+      const imageData = e.target?.result;
       if (imageData) {
-        decodeQRCode(imageData as string)
+        decodeQRCode(imageData as string);
       }
-    }
-    reader.readAsDataURL(file)
-  }
+    };
+    reader.readAsDataURL(file);
+  };
 
   // Funzione per decodificare il codice QR dall'immagine
   const decodeQRCode = (imageData: string) => {
-    const img = new Image()
-    img.src = imageData
+    const img = new Image();
+    img.src = imageData;
     img.onload = () => {
-      const canvas = document.createElement('canvas')
-      canvas.width = img.width
-      canvas.height = img.height
-      const ctx = canvas.getContext('2d')
+      const canvas = document.createElement('canvas');
+      canvas.width = img.width;
+      canvas.height = img.height;
+      const ctx = canvas.getContext('2d');
       if (ctx) {
-        ctx.drawImage(img, 0, 0, img.width, img.height)
-        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
-        const code = jsQR(imageData.data, canvas.width, canvas.height)
+        ctx.drawImage(img, 0, 0, img.width, img.height);
+        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        const code = jsQR(imageData.data, canvas.width, canvas.height);
         if (code) {
-          setId(code.data)
-          handleSearch(code.data) // Passa il codice QR decodificato
+          setId(code.data);
+          handleSearch(code.data); // Passa il codice QR decodificato
         } else {
-          setError("Nessun codice QR trovato nell'immagine.")
+          setError("Nessun codice QR trovato nell'immagine.");
         }
       }
-    }
+    };
   }
 
   const handleUpdate = async () => {
     if (!prenotazione) {
-      setError('Nessuna prenotazione da aggiornare.')
-      return
+      setError('Nessuna prenotazione da aggiornare.');
+      return;
     }
 
     try {
@@ -88,37 +92,45 @@ const Validazione: React.FC = () => {
         body: JSON.stringify({
           usato: true,
         }),
-      })
+      });
 
       if (!response.ok) {
-        throw new Error("Errore durante l'aggiornamento dello stato.")
+        throw new Error("Errore durante l'aggiornamento dello stato.");
       }
 
-      setPrenotazione((prev) => (prev ? { ...prev, usato: true } : prev))
+      setPrenotazione((prev) => (prev ? { ...prev, usato: true } : prev));
     } catch (err: any) {
-      setError(err.message || "Errore durante l'aggiornamento dello stato.")
+      setError(err.message || "Errore durante l'aggiornamento dello stato.");
     }
   }
 
   const handleSearch = async (searchId: string) => {
-    // Aggiunto un parametro per l'ID
-    setLoading(true)
-    setError('')
+    setLoading(true);
+    setError('');
     try {
-      const response = await fetch(`/api/prenotazioni/${searchId}`)
+      const response = await fetch(`/api/prenotazioni/${searchId}`);
 
       if (!response.ok) {
-        throw new Error('Prenotazione non trovata.')
+        throw new Error('Prenotazione non trovata.');
       }
 
-      const data = await response.json()
-      setPrenotazione(data)
-      setQrData(data.id)
+      const data = await response.json();
+      setPrenotazione(data);
+      setQrData(data.id);
     } catch (err: any) {
-      setError(err.message || 'Prenotazione non trovata.')
+      setError(err.message || 'Prenotazione non trovata.');
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
+  }
+
+  // Render loading state while checking authentication
+  if (loadingAuth) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <h2 className="text-xl">Controllo accesso in corso...</h2>
+      </div>
+    );
   }
 
   return (
@@ -127,7 +139,7 @@ const Validazione: React.FC = () => {
         <h1 className="text-xl font-bold">Validazione Prenotazione</h1>
         <input
           type="text"
-          className="border border-black focus:border-2 p-2  w-80 "
+          className="border border-black focus:border-2 p-2 w-80 "
           placeholder="Inserisci ID prenotazione"
           value={id}
           onChange={(e) => setId(e.target.value)}
@@ -202,7 +214,7 @@ const Validazione: React.FC = () => {
         </section>
       )}
     </section>
-  )
-}
+  );
+};
 
-export default Validazione
+export default Validazione;
