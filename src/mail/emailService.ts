@@ -1,6 +1,4 @@
 import { PayloadRequest } from 'payload';
-import {QRCodeSVG} from 'qrcode.react';
-
 
 const defaultMail = 'galluccioma@gmail.com';
 
@@ -51,43 +49,18 @@ export const sendAdminNotification = async ({ doc, req }: { doc: any, req: Paylo
 // Funzione per inviare una mail di conferma al cliente
 export const sendClientConfirmation = async ({ doc, req }: { doc: any, req: PayloadRequest }) => {
   const subject = 'Grazie per la tua prenotazione';
-  const qrData = doc.id; // Utilizza l'ID della prenotazione per generare il codice QR
-
-  // Genera il codice QR come SVG utilizzando QRCodeSVG
-  const qrCodeSVG = `<svg>${QRCodeSVG({ value: qrData, size: 128 })}</svg>`; // Conversione in stringa SVG
-
-  // Crea una stringa per la causale
-  const causale = doc.carrello.map((item: any) => `${item.biglietto.titolo} (Quantità: ${item.quantità})`).join(", ");
-
-  // Creazione del contenuto HTML dell'email
+  const causale = doc.carrello.map((item: any) => `${item.biglietto.title} (Quantità: ${item.quantità})`).join(", ");
   const html = `
     <h1>Grazie per aver prenotato online i tuoi posti</h1>
-    <h2 class='text-lg font-bold'>Dettagli Prenotazione</h2>
-    <p><strong>ID:</strong> ${doc.id}</p>
-    <p><strong>Stato:</strong> ${doc.stato}</p>
-    <p><strong>Utente:</strong> ${doc.utente}</p>
-    <p><strong>Usato:</strong> ${doc.usato ? 'Sì' : 'No'}</p>
-    <p><strong>Telefono:</strong> ${doc.numeroDiTelefono}</p>
-    <p><strong>Email:</strong> ${doc.email}</p>
-    <p><strong>Fascia Oraria:</strong> ${doc.fasciaOraria}</p>
-    
-    <h3 class='text-lg font-bold'>Codice QR per la Prenotazione</h3>
-    <div>${qrCodeSVG}</div> <!-- Includi il QR code nell'email -->
-
-    <h3 class='text-lg font-bold mt-4'>Biglietti nel Carrello</h3>
-    <div>
-      ${doc.carrello && doc.carrello.length > 0 
-        ? doc.carrello.map((item: any) => `
-          <div class="border p-2 my-2">
-            <p><strong>Titolo:</strong> ${item.biglietto.titolo}</p>
-            <p><strong>Prezzo:</strong> €${item.biglietto.prezzo}</p>
-            <p><strong>Quantità:</strong> ${item.quantità}</p>
-          </div>
-        `).join('') 
-        : '<p>Nessun biglietto nel carrello.</p>'}
-    </div>
-
-    <h3>I dati per il bonifico:</h3>
+    <p>Riepilogo della prenotazione:</p>
+    <ul>
+      <li>Utente: ${doc.utente}</li>
+      <li>Email: ${doc.email}</li>
+      <li>Data Prenotazione: ${doc.dataPrenotazione}</li>
+      <li>Fascia Oraria: ${doc.fasciaOraria}</li>
+      <li>Numero di Telefono: ${doc.numeroDiTelefono}</li>
+    </ul>
+    <p>I dati per il bonifico:</p>
     <ul>
       <li>Cifra: ${doc.totaleCarrello} €</li>
       <li>Intestazione: Associazione Atelier Kadalù</li>
