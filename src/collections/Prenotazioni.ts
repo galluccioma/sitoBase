@@ -30,28 +30,28 @@ export const Prenotazioni: CollectionConfig = {
   access: {
     read: ({ req }) => {
       const origin = req.headers.get('origin'); // Usa il metodo .get()
-      if (origin === 'https://musesaccademia.pages.dev') {
+      if (origin === 'https://musesaccademia.pages.dev/booking') {
         return true;  // Consente l'accesso
       }
       return false;  // Rifiuta l'accesso per altri domini
     },
     create: ({ req }) => {
       const origin = req.headers.get('origin'); // Usa il metodo .get()
-      if (origin === 'https://musesaccademia.pages.dev') {
+      if (origin === 'https://musesaccademia.pages.dev/booking') {
         return true;
       }
       return false;
     },
     update: ({ req }) => {
       const origin = req.headers.get('origin'); // Usa il metodo .get()
-      if (origin === 'https://musesaccademia.pages.dev') {
+      if (origin === 'https://musesaccademia.pages.dev/booking') {
         return true;
       }
       return false;
     },
     delete: ({ req }) => {
       const origin = req.headers.get('origin'); // Usa il metodo .get()
-      if (origin === 'https://musesaccademia.pages.dev') {
+      if (origin === 'https://musesaccademia.pages.dev/booking') {
         return true;
       }
       return false;
