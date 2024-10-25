@@ -148,6 +148,5 @@ export default buildConfig({
   }),
   cors: [
     'https://musesaccademia.pages.dev', // Dominio di produzione
-    'http://localhost:4321',             // Ambiente di sviluppo
   ],
 });
