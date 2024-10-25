@@ -64,7 +64,6 @@ export default buildConfig({
     Prenotazioni,// Collezione per le prenotazioni
     FormSubmission, // Collezione degli invii del modulo
     Biglietti,    // Collezione per i biglietti
-     
     Mostre,        // Collezione mostre
     Notizie,        // Collezione per il blog
     Categories,  // Collezione delle categorie
@@ -147,4 +146,8 @@ export default buildConfig({
       },
     },
   }),
+  cors: [
+    'https://musesaccademia.pages.dev', // Dominio di produzione
+    'http://localhost:4321',             // Ambiente di sviluppo
+  ],
 });
