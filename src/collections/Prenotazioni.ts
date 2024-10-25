@@ -26,6 +26,9 @@ interface ItemType {
 
 export const Prenotazioni: CollectionConfig = {
   slug: 'prenotazioni',
+  access: {
+    create: () => true,
+  },
   auth: true,
   admin: {
     useAsTitle: "id",
