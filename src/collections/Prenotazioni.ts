@@ -30,7 +30,6 @@ export const Prenotazioni: CollectionConfig = {
     useAsTitle: "id",
     defaultColumns: ['dataPrenotazione', 'stato', 'usato', 'totaleCarrello',  'utente', 'email'],
   },
-  auth:true,
   fields: [  
     {
       name: 'carrello',
