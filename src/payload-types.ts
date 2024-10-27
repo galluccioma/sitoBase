@@ -98,19 +98,6 @@ export interface Biglietti {
   titolo: string;
   prezzo?: number | null;
   descrizione?: string | null;
-  fasceOrarie?:
-    | {
-        fasciaOraria: 'mattina' | 'pomeriggio' | 'sera';
-        bigliettiDisponibili: number;
-        id?: string | null;
-      }[]
-    | null;
-  giorniAttivi?:
-    | {
-        giorno: 'lunedì' | 'martedì' | 'mercoledì' | 'giovedì' | 'venerdì';
-        id?: string | null;
-      }[]
-    | null;
   updatedAt: string;
   createdAt: string;
 }

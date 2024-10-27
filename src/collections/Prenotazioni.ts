@@ -30,10 +30,7 @@ export const Prenotazioni: CollectionConfig = {
     useAsTitle: "id",
     defaultColumns: ['dataPrenotazione', 'stato', 'usato', 'totaleCarrello',  'utente', 'email'],
   },
-  access: {
-    create: () => true,
-    read: () => true,
-  },
+  auth:true,
   fields: [  
     {
       name: 'carrello',
@@ -169,7 +166,23 @@ export const Prenotazioni: CollectionConfig = {
     ],
     
     afterChange: [
-     
+      async ({ operation, doc, previousDoc, req }) => {
+        if (operation === 'create') {
+          // Invio della mail per nuova prenotazione
+          await sendSummaryEmail({ doc, req, state: doc.stato });
+        } else if (operation === 'update') {
+          if (doc.stato === 'completato') {
+            // Invio della mail di conferma con QR code
+            await sendClientConfirmationWithQRCode({ doc, req });
+          } else if (doc.stato === 'respinto') {
+            // Invio della mail di mancato pagamento
+            await sendPaymentFailureNotification({ doc, req });
+          } else if (doc.stato === 'attesa_pagamento') {
+            // Invio della mail di riepilogo per attesa pagamento
+            await sendSummaryEmail({ doc, req, state: doc.stato });
+          }
+        }
+      },
     ],
     
   },
