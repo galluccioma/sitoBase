@@ -8,6 +8,7 @@
 
 export interface Config {
   auth: {
+    prenotazioni: PrenotazioniAuthOperations;
     users: UserAuthOperations;
   };
   collections: {
@@ -25,8 +26,25 @@ export interface Config {
   };
   globals: {};
   locale: 'en' | 'it';
-  user: User & {
-    collection: 'users';
+  user:
+    | (Prenotazioni & {
+        collection: 'prenotazioni';
+      })
+    | (User & {
+        collection: 'users';
+      });
+}
+export interface PrenotazioniAuthOperations {
+  forgotPassword: {
+    email: string;
+  };
+  login: {
+    password: string;
+    email: string;
+  };
+  registerFirstUser: {
+    email: string;
+    password: string;
   };
 }
 export interface UserAuthOperations {
@@ -56,13 +74,20 @@ export interface Prenotazioni {
   dataPrenotazione: string;
   fasciaOraria: 'mattina' | 'pomeriggio' | 'sera';
   utente: string;
-  email?: string | null;
   numeroDiTelefono?: string | null;
   stato?: ('nuovo' | 'attesa_pagamento' | 'carrello' | 'respinto' | 'completato') | null;
   usato?: boolean | null;
   totaleCarrello?: number | null;
   updatedAt: string;
   createdAt: string;
+  email: string;
+  resetPasswordToken?: string | null;
+  resetPasswordExpiration?: string | null;
+  salt?: string | null;
+  hash?: string | null;
+  loginAttempts?: number | null;
+  lockUntil?: string | null;
+  password?: string | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -230,10 +255,15 @@ export interface User {
  */
 export interface PayloadPreference {
   id: string;
-  user: {
-    relationTo: 'users';
-    value: string | User;
-  };
+  user:
+    | {
+        relationTo: 'prenotazioni';
+        value: string | Prenotazioni;
+      }
+    | {
+        relationTo: 'users';
+        value: string | User;
+      };
   key?: string | null;
   value?:
     | {
