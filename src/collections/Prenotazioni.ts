@@ -26,13 +26,12 @@ interface ItemType {
 
 export const Prenotazioni: CollectionConfig = {
   slug: 'prenotazioni',
-  
   admin: {
     useAsTitle: "id",
     defaultColumns: ['dataPrenotazione', 'stato', 'usato', 'totaleCarrello',  'utente', 'email'],
   },
-  fields: [
-    
+  auth: true,
+  fields: [  
     {
       name: 'carrello',
       type: 'array',
