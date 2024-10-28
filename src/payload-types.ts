@@ -14,7 +14,7 @@ export interface Config {
     prenotazioni: Prenotazioni;
     'form-submissions': FormSubmission;
     biglietti: Biglietti;
-    mostre: Mostre;
+    aggiornamenti: Aggiornamenti;
     notizie: Notizie;
     categories: Category;
     tags: Tag;
@@ -90,17 +90,15 @@ export interface FormSubmission {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "mostre".
+ * via the `definition` "aggiornamenti".
  */
-export interface Mostre {
+export interface Aggiornamenti {
   id: string;
   slug: string;
   status?: ('draft' | 'published') | null;
   category?: (string | null) | Category;
   tags?: (string | Tag)[] | null;
   title: string;
-  dataInizio?: string | null;
-  dataFine?: string | null;
   description: string;
   content?: {
     root: {

@@ -15,8 +15,8 @@ const formatSlug: FieldHook = async ({ value, data }) => {
 };
 
 
-export const Mostre: CollectionConfig = {
-  slug: 'mostre', // Nome della collezione nel database e URL
+export const Aggiornamenti: CollectionConfig = {
+  slug: 'aggiornamenti', // Nome della collezione nel database e URL
   admin: {
     useAsTitle: "title",
     defaultColumns: ['title', 'category', 'image', 'tags', 'status'],
@@ -26,8 +26,8 @@ export const Mostre: CollectionConfig = {
     read: () => true,
   },
   labels: {
-    singular: 'Mostra',
-    plural: 'Mostre',
+    singular: 'Aggiornamento',
+    plural: 'Aggiornamenti',
   },
   fields: [
 
@@ -90,16 +90,6 @@ export const Mostre: CollectionConfig = {
       type: 'text',
       label: 'Title',
       required: true,
-    },
-    {
-      name: 'dataInizio',
-      type: 'date',
-      label: 'Data Inizio',
-    },
-    {
-      name: 'dataFine',
-      type: 'date',
-      label: 'Data Fine',
     },
     {
       name: 'description',

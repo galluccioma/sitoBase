@@ -31,7 +31,7 @@ import { Notizie } from './collections/Notizie' // Collezione articoli del blog
 import { FormSubmission } from './collections/Formsubmission' // Collezione per invii di moduli
 import { Biglietti } from './collections/Biglietti' // Collezione biglietti
 import { Prenotazioni } from './collections/Prenotazioni'
-import { Mostre } from './collections/Mostre'  // Collezione Mostre
+import { Aggiornamenti } from './collections/Aggiornamenti'  // Collezione Mostre
 
 // Determina il percorso corrente del file
 const filename = fileURLToPath(import.meta.url)
@@ -64,7 +64,7 @@ export default buildConfig({
     Prenotazioni,// Collezione per le prenotazioni
     FormSubmission, // Collezione degli invii del modulo
     Biglietti,    // Collezione per i biglietti
-    Mostre,        // Collezione mostre
+    Aggiornamenti,        // Collezione mostre
     Notizie,        // Collezione per il blog
     Categories,  // Collezione delle categorie
     Tags,        // Collezione dei tag
