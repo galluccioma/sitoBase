@@ -18,6 +18,10 @@ export const Users: CollectionConfig = {
           value: 'admin',
         },
         {
+          label: 'Editore',
+          value: 'editore',
+        },
+        {
           label: 'User',
           value: 'user',
         },

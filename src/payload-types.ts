@@ -194,7 +194,7 @@ export interface Notizie {
  */
 export interface User {
   id: string;
-  role: 'admin' | 'user';
+  role: 'admin' | 'editore' | 'user';
   updatedAt: string;
   createdAt: string;
   enableAPIKey?: boolean | null;

@@ -7,6 +7,10 @@ export const FormSubmission: CollectionConfig = {
   access: {
     create: () => true,
   },
+  labels: {
+    singular: 'Feedback',
+    plural: 'Feedbacks',
+  },
   fields: [
     {
       type: 'text',
