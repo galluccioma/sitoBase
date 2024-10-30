@@ -201,11 +201,6 @@ const Validazione: React.FC = () => {
             {scanning ? 'Ferma Scansione' : 'Scansiona QR'}
           </button>
 
-          {/* QR Reader Element */}
-          <div id="qr-reader" className='mt-4' style={{ width: "250px", height: "250px" }} />
-
-          {error && <p style={{ color: 'red' }}>{error}</p>}
-
           {prenotazione && (
             <section className="flex items-top mx-auto max-w-6xl bg-white text-black gap-6 p-6">
               {/* Reservation Details Column */}
@@ -262,6 +257,10 @@ const Validazione: React.FC = () => {
             </section>
           )}
         </div>
+        {/* QR Reader Element */}
+        <div id="qr-reader" className='mt-4' style={{ width: "100px", height: "100px" }} />
+
+{error && <p style={{ color: 'red' }}>{error}</p>}
       </section>
     </ProtectedLayout>
   );
