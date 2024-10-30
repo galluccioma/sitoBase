@@ -163,6 +163,7 @@ const Validazione: React.FC = () => {
       const data = await response.json();
       setPrenotazione(data);
       setQrData(data.id);
+      stopScanner()
     } catch (err: any) {
       setError(err.message || 'Errore durante la ricerca.');
     } finally {
@@ -199,7 +200,7 @@ const Validazione: React.FC = () => {
           </button>
 
           {/* QR Reader Element */}
-          <div id="qr-reader" style={{ width: "250px", height: "250px" }} />
+          <div id="qr-reader" className='mt-4' style={{ width: "250px", height: "250px" }} />
 
           {error && <p style={{ color: 'red' }}>{error}</p>}
 
