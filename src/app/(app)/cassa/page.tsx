@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import React, { useState, useEffect } from 'react';
 import { QRCodeSVG } from 'qrcode.react';
 import { Html5Qrcode } from 'html5-qrcode';
@@ -36,48 +36,74 @@ const Validazione: React.FC = () => {
   const [qrData, setQrData] = useState<string | null>(null);
   const [html5QrCode, setHtml5QrCode] = useState<Html5Qrcode | null>(null);
   const [scanning, setScanning] = useState(false);
+  const [cameraPermission, setCameraPermission] = useState<boolean | null>(null);
 
-  useEffect(() => {
-    if (scanning) {
-      const qrCode = new Html5Qrcode("qr-reader");
-      setHtml5QrCode(qrCode);
-      const qrCodeSuccessCallback = (decodedText: string) => {
-        setId(decodedText);
-        handleSearch(decodedText);
-        stopScanning(); // Ferma la scansione dopo aver ottenuto il codice
-      };
+  const onScanSuccess = (decodedText: string) => {
+    setId(decodedText);
+    handleSearch(decodedText);
+  };
 
-      const qrCodeErrorCallback = (errorMessage: string) => {
-        setError(`Errore nella scansione: ${errorMessage}`);
-      };
+  const onScanFailed = (errorMessage: string) => {
+    console.warn(`Scansione fallita: ${errorMessage}`);
+  };
 
-      qrCode.start(
-        { facingMode: "environment" },
-        {
-          fps: 10,
-          qrbox: { width: 250, height: 250 },
-        },
-        qrCodeSuccessCallback,
-        qrCodeErrorCallback
-      ).catch((err) => {
-        setError(`Errore nell'avvio della scansione: ${err}`);
-      });
-
-      return () => {
-        stopScanning(); // Ferma la scansione quando il componente si smonta
-      };
-    }
-  }, [scanning]);
-
-  const stopScanning = () => {
-    if (html5QrCode) {
-      html5QrCode.stop().then(() => {
-        console.log("Scansione fermata.");
-      }).catch((err) => {
-        setError(`Errore durante la fermata della scansione: ${err}`);
-      });
+  const checkCameraPermission = async () => {
+    try {
+      await navigator.mediaDevices.getUserMedia({ video: true });
+      setCameraPermission(true);
+    } catch (error) {
+      console.error('Accesso alla camera negato:', error);
+      setCameraPermission(false);
     }
   };
+
+  const startScanner = async () => {
+    if (!html5QrCode) {
+      const qrCode = new Html5Qrcode('qr-reader');
+      setHtml5QrCode(qrCode);
+
+      try {
+        await qrCode.start(
+          { facingMode: 'environment' },
+          {
+            fps: 10,
+            qrbox: { width: 250, height: 250 },
+          },
+          onScanSuccess,
+          onScanFailed
+        );
+      } catch (error) {
+        console.error('Errore durante l\'avvio dello scanner QR:', error);
+        setError('Errore nell\'accesso alla fotocamera. Assicurati che il dispositivo abbia una fotocamera e che l\'accesso sia consentito.');
+      }
+    }
+  };
+
+  const stopScanner = async () => {
+    if (html5QrCode && html5QrCode.isScanning) {
+      await html5QrCode.stop();
+      html5QrCode.clear();
+      setHtml5QrCode(null);
+    }
+  };
+
+  useEffect(() => {
+    checkCameraPermission(); // Controlla il permesso della camera al caricamento del componente
+
+    if (scanning) {
+      if (cameraPermission) {
+        startScanner();
+      } else {
+        setError('Permesso della fotocamera non concesso.');
+      }
+    } else {
+      stopScanner();
+    }
+
+    return () => {
+      stopScanner();
+    };
+  }, [scanning, cameraPermission]);
 
   const handleUpdate = async () => {
     if (!prenotazione) {
@@ -91,9 +117,7 @@ const Validazione: React.FC = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          usato: true,
-        }),
+        body: JSON.stringify({ usato: true }),
       });
 
       if (!response.ok) {
@@ -109,6 +133,13 @@ const Validazione: React.FC = () => {
   const handleSearch = async (searchId: string) => {
     setLoading(true);
     setError('');
+
+    if (!searchId.trim()) {
+      setError('ID prenotazione non valido.');
+      setLoading(false);
+      return;
+    }
+
     try {
       const response = await fetch(`/api/prenotazioni/${searchId}`);
 
@@ -120,7 +151,7 @@ const Validazione: React.FC = () => {
       setPrenotazione(data);
       setQrData(data.id);
     } catch (err: any) {
-      setError(err.message || 'Prenotazione non trovata.');
+      setError(err.message || 'Errore durante la ricerca.');
     } finally {
       setLoading(false);
     }
@@ -146,21 +177,22 @@ const Validazione: React.FC = () => {
             {loading ? 'Cercando...' : 'Cerca'}
           </button>
 
-          {/* Bottone per avviare la scansione QR */}
+          {/* Button to start/stop QR scanning */}
           <button
-            onClick={() => setScanning(!scanning)}
+            onClick={() => setScanning(prev => !prev)}
             className="bg-black text-white text-lg flex w-80 p-2 mt-4 items-center justify-center uppercase rounded-full"
           >
             {scanning ? 'Ferma Scansione' : 'Scansiona QR'}
           </button>
 
-          {scanning && <div id="qr-reader" style={{ width: "250px", height: "250px" }} />}
+          {/* QR Reader Element */}
+          <div id="qr-reader" style={{ width: "250px", height: "250px" }} />
 
           {error && <p style={{ color: 'red' }}>{error}</p>}
 
           {prenotazione && (
             <section className="flex items-top mx-auto max-w-6xl bg-white text-black gap-6 p-6">
-              {/* Colonna Dettagli Prenotazione */}
+              {/* Reservation Details Column */}
               <div className="flex-grow">
                 <h2 className="text-lg font-bold">Dettagli Prenotazione</h2>
                 <p>ID: {prenotazione.id}</p>
@@ -179,7 +211,7 @@ const Validazione: React.FC = () => {
                 )}
               </div>
 
-              {/* Colonna Biglietti nel Carrello */}
+              {/* Tickets in Cart Column */}
               <div className="flex-grow">
                 {prenotazione.carrello && prenotazione.carrello.length > 0 ? (
                   <>
