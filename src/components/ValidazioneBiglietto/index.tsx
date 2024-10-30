@@ -194,33 +194,34 @@ export const ValidazioneBiglietto: React.FC = () => {
       <section className="flex flex-col items-start justify-top bg-white text-black ">
         <div className="gap-6 w-full max-w-4xl">
           <h2 className="text-3xl my-6">Validazione Prenotazione</h2>
-          <input
-            type="text"
-            className="border border-black focus:border-2 p-2 w-full"
-            placeholder="Inserisci ID prenotazione"
-            value={id}
-            onChange={(e) => setId(e.target.value)}
-          />
-          <button
-            onClick={() => handleSearch(id)}
-            disabled={loading}
-            className="bg-black text-white text-lg flex p-2 mt-4 items-center justify-center uppercase rounded-sm w-full"
-          >
-            {loading ? 'Cercando...' : 'Cerca'}
-          </button>
+          <div className='bg-[#f5f5f5] p-6'>
+                <input
+                  type="text"
+                  className="border border-black/40 focus:border-black/70 p-4 w-full "
+                  placeholder="Inserisci ID prenotazione"
+                  value={id}
+                  onChange={(e) => setId(e.target.value)}
+                />
+                <button
+                  onClick={() => handleSearch(id)}
+                  disabled={loading}
+                  className="bg-black text-white text-lg flex p-2 mt-4 items-center justify-center uppercase rounded-sm w-full"
+                >
+                  {loading ? 'Cercando...' : 'Cerca'}
+                </button>
 
-          {/* Button to start/stop QR scanning */}
-          <button
-            onClick={() => setScanning(prev => !prev)}
-            className="bg-black text-white text-lg flex w-80 p-2 mt-4 items-center justify-center uppercase rounded-sm w-full"
-          >
-            {scanning ? 'Ferma Scansione' : 'Scansiona QR'}
-          </button>
-
+                {/* Button to start/stop QR scanning */}
+                <button
+                  onClick={() => setScanning(prev => !prev)}
+                  className="bg-zinc-200 border text-black text-lg flex p-2 mt-4 items-center justify-center uppercase rounded-sm w-full"
+                >
+                  {scanning ? 'Ferma Scansione' : 'Scansiona QR'}
+                </button>
+          </div>
           {prenotazione && (
             <section className="flex items-top mx-auto max-w-6xl bg-white text-black gap-6 p-6">
               {/* Reservation Details Column */}
-              <div className="flex-grow">
+              <div className="flex-grow ">
                 <h2 className="text-lg font-bold">Dettagli Prenotazione</h2>
                 <p>ID: {prenotazione.id}</p>
                 <p>Stato: {prenotazione.stato}</p>
