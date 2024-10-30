@@ -90,8 +90,8 @@ export const sendClientConfirmationWithQRCode = async ({ doc, req }: { doc: any,
     <h3>l'ID della tua prenotazione:</h3>
     <li>${doc.id}</li>
 
-    <h3>Il tuo QR Code:</h3>
-    <img src="${qrCodeUrl}" alt="QR Code per la tua prenotazione" />
+    <h3>Il tuo QR Code relativo alla prenotazione:</h3>
+    <img style=”display:block” src='${qrCodeUrl}' alt="${doc.id}" width=256 height=256 />
   `;
 
   await sendEmail({ to: doc.email, subject, html, req });
