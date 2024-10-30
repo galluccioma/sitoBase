@@ -49,14 +49,24 @@ const Validazione: React.FC = () => {
 
   const checkCameraPermission = useCallback(async () => {
     try {
-      await navigator.mediaDevices.getUserMedia({ video: true });
-      setCameraPermission(true);
+      // Show an alert explaining why you need permission
+      const userConsent = window.confirm(
+        "Questa applicazione richiede accesso alla tua fotocamera per scansionare i codici QR. Vuoi concedere il permesso?"
+      );
+      
+      if (userConsent) {
+        // Request access to the camera
+        await navigator.mediaDevices.getUserMedia({ video: true });
+        setCameraPermission(true);
+      } else {
+        setCameraPermission(false);
+      }
     } catch (error) {
       console.error('Accesso alla camera negato:', error);
       setCameraPermission(false);
-      setError('Accesso alla fotocamera non consentito. Controlla le impostazioni del browser.');
     }
   }, []);
+
 
   const startScanner = useCallback(async () => {
     if (!html5QrCode) {
