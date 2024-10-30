@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { QRCodeSVG } from 'qrcode.react';
 import { Html5Qrcode } from 'html5-qrcode';
-import ProtectedLayout from '@/access/adminAuth';
+
 
 interface Biglietto {
   id: string;
@@ -28,7 +28,7 @@ interface Prenotazione {
   carrello: Carrello[];
 }
 
-const Validazione: React.FC = () => {
+export const ValidazioneBiglietto: React.FC = () => {
   const [id, setId] = useState('');
   const [prenotazione, setPrenotazione] = useState<Prenotazione | null>(null);
   const [loading, setLoading] = useState(false);
@@ -49,25 +49,40 @@ const Validazione: React.FC = () => {
   }, []);
 
   const checkCameraPermission = useCallback(async () => {
-    try {
-      // Show an alert explaining why you need permission
-      const userConsent = window.confirm(
-        "Questa applicazione richiede accesso alla tua fotocamera per scansionare i codici QR. Vuoi concedere il permesso?"
-      );
-      
-      if (userConsent) {
-        // Request access to the camera
+    // Verifica se il consenso è già salvato nel localStorage
+    const storedPermission = localStorage.getItem('cameraPermission');
+    
+    if (storedPermission === 'granted') {
+      // Permesso già concesso
+      setCameraPermission(true);
+      return;
+    } else if (storedPermission === 'denied') {
+      // Permesso negato
+      setCameraPermission(false);
+      return;
+    }
+
+    // Mostra un avviso che spiega perché hai bisogno del permesso
+    const userConsent = window.confirm(
+      "Questa applicazione richiede accesso alla tua fotocamera per scansionare i codici QR. Vuoi concedere il permesso?"
+    );
+
+    if (userConsent) {
+      // Richiedi accesso alla fotocamera
+      try {
         await navigator.mediaDevices.getUserMedia({ video: true });
         setCameraPermission(true);
-      } else {
+        localStorage.setItem('cameraPermission', 'granted'); // Salva il permesso nel localStorage
+      } catch (error) {
+        console.error('Accesso alla camera negato:', error);
         setCameraPermission(false);
+        localStorage.setItem('cameraPermission', 'denied'); // Salva il permesso nel localStorage
       }
-    } catch (error) {
-      console.error('Accesso alla camera negato:', error);
+    } else {
       setCameraPermission(false);
+      localStorage.setItem('cameraPermission', 'denied'); // Salva il permesso nel localStorage
     }
   }, []);
-
 
   const startScanner = useCallback(async () => {
     if (!html5QrCode) {
@@ -176,13 +191,12 @@ const Validazione: React.FC = () => {
 
 
   return (
-    <ProtectedLayout>
-      <section className="flex flex-col items-center justify-top pt-36 bg-white text-black min-h-[100vh] w-full">
-        <div className="gap-6">
-          <h1 className="text-xl font-bold">Validazione Prenotazione</h1>
+      <section className="flex flex-col items-start justify-top bg-white text-black ">
+        <div className="gap-6 w-full max-w-4xl">
+          <h2 className="text-3xl my-6">Validazione Prenotazione</h2>
           <input
             type="text"
-            className="border border-black focus:border-2 p-2 w-80"
+            className="border border-black focus:border-2 p-2 w-full"
             placeholder="Inserisci ID prenotazione"
             value={id}
             onChange={(e) => setId(e.target.value)}
@@ -190,7 +204,7 @@ const Validazione: React.FC = () => {
           <button
             onClick={() => handleSearch(id)}
             disabled={loading}
-            className="bg-black text-white text-lg flex w-80 p-2 mt-4 items-center justify-center uppercase rounded-full"
+            className="bg-black text-white text-lg flex p-2 mt-4 items-center justify-center uppercase rounded-sm w-full"
           >
             {loading ? 'Cercando...' : 'Cerca'}
           </button>
@@ -198,7 +212,7 @@ const Validazione: React.FC = () => {
           {/* Button to start/stop QR scanning */}
           <button
             onClick={() => setScanning(prev => !prev)}
-            className="bg-black text-white text-lg flex w-80 p-2 mt-4 items-center justify-center uppercase rounded-full"
+            className="bg-black text-white text-lg flex w-80 p-2 mt-4 items-center justify-center uppercase rounded-sm w-full"
           >
             {scanning ? 'Ferma Scansione' : 'Scansiona QR'}
           </button>
@@ -251,7 +265,7 @@ const Validazione: React.FC = () => {
 
                 <button
                   onClick={handleUpdate}
-                  className="bg-black text-white flex p-2 gap-2 items-center justify-center uppercase text-sm rounded-full mt-4"
+                  className="bg-black text-white flex p-2 gap-2 items-center justify-center uppercase text-sm rounded-sm w-full mt-4"
                 >
                   Valida Prenotazione
                 </button>
@@ -264,8 +278,6 @@ const Validazione: React.FC = () => {
 
 {error && <p style={{ color: 'red' }}>{error}</p>}
       </section>
-    </ProtectedLayout>
   );
 };
 
-export default Validazione;

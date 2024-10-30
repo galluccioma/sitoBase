@@ -21,6 +21,8 @@ import { fileURLToPath } from 'url'
 // Import dei componenti personalizzati
 import { Logo } from './components/WhiteLabel' // Logo personalizzato per l'amministrazione
 import { Icon } from './components/WhiteLabel' // Icona personalizzata per l'amministrazione
+import {ValidazioneBiglietto} from './components/ValidazioneBiglietto'
+import { Links } from './components/Links'
 
 // Import delle collezioni
 import { Users } from './collections/Users' // Collezione utenti
@@ -57,6 +59,7 @@ export default buildConfig({
         Logo, // Logo personalizzato nel pannello admin
         Icon, // Icona personalizzata nel pannello admin
       },
+      afterDashboard:[ValidazioneBiglietto],
     },
   },
   
