@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { QRCodeSVG } from 'qrcode.react';
 import { Html5Qrcode } from 'html5-qrcode';
 import ProtectedLayout from '@/access/adminAuth';
@@ -38,26 +38,27 @@ const Validazione: React.FC = () => {
   const [scanning, setScanning] = useState(false);
   const [cameraPermission, setCameraPermission] = useState<boolean | null>(null);
 
-  const onScanSuccess = (decodedText: string) => {
+  const onScanSuccess = useCallback((decodedText: string) => {
     setId(decodedText);
     handleSearch(decodedText);
-  };
+  }, []);
 
-  const onScanFailed = (errorMessage: string) => {
+  const onScanFailed = useCallback((errorMessage: string) => {
     console.warn(`Scansione fallita: ${errorMessage}`);
-  };
+  }, []);
 
-  const checkCameraPermission = async () => {
+  const checkCameraPermission = useCallback(async () => {
     try {
       await navigator.mediaDevices.getUserMedia({ video: true });
       setCameraPermission(true);
     } catch (error) {
       console.error('Accesso alla camera negato:', error);
       setCameraPermission(false);
+      setError('Accesso alla fotocamera non consentito. Controlla le impostazioni del browser.');
     }
-  };
+  }, []);
 
-  const startScanner = async () => {
+  const startScanner = useCallback(async () => {
     if (!html5QrCode) {
       const qrCode = new Html5Qrcode('qr-reader');
       setHtml5QrCode(qrCode);
@@ -77,19 +78,21 @@ const Validazione: React.FC = () => {
         setError('Errore nell\'accesso alla fotocamera. Assicurati che il dispositivo abbia una fotocamera e che l\'accesso sia consentito.');
       }
     }
-  };
+  }, [html5QrCode, onScanSuccess, onScanFailed]);
 
-  const stopScanner = async () => {
+  const stopScanner = useCallback(async () => {
     if (html5QrCode && html5QrCode.isScanning) {
       await html5QrCode.stop();
       html5QrCode.clear();
       setHtml5QrCode(null);
     }
-  };
+  }, [html5QrCode]);
 
   useEffect(() => {
-    checkCameraPermission(); // Controlla il permesso della camera al caricamento del componente
+    checkCameraPermission();
+  }, [checkCameraPermission]);
 
+  useEffect(() => {
     if (scanning) {
       if (cameraPermission) {
         startScanner();
@@ -101,9 +104,9 @@ const Validazione: React.FC = () => {
     }
 
     return () => {
-      stopScanner();
+      stopScanner(); // Assicurati di fermare lo scanner quando il componente si smonta o quando 'scanning' cambia
     };
-  }, [scanning, cameraPermission]);
+  }, [scanning, cameraPermission, startScanner, stopScanner]);
 
   const handleUpdate = async () => {
     if (!prenotazione) {
