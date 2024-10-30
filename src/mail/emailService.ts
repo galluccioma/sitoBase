@@ -49,8 +49,7 @@ const generateQRCode = async (data: string): Promise<string> => {
 
 // Funzione per inviare una email di riepilogo
 export const sendSummaryEmail = async ({ doc, req, state }: { doc: any, req: PayloadRequest, state: string }) => {
-  const subject = `Riepilogo Prenotazione - Stato: ${state}`;
-  const causale = doc.carrello.map((item: any) => `${item.biglietto.title} (Quantità: ${item.quantità})`).join(", ");
+  const subject = `Riepilogo Prenotazione | MÚSES - Accademia Essenze`;
   const html = `
     <h1>Dettagli della tua prenotazione:</h1>
     <ul>
@@ -66,7 +65,7 @@ export const sendSummaryEmail = async ({ doc, req, state }: { doc: any, req: Pay
       <li>Cifra: ${doc.totaleCarrello} €</li>
       <li>Intestazione: Associazione Atelier Kadalù</li>
       <li>IBAN: IT73R0617046320000001557342</li>
-      <li>Causale: ${causale}</li>
+      <li>Causale: Acquisto biglietti online MÚSES </li>
   `;
 
   await sendEmail({ to: doc.email, subject, html, req });
@@ -75,7 +74,7 @@ export const sendSummaryEmail = async ({ doc, req, state }: { doc: any, req: Pay
 
 // Funzione per inviare email di conferma con QR code
 export const sendClientConfirmationWithQRCode = async ({ doc, req }: { doc: any, req: PayloadRequest }) => {
-  const subject = 'Grazie per la tua prenotazione';
+  const subject = 'Grazie per la tua prenotazione | MÚSES - Accademia Essenze';
   const qrCodeUrl = await generateQRCode(doc.id);
   
   const html = `
@@ -88,6 +87,9 @@ export const sendClientConfirmationWithQRCode = async ({ doc, req }: { doc: any,
       <li>Fascia Oraria: ${doc.fasciaOraria}</li>
       <li>Numero di Telefono: ${doc.numeroDiTelefono}</li>
     </ul>
+    <h3>l'ID della tua prenotazione:</h3>
+    <li>${doc.id}</li>
+
     <h3>Il tuo QR Code:</h3>
     <img src="${qrCodeUrl}" alt="QR Code per la tua prenotazione" />
   `;
@@ -97,7 +99,7 @@ export const sendClientConfirmationWithQRCode = async ({ doc, req }: { doc: any,
 
 // Funzione per inviare email di notifica di mancato pagamento
 export const sendPaymentFailureNotification = async ({ doc, req }: { doc: any, req: PayloadRequest }) => {
-  const subject = 'Notifica di Mancato Pagamento';
+  const subject = 'Mancato Pagamento | MÚSES - Accademia Essenze';
   const html = `
     <h1>Attenzione: Mancato Pagamento</h1>
     <p>La tua prenotazione non è stata completata a causa di un mancato pagamento.</p>
