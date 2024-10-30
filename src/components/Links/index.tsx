@@ -14,6 +14,11 @@ export const Links = () => {
         <span>Valida le prenotazioni attraverso il codice o scansiona il biglietto.</span>
         <div className={styles.scanlines} />
       </Link>
+      <Link href="https://data.umazing.it" target='blank'>
+        <h6>Analitiche e stats</h6>
+        <span>Vai alla dashboard analitica, ricordati di fare richiesta preventivamente per ottenere l`accesso alle analitiche.</span>
+        <div className={styles.scanlines} />
+      </Link>
       <Link href="https://musesaccademia.pages.dev">
         <h6>Vai al frontend del tuo sito</h6>
         <span>Scrivici per ottenere assistenza personalizzata.</span>
