@@ -170,10 +170,7 @@ export const Prenotazioni: CollectionConfig = {
     
     afterChange: [
       async ({ operation, doc, previousDoc, req }) => {
-        if (operation === 'create') {
-          // Invio della mail per nuova prenotazione
-          await sendSummaryEmail({ doc, req, state: doc.stato });
-        } else if (operation === 'update') {
+       if (operation === 'update') {
           if (doc.stato === 'completato') {
             // Invio della mail di conferma con QR code
             await sendClientConfirmationWithQRCode({ doc, req });
