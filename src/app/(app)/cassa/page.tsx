@@ -40,6 +40,7 @@ const Validazione: React.FC = () => {
 
   const onScanSuccess = useCallback((decodedText: string) => {
     setId(decodedText);
+    stopScanner(); 
     handleSearch(decodedText);
   }, []);
 
@@ -150,6 +151,7 @@ const Validazione: React.FC = () => {
     if (!searchId.trim()) {
       setError('ID prenotazione non valido.');
       setLoading(false);
+      stopScanner();  // Stop scanner se l'ID non è valido
       return;
     }
 
@@ -163,7 +165,7 @@ const Validazione: React.FC = () => {
       const data = await response.json();
       setPrenotazione(data);
       setQrData(data.id);
-      stopScanner()
+      stopScanner();  // Stop scanner se l'ID è valido
     } catch (err: any) {
       setError(err.message || 'Errore durante la ricerca.');
     } finally {
