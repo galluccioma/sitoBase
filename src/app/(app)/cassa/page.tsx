@@ -1,8 +1,7 @@
 'use client'
-
 import React, { useState, useEffect } from 'react';
 import { QRCodeSVG } from 'qrcode.react';
-import jsQR from 'jsqr'; // Importa la libreria jsQR
+import { Html5Qrcode } from 'html5-qrcode';
 import ProtectedLayout from '@/access/adminAuth';
 
 interface Biglietto {
@@ -35,46 +34,50 @@ const Validazione: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [qrData, setQrData] = useState<string | null>(null);
+  const [html5QrCode, setHtml5QrCode] = useState<Html5Qrcode | null>(null);
+  const [scanning, setScanning] = useState(false);
 
-  // Funzione per gestire il caricamento del file
-  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (!file) return;
+  useEffect(() => {
+    if (scanning) {
+      const qrCode = new Html5Qrcode("qr-reader");
+      setHtml5QrCode(qrCode);
+      const qrCodeSuccessCallback = (decodedText: string) => {
+        setId(decodedText);
+        handleSearch(decodedText);
+        stopScanning(); // Ferma la scansione dopo aver ottenuto il codice
+      };
 
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      const imageData = e.target?.result;
-      if (imageData) {
-        decodeQRCode(imageData as string);
-      }
-    };
-    reader.readAsDataURL(file);
+      const qrCodeErrorCallback = (errorMessage: string) => {
+        setError(`Errore nella scansione: ${errorMessage}`);
+      };
+
+      qrCode.start(
+        { facingMode: "environment" },
+        {
+          fps: 10,
+          qrbox: { width: 250, height: 250 },
+        },
+        qrCodeSuccessCallback,
+        qrCodeErrorCallback
+      ).catch((err) => {
+        setError(`Errore nell'avvio della scansione: ${err}`);
+      });
+
+      return () => {
+        stopScanning(); // Ferma la scansione quando il componente si smonta
+      };
+    }
+  }, [scanning]);
+
+  const stopScanning = () => {
+    if (html5QrCode) {
+      html5QrCode.stop().then(() => {
+        console.log("Scansione fermata.");
+      }).catch((err) => {
+        setError(`Errore durante la fermata della scansione: ${err}`);
+      });
+    }
   };
-
-  // Funzione per decodificare il codice QR dall'immagine
-  const decodeQRCode = (imageData: string) => {
-    const img = new Image();
-    img.src = imageData;
-    img.onload = () => {
-        const canvas = document.createElement('canvas');
-        canvas.width = img.width;
-        canvas.height = img.height;
-        const ctx = canvas.getContext('2d');
-        if (ctx) {
-            ctx.drawImage(img, 0, 0, img.width, img.height);
-            // Aggiungi filtri qui per migliorare l'immagine
-            ctx.filter = 'contrast(200%)'; // Aumenta il contrasto
-            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-            const code = jsQR(imageData.data, canvas.width, canvas.height);
-            if (code) {
-                setId(code.data);
-                handleSearch(code.data); // Passa il codice QR decodificato
-            } else {
-                setError("Nessun codice QR trovato nell'immagine.");
-            }
-        }
-    };
-};
 
   const handleUpdate = async () => {
     if (!prenotazione) {
@@ -135,10 +138,6 @@ const Validazione: React.FC = () => {
             value={id}
             onChange={(e) => setId(e.target.value)}
           />
-          <div className="mt-4">
-            <h2 className="text-lg font-bold">Scansione Codice QR</h2>
-            <input type="file" accept="image/*" capture="environment" onChange={handleFileUpload} className="mt-2" />
-          </div>
           <button
             onClick={() => handleSearch(id)}
             disabled={loading}
@@ -146,64 +145,75 @@ const Validazione: React.FC = () => {
           >
             {loading ? 'Cercando...' : 'Cerca'}
           </button>
-        </div>
-        {error && <p style={{ color: 'red' }}>{error}</p>}
 
-        {prenotazione && (
-          <section className="flex items-top mx-auto max-w-6xl bg-white text-black gap-6 p-6">
-            {/* Colonna Dettagli Prenotazione */}
-            <div className="flex-grow">
-              <h2 className="text-lg font-bold">Dettagli Prenotazione</h2>
-              <p>ID: {prenotazione.id}</p>
-              <p>Stato: {prenotazione.stato}</p>
-              <p>Utente: {prenotazione.utente}</p>
-              <p>Usato: {prenotazione.usato ? 'Sì' : 'No'}</p>
-              <p>Telefono: {prenotazione.numeroDiTelefono}</p>
-              <p>Email: {prenotazione.email}</p>
-              <p>Fascia Oraria: {prenotazione.fasciaOraria}</p>
+          {/* Bottone per avviare la scansione QR */}
+          <button
+            onClick={() => setScanning(!scanning)}
+            className="bg-black text-white text-lg flex w-80 p-2 mt-4 items-center justify-center uppercase rounded-full"
+          >
+            {scanning ? 'Ferma Scansione' : 'Scansiona QR'}
+          </button>
 
-              {qrData && (
-                <div className="mt-4">
-                  <h3 className="text-lg font-bold">QR Prenotazione</h3>
-                  <QRCodeSVG value={qrData} size={128} />
-                </div>
-              )}
-            </div>
+          {scanning && <div id="qr-reader" style={{ width: "250px", height: "250px" }} />}
 
-            {/* Colonna Biglietti nel Carrello */}
-            <div className="flex-grow">
-              {prenotazione.carrello && prenotazione.carrello.length > 0 ? (
-                <>
-                  <h3 className="text-lg font-bold">Biglietti nel Carrello</h3>
-                  <div className="grid grid-cols-1 gap-6">
-                    {prenotazione.carrello.map((item) => (
-                      <div key={item.id} className="border p-2 my-2">
-                        <p>
-                          <strong>Titolo:</strong> {item.biglietto.titolo}
-                        </p>
-                        <p>
-                          <strong>Prezzo:</strong> €{item.biglietto.prezzo}
-                        </p>
-                        <p>
-                          <strong>Quantità:</strong> {item.quantità}
-                        </p>
-                      </div>
-                    ))}
+          {error && <p style={{ color: 'red' }}>{error}</p>}
+
+          {prenotazione && (
+            <section className="flex items-top mx-auto max-w-6xl bg-white text-black gap-6 p-6">
+              {/* Colonna Dettagli Prenotazione */}
+              <div className="flex-grow">
+                <h2 className="text-lg font-bold">Dettagli Prenotazione</h2>
+                <p>ID: {prenotazione.id}</p>
+                <p>Stato: {prenotazione.stato}</p>
+                <p>Utente: {prenotazione.utente}</p>
+                <p>Usato: {prenotazione.usato ? 'Sì' : 'No'}</p>
+                <p>Telefono: {prenotazione.numeroDiTelefono}</p>
+                <p>Email: {prenotazione.email}</p>
+                <p>Fascia Oraria: {prenotazione.fasciaOraria}</p>
+
+                {qrData && (
+                  <div className="mt-4">
+                    <h3 className="text-lg font-bold">QR Prenotazione</h3>
+                    <QRCodeSVG value={qrData} size={128} />
                   </div>
-                </>
-              ) : (
-                <p>Nessun biglietto nel carrello.</p>
-              )}
+                )}
+              </div>
 
-              <button
-                onClick={handleUpdate}
-                className="bg-black text-white flex p-2 gap-2 items-center justify-center uppercase text-sm rounded-full mt-4"
-              >
-                Valida Prenotazione
-              </button>
-            </div>
-          </section>
-        )}
+              {/* Colonna Biglietti nel Carrello */}
+              <div className="flex-grow">
+                {prenotazione.carrello && prenotazione.carrello.length > 0 ? (
+                  <>
+                    <h3 className="text-lg font-bold">Biglietti nel Carrello</h3>
+                    <div className="grid grid-cols-1 gap-6">
+                      {prenotazione.carrello.map((item) => (
+                        <div key={item.id} className="border p-2 my-2">
+                          <p>
+                            <strong>Titolo:</strong> {item.biglietto.titolo}
+                          </p>
+                          <p>
+                            <strong>Prezzo:</strong> €{item.biglietto.prezzo}
+                          </p>
+                          <p>
+                            <strong>Quantità:</strong> {item.quantità}
+                          </p>
+                        </div>
+                      ))}
+                    </div>
+                  </>
+                ) : (
+                  <p>Nessun biglietto nel carrello.</p>
+                )}
+
+                <button
+                  onClick={handleUpdate}
+                  className="bg-black text-white flex p-2 gap-2 items-center justify-center uppercase text-sm rounded-full mt-4"
+                >
+                  Valida Prenotazione
+                </button>
+              </div>
+            </section>
+          )}
+        </div>
       </section>
     </ProtectedLayout>
   );
