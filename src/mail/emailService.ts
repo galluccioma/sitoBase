@@ -55,7 +55,7 @@ const generateQRCode = async (data: string): Promise<Buffer> => {
 export const sendSummaryEmail = async ({ doc, req, state }: { doc: any, req: PayloadRequest, state: string }) => {
   const subject = `Riepilogo Prenotazione | MÚSES - Accademia Essenze`;
   const html = `
-  <div style="font-family: Arial, sans-serif; line-height: 1.6; background-color: #f4f4f4; padding: 20px;">
+  <div style="font-family: Arial, sans-serif; line-height: 1.6; background-color: #f4f4f4; padding: 20px; gap: 16px">
     <div style="max-width: 600px; margin: auto; background: #ffffff; padding: 20px; border-radius: 5px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
       <h1 style="color: #333; text-align: center;">📅 Dettagli della tua prenotazione:</h1>
       <ul style="list-style-type: none; padding: 0;">
@@ -66,7 +66,9 @@ export const sendSummaryEmail = async ({ doc, req, state }: { doc: any, req: Pay
         <li style="margin: 10px 0;"><strong>Numero di Telefono:</strong> ${doc.numeroDiTelefono}</li>
         <li style="margin: 10px 0;"><strong>Cifra:</strong> ${doc.totaleCarrello} €</li>
       </ul>
-      <h3 style="color: #333;">I dati per il bonifico:</h3>
+   </div>
+   <div style="max-width: 600px; margin: auto; background: #ffffff; padding: 20px; border-radius: 5px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-top:16px">
+      <h2 style="color: #333; text-align: center;">🧾 I dati per il bonifico:</h2>
       <ul style="list-style-type: none; padding: 0;">
         <li style="margin: 10px 0;"><strong>Cifra:</strong> ${doc.totaleCarrello} €</li>
         <li style="margin: 10px 0;"><strong>Intestazione:</strong> Associazione Atelier Kadalù</li>
@@ -74,6 +76,7 @@ export const sendSummaryEmail = async ({ doc, req, state }: { doc: any, req: Pay
         <li style="margin: 10px 0;"><strong>Causale:</strong> Acquisto biglietti online MÚSES</li>
       </ul>
       <p style="color: #555; text-align: center; margin-top: 20px;">Grazie per aver scelto MÚSES!</p>
+    </div>
     </div>
   </div>
 `;
