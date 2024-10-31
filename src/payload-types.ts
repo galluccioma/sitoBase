@@ -13,9 +13,9 @@ export interface Config {
   collections: {
     prenotazioni: Prenotazioni;
     'form-submissions': FormSubmission;
-    biglietti: Biglietti;
     aggiornamenti: Aggiornamenti;
     notizie: Notizie;
+    biglietti: Biglietti;
     categories: Category;
     tags: Tag;
     media: Media;
@@ -58,7 +58,7 @@ export interface Prenotazioni {
   utente: string;
   email?: string | null;
   numeroDiTelefono?: string | null;
-  stato?: ('nuovo' | 'attesa_pagamento' | 'carrello' | 'respinto' | 'completato') | null;
+  stato?: ('nuovo' | 'attesa_pagamento' | 'respinto' | 'completato') | null;
   usato?: boolean | null;
   totaleCarrello?: number | null;
   updatedAt: string;

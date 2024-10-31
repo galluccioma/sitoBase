@@ -66,9 +66,9 @@ export default buildConfig({
   collections: [
     Prenotazioni,// Collezione per le prenotazioni
     FormSubmission, // Collezione degli invii del modulo
-    Biglietti,    // Collezione per i biglietti
     Aggiornamenti,        // Collezione mostre
     Notizie,        // Collezione per il blog
+    Biglietti,    // Collezione per i biglietti
     Categories,  // Collezione delle categorie
     Tags,        // Collezione dei tag
     Media,       // Collezione per i media
