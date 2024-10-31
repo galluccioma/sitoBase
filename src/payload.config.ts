@@ -150,9 +150,9 @@ export default buildConfig({
     },
   }),
   cors:[
-    "http://localhost:4321/", //test
+    "http://localhost:4321", //test
     "https://musesaccademia.pages.dev", //production
-    "https://www.accademiaessenze.it/",
-    "https://accademiaessenze.it/",
-  ]
+    "https://www.accademiaessenze.it",
+    "https://accademiaessenze.it",
+  ]  
 });
