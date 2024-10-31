@@ -10,11 +10,13 @@ const sendEmail = async ({
   subject,
   html,
   req,
+  attachments,
 }: {
   to: string | string[],
   subject: string,
   html: string,
   req: PayloadRequest,
+  attachments?: { filename: string, content: Buffer, cid: string }[],
 }) => {
   try {
     await req.payload.sendEmail({
@@ -23,24 +25,26 @@ const sendEmail = async ({
       replyTo: defaultMail,
       subject,
       html,
+      attachments,
     });
   } catch (error) {
-    console.error('Errore durante l\'invio della mail:', error);
+    console.error("Errore durante l'invio della mail:", error);
   }
 };
 
+
 // Funzione per generare un QR code come immagine base64
-const generateQRCode = async (data: string): Promise<string> => {
+const generateQRCode = async (data: string): Promise<Buffer> => {
   try {
-    const qrCode = await QRCode.toDataURL(data, {
+    const qrCodeBuffer = await QRCode.toBuffer(data, {
       width: 180,
       margin: 1,
       color: {
-        dark: '#000000',  // Colore del QR code
-        light: '#ffffff',  // Colore dello sfondo
+        dark: '#000000', // Colore del QR code
+        light: '#ffffff', // Colore dello sfondo
       },
     });
-    return qrCode; // Ritorna l'immagine QR code in formato base64
+    return qrCodeBuffer;
   } catch (error) {
     console.error('Errore nella generazione del QR Code:', error);
     throw error;
@@ -73,10 +77,14 @@ export const sendSummaryEmail = async ({ doc, req, state }: { doc: any, req: Pay
 };
 
 // Funzione per inviare email di conferma con QR code
+// Funzione per inviare email di conferma con QR code come allegato CID
 export const sendClientConfirmationWithQRCode = async ({ doc, req }: { doc: any, req: PayloadRequest }) => {
   const subject = 'Grazie per la tua prenotazione | MÚSES - Accademia Essenze';
-  const qrCodeUrl = await generateQRCode(doc.id);
   
+  // Genera il QR code come buffer
+  const qrCodeBuffer = await generateQRCode(doc.id);
+  
+  // HTML dell'email con l'immagine inline referenziata dal Content-ID
   const html = `
     <h1>Grazie per aver prenotato online i tuoi posti</h1>
     <p>Riepilogo della prenotazione:</p>
@@ -88,13 +96,25 @@ export const sendClientConfirmationWithQRCode = async ({ doc, req }: { doc: any,
       <li>Numero di Telefono: ${doc.numeroDiTelefono}</li>
     </ul>
     <h3>l'ID della tua prenotazione:</h3>
-    <li>${doc.id}</li>
-
+    <p>${doc.id}</p>
     <h3>Il tuo QR Code relativo alla prenotazione:</h3>
-    <img style=”display:block” src='${qrCodeUrl}' alt="${doc.id}" width=256 height=256 />
+    <img style="display:block" src="cid:unique-qrcode-id" title="${doc.id}" alt="${doc.id}" width=256 height=256 />
   `;
 
-  await sendEmail({ to: doc.email, subject, html, req });
+  // Invia l'email con il QR code come allegato
+  await sendEmail({
+    to: doc.email,
+    subject,
+    html,
+    req,
+    attachments: [
+      {
+        filename: 'qrcode.png',
+        content: qrCodeBuffer,
+        cid: 'unique-qrcode-id', // Referenziato nell'HTML con src="cid:unique-qrcode-id"
+      },
+    ],
+  });
 };
 
 // Funzione per inviare email di notifica di mancato pagamento

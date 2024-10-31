@@ -9,11 +9,6 @@ export const Links = () => {
         <span>Gestisci i contenuti e le prenotazioni del sito dal pannello di amministrazione.</span>
         <div className={styles.scanlines} />
       </Link>
-      <Link href="/cassa">
-        <h6>Validazione biglietti</h6>
-        <span>Valida le prenotazioni attraverso il codice o scansiona il biglietto.</span>
-        <div className={styles.scanlines} />
-      </Link>
       <Link href="https://data.umazing.it" target='blank'>
         <h6>Analitiche e stats</h6>
         <span>Vai alla dashboard analitica, ricordati di fare richiesta preventivamente per ottenere l`accesso alle analitiche.</span>
