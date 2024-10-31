@@ -77,6 +77,16 @@ export const sendSummaryEmail = async ({ doc, req, state }: { doc: any, req: Pay
       </ul>
       <p style="color: #555; text-align: center; margin-top: 20px;">Grazie per aver scelto MÚSES!</p>
     </div>
+    <footer style="padding: 20px; text-align: center; font-family: Arial, sans-serif; color: #666; border-top: 1px solid #ddd; margin-top: 20px;">
+                <p style="margin: 0; font-size: 14px;">
+                <strong>Múses – Accademia Europea delle Essenze</strong><br>
+                <a target="_blank" href="http://www.musesaccademia.it/" style="color: #007BFF; text-decoration: none;">www.musesaccademia.it</a><br>
+                Palazzo Taffini d’Acceglio<br>
+                Via Sant’Andrea, 53<br>
+                12038 Savigliano (CN)<br>
+                Tel. <a href="tel:+390172375025" style="color: #007BFF; text-decoration: none;">(+39) 0172 375025</a>
+                </p>
+            </footer>
     </div>
   </div>
 `;
@@ -112,6 +122,16 @@ export const sendClientConfirmationWithQRCode = async ({ doc, req }: { doc: any,
       <img style="display: block; margin: 0 auto; border: 1px solid #ddd; border-radius: 5px;" src="cid:unique-qrcode-id" title="${doc.id}" alt="${doc.id}" width="256" height="256" />
       <p style="color: #555; text-align: center; margin-top: 20px;">Ti aspettiamo!</p>
     </div>
+    <footer style="padding: 20px; text-align: center; font-family: Arial, sans-serif; color: #666; border-top: 1px solid #ddd; margin-top: 20px;">
+                <p style="margin: 0; font-size: 14px;">
+                <strong>Múses – Accademia Europea delle Essenze</strong><br>
+                <a target="_blank" href="http://www.musesaccademia.it/" style="color: #007BFF; text-decoration: none;">www.musesaccademia.it</a><br>
+                Palazzo Taffini d’Acceglio<br>
+                Via Sant’Andrea, 53<br>
+                12038 Savigliano (CN)<br>
+                Tel. <a href="tel:+390172375025" style="color: #007BFF; text-decoration: none;">(+39) 0172 375025</a>
+                </p>
+      </footer>
   </div>
 `;
 
@@ -149,6 +169,16 @@ export const sendPaymentFailureNotification = async ({ doc, req }: { doc: any, r
       </ul>
       <p style="color: #555; text-align: center; margin-top: 20px;">Ti invitiamo a completare il pagamento per confermare la tua prenotazione.</p>
     </div>
+    <footer style="padding: 20px; text-align: center; font-family: Arial, sans-serif; color: #666; border-top: 1px solid #ddd; margin-top: 20px;">
+                <p style="margin: 0; font-size: 14px;">
+                <strong>Múses – Accademia Europea delle Essenze</strong><br>
+                <a target="_blank" href="http://www.musesaccademia.it/" style="color: #007BFF; text-decoration: none;">www.musesaccademia.it</a><br>
+                Palazzo Taffini d’Acceglio<br>
+                Via Sant’Andrea, 53<br>
+                12038 Savigliano (CN)<br>
+                Tel. <a href="tel:+390172375025" style="color: #007BFF; text-decoration: none;">(+39) 0172 375025</a>
+                </p>
+            </footer>
   </div>
 `;
 
