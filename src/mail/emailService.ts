@@ -1,6 +1,6 @@
 import { PayloadRequest } from 'payload';
 
-const defaultMail = 'infomusesaccademia@gmail.com';
+const defaultMail = 'info@musesaccademia.it';
 import QRCode from 'qrcode'; // Importazione corretta della libreria QRCode
 
 
