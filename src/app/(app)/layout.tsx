@@ -1,3 +1,4 @@
+// layout.tsx
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.scss'
@@ -11,11 +12,16 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode
-}>) {
+}) {
   return (
     <html lang="it">
+      <head>
+        <link rel="manifest" href="/manifest.json" />
+        <link rel="apple-touch-icon" href="/ico/apple-touch-icon-180x180.png" />
+        <meta name="theme-color" content="#61CE70" />
+      </head>
       <body className={inter.className}>{children}</body>
     </html>
   )
