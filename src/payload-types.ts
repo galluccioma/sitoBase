@@ -20,24 +20,52 @@ export interface Config {
     tags: Tag;
     media: Media;
     users: User;
+    'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
   };
+  collectionsSelect?: {
+    prenotazioni: PrenotazioniSelect<false> | PrenotazioniSelect<true>;
+    'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
+    aggiornamenti: AggiornamentiSelect<false> | AggiornamentiSelect<true>;
+    notizie: NotizieSelect<false> | NotizieSelect<true>;
+    biglietti: BigliettiSelect<false> | BigliettiSelect<true>;
+    categories: CategoriesSelect<false> | CategoriesSelect<true>;
+    tags: TagsSelect<false> | TagsSelect<true>;
+    media: MediaSelect<false> | MediaSelect<true>;
+    users: UsersSelect<false> | UsersSelect<true>;
+    'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
+    'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
+    'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
+  };
+  db: {
+    defaultIDType: string;
+  };
   globals: {};
+  globalsSelect?: {};
   locale: 'en' | 'it';
   user: User & {
     collection: 'users';
+  };
+  jobs?: {
+    tasks: unknown;
+    workflows?: unknown;
   };
 }
 export interface UserAuthOperations {
   forgotPassword: {
     email: string;
+    password: string;
   };
   login: {
-    password: string;
     email: string;
+    password: string;
   };
   registerFirstUser: {
+    email: string;
+    password: string;
+  };
+  unlock: {
     email: string;
     password: string;
   };
@@ -116,7 +144,7 @@ export interface Aggiornamenti {
     [k: string]: unknown;
   } | null;
   content_html?: string | null;
-  image?: string | Media | null;
+  image?: (string | null) | Media;
   updatedAt: string;
   createdAt: string;
 }
@@ -183,8 +211,7 @@ export interface Notizie {
     };
     [k: string]: unknown;
   } | null;
-  content_html?: string | null;
-  image?: string | Media | null;
+  image?: (string | null) | Media;
   updatedAt: string;
   createdAt: string;
 }
@@ -208,6 +235,57 @@ export interface User {
   loginAttempts?: number | null;
   lockUntil?: string | null;
   password?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "payload-locked-documents".
+ */
+export interface PayloadLockedDocument {
+  id: string;
+  document?:
+    | ({
+        relationTo: 'prenotazioni';
+        value: string | Prenotazioni;
+      } | null)
+    | ({
+        relationTo: 'form-submissions';
+        value: string | FormSubmission;
+      } | null)
+    | ({
+        relationTo: 'aggiornamenti';
+        value: string | Aggiornamenti;
+      } | null)
+    | ({
+        relationTo: 'notizie';
+        value: string | Notizie;
+      } | null)
+    | ({
+        relationTo: 'biglietti';
+        value: string | Biglietti;
+      } | null)
+    | ({
+        relationTo: 'categories';
+        value: string | Category;
+      } | null)
+    | ({
+        relationTo: 'tags';
+        value: string | Tag;
+      } | null)
+    | ({
+        relationTo: 'media';
+        value: string | Media;
+      } | null)
+    | ({
+        relationTo: 'users';
+        value: string | User;
+      } | null);
+  globalSlug?: string | null;
+  user: {
+    relationTo: 'users';
+    value: string | User;
+  };
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -242,6 +320,168 @@ export interface PayloadMigration {
   batch?: number | null;
   updatedAt: string;
   createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "prenotazioni_select".
+ */
+export interface PrenotazioniSelect<T extends boolean = true> {
+  carrello?:
+    | T
+    | {
+        biglietto?: T;
+        quantità?: T;
+        id?: T;
+      };
+  dataPrenotazione?: T;
+  fasciaOraria?: T;
+  utente?: T;
+  email?: T;
+  numeroDiTelefono?: T;
+  stato?: T;
+  usato?: T;
+  totaleCarrello?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "form-submissions_select".
+ */
+export interface FormSubmissionsSelect<T extends boolean = true> {
+  email?: T;
+  message?: T;
+  source?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "aggiornamenti_select".
+ */
+export interface AggiornamentiSelect<T extends boolean = true> {
+  slug?: T;
+  status?: T;
+  category?: T;
+  tags?: T;
+  title?: T;
+  description?: T;
+  content?: T;
+  content_html?: T;
+  image?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "notizie_select".
+ */
+export interface NotizieSelect<T extends boolean = true> {
+  slug?: T;
+  status?: T;
+  category?: T;
+  tags?: T;
+  title?: T;
+  description?: T;
+  content?: T;
+  image?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "biglietti_select".
+ */
+export interface BigliettiSelect<T extends boolean = true> {
+  titolo?: T;
+  prezzo?: T;
+  descrizione?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "categories_select".
+ */
+export interface CategoriesSelect<T extends boolean = true> {
+  categorie?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "tags_select".
+ */
+export interface TagsSelect<T extends boolean = true> {
+  tag?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "media_select".
+ */
+export interface MediaSelect<T extends boolean = true> {
+  alt?: T;
+  prefix?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  url?: T;
+  thumbnailURL?: T;
+  filename?: T;
+  mimeType?: T;
+  filesize?: T;
+  width?: T;
+  height?: T;
+  focalX?: T;
+  focalY?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "users_select".
+ */
+export interface UsersSelect<T extends boolean = true> {
+  role?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  enableAPIKey?: T;
+  apiKey?: T;
+  apiKeyIndex?: T;
+  email?: T;
+  resetPasswordToken?: T;
+  resetPasswordExpiration?: T;
+  salt?: T;
+  hash?: T;
+  loginAttempts?: T;
+  lockUntil?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "payload-locked-documents_select".
+ */
+export interface PayloadLockedDocumentsSelect<T extends boolean = true> {
+  document?: T;
+  globalSlug?: T;
+  user?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "payload-preferences_select".
+ */
+export interface PayloadPreferencesSelect<T extends boolean = true> {
+  user?: T;
+  key?: T;
+  value?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "payload-migrations_select".
+ */
+export interface PayloadMigrationsSelect<T extends boolean = true> {
+  name?: T;
+  batch?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

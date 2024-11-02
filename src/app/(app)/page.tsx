@@ -5,6 +5,7 @@ import { Background } from '@/components/Background'
 import useServiceWorker from '../hooks/useServiceWorker'
 
 
+
 export default function Home() {
   useServiceWorker();
   return (

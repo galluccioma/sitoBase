@@ -1,11 +1,7 @@
 import { CollectionConfig, FieldHook } from 'payload';
-import payload from 'payload';
 
-import {
-  HTMLConverterFeature,
-  lexicalEditor,
-  lexicalHTML
-} from '@payloadcms/richtext-lexical'
+
+import {lexicalEditor,} from '@payloadcms/richtext-lexical'
 
 
 // 'data' is all of the incoming values for the document
@@ -109,11 +105,9 @@ export const Notizie: CollectionConfig = {
           ...defaultFeatures,
           // The HTMLConverter Feature is the feature which manages the HTML serializers.
           // If you do not pass any arguments to it, it will use the default serializers.
-          HTMLConverterFeature({}),
         ],
       }),
     },
-    lexicalHTML('content', { name: 'content_html' }),
     {
       name: 'image',
       type: 'upload',

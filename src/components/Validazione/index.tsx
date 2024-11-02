@@ -28,7 +28,8 @@ interface Prenotazione {
   carrello: Carrello[];
 }
 
-export const ValidazioneBiglietto: React.FC = () => {
+
+const Validazione: React.FC = () => {
   const [id, setId] = useState('');
   const [prenotazione, setPrenotazione] = useState<Prenotazione | null>(null);
   const [loading, setLoading] = useState(false);
@@ -282,3 +283,6 @@ export const ValidazioneBiglietto: React.FC = () => {
   );
 };
 
+
+
+export default Validazione

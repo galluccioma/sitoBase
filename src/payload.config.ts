@@ -18,12 +18,6 @@ import sharp from 'sharp'
 import { buildConfig } from 'payload'
 import { fileURLToPath } from 'url'
 
-// Import dei componenti personalizzati
-import { Logo } from './components/WhiteLabel' // Logo personalizzato per l'amministrazione
-import { Icon } from './components/WhiteLabel' // Icona personalizzata per l'amministrazione
-import {ValidazioneBiglietto} from './components/ValidazioneBiglietto'
-import { Links } from './components/Links'
-
 // Import delle collezioni
 import { Users } from './collections/Users' // Collezione utenti
 import { Media } from './collections/Media' // Collezione media
@@ -54,12 +48,12 @@ export default buildConfig({
         },
       ],
     },
-    components: {
+   components: {
       graphics: {
-        Logo, // Logo personalizzato nel pannello admin
-        Icon, // Icona personalizzata nel pannello admin
+        Logo:'@/components/Logo',
+        Icon:'@/components/Icon',
       },
-      afterDashboard:[ValidazioneBiglietto],
+      afterDashboard:['@/components/Validazione'],
     },
   },
   

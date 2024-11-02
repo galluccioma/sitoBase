@@ -4,58 +4,67 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint",
-    "ci": "payload migrate && pnpm build",
+    "build": "cross-env NODE_OPTIONS=--no-deprecation next build",
+    "dev": "cross-env NODE_OPTIONS=--no-deprecation next dev",
+    "devsafe": "rm -rf .next && cross-env NODE_OPTIONS=--no-deprecation next dev",
+    "generate:importmap": "cross-env NODE_OPTIONS=--no-deprecation payload generate:importmap",
+    "generate:types": "cross-env NODE_OPTIONS=--no-deprecation payload generate:types",
+    "lint": "cross-env NODE_OPTIONS=--no-deprecation next lint",
     "payload": "cross-env NODE_OPTIONS=--no-deprecation payload",
-    "generate:types": "payload generate:types"
+    "start": "cross-env NODE_OPTIONS=--no-deprecation next start"
   },
   "dependencies": {
-    "@payloadcms/db-mongodb": "3.0.0-beta.58",
-    "@payloadcms/db-postgres": "3.0.0-beta.58",
-    "@payloadcms/email-nodemailer": "^3.0.0-beta.58",
-    "@payloadcms/next": "3.0.0-beta.58",
-    "@payloadcms/richtext-lexical": "3.0.0-beta.58",
-    "@payloadcms/storage-s3": "3.0.0-beta.58",
+    "@mongodb-js/zstd": "^1.2.2",
+    "@payloadcms/db-mongodb": "beta",
+    "@payloadcms/db-postgres": "beta",
+    "@payloadcms/email-nodemailer": "beta",
+    "@payloadcms/next": "3.0.0-beta.123",
+    "@payloadcms/richtext-lexical": "3.0.0-beta.123",
+    "@payloadcms/storage-s3": "beta",
+    "@payloadcms/ui": "3.0.0-beta.123",
     "@swc/core": "^1.7.26",
     "@types/react-router": "^5.1.20",
+    "aws4": "^1.13.2",
     "cross-env": "^7.0.3",
     "graphql": "^16.9.0",
     "html5-qrcode": "^2.3.8",
     "jsqr": "^1.4.0",
-    "next": "15.0.0-rc.0",
+    "mongodb-client-encryption": "^6.1.0",
+    "next": "15.0.0",
     "next-pwa": "^5.6.0",
-    "payload": "3.0.0-beta.58",
+    "payload": "beta",
     "qrcode": "^1.5.4",
     "qrcode.react": "^4.1.0",
-    "react": "^19.0.0-rc-f994737d14-20240522",
-    "react-dom": "^19.0.0-rc-f994737d14-20240522",
+    "react": "19.0.0-rc-65a56d0e-20241020",
+    "react-dom": "19.0.0-rc-65a56d0e-20241020",
     "sharp": "^0.33.5",
+    "snappy": "^7.2.2",
     "web-push": "^3.6.7"
   },
   "devDependencies": {
-    "@types/node": "^20",
+    "@types/node": "^22.5.4",
     "@types/qrcode": "^1.5.5",
-    "@types/react": "npm:types-react@19.0.0-beta.2",
-    "@types/react-dom": "npm:types-react-dom@19.0.0-beta.2",
+    "@types/react": "npm:types-react@19.0.0-rc.1",
+    "@types/react-dom": "npm:types-react-dom@19.0.0-rc.1",
     "autoprefixer": "^10.4.20",
     "eslint": "^8",
-    "eslint-config-next": "15.0.0-rc.0",
+    "eslint-config-next": "15.0.0",
     "postcss": "^8.4.47",
     "sass": "^1.80.3",
     "tailwindcss": "^3.4.14",
-    "typescript": "^5"
+    "typescript": "5.6.3"
+  },
+  "engines": {
+    "node": "^18.20.2 || >=20.9.0"
   },
   "pnpm": {
     "overrides": {
-      "@types/react": "npm:types-react@19.0.0-beta.2",
-      "@types/react-dom": "npm:types-react-dom@19.0.0-beta.2"
+      "@types/react": "npm:types-react@19.0.0-rc.1",
+      "@types/react-dom": "npm:types-react-dom@19.0.0-rc.1"
     }
   },
   "overrides": {
-    "@types/react": "npm:types-react@19.0.0-beta.2",
-    "@types/react-dom": "npm:types-react-dom@19.0.0-beta.2"
+    "@types/react": "npm:types-react@19.0.0-rc.1",
+    "@types/react-dom": "npm:types-react-dom@19.0.0-rc.1"
   }
 }
