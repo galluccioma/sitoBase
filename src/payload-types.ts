@@ -82,7 +82,7 @@ export interface Prenotazioni {
     id?: string | null;
   }[];
   dataPrenotazione: string;
-  fasciaOraria: '1430' | '1730';
+  fasciaOraria: '14:30' | '17:30';
   utente: string;
   email?: string | null;
   numeroDiTelefono?: string | null;

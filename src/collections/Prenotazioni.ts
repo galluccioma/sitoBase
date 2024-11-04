@@ -8,9 +8,9 @@ const defaultMail = 'galluccioma@gmail.com';
 const getFasciaOrariaDefault = () => {
   const currentHour = new Date().getHours(); // Ottieni l'ora corrente
   if (currentHour < 14) {
-    return '1430'; // Prima delle 14
+    return '14:30'; // Prima delle 14
   } else {
-    return '1730'; // Dopo le 18
+    return '17:30'; // Dopo le 18
   }
 };
 
@@ -64,8 +64,8 @@ export const Prenotazioni: CollectionConfig = {
       name: 'fasciaOraria',
       type: 'select',
       options: [
-        { label: '14:30', value: '1430' },
-        { label: '17:30', value: '1730' },
+        { label: '14:30', value: '14:30' },
+        { label: '17:30', value: '17:30' },
       ],
       required: true,
       defaultValue: getFasciaOrariaDefault(), // Imposta il valore predefinito in base all'ora
