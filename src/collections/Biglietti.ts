@@ -9,7 +9,7 @@ export const Biglietti: CollectionConfig = {
   },
   admin: {
     useAsTitle: "titolo",
-    defaultColumns: ['titolo', 'descrizione', 'fasceOrarie', 'giorniAttivi'],
+    defaultColumns: ['titolo', 'descrizione', 'fasceOrarie'],
    
   },
   labels: {

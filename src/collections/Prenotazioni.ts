@@ -7,12 +7,10 @@ const defaultMail = 'galluccioma@gmail.com';
 // FASCIA ORARIA AUTOMATICA
 const getFasciaOrariaDefault = () => {
   const currentHour = new Date().getHours(); // Ottieni l'ora corrente
-  if (currentHour < 13) {
-    return 'mattina'; // Prima delle 12
-  } else if (currentHour < 18) {
-    return 'pomeriggio'; // Tra le 12 e le 18
+  if (currentHour < 14) {
+    return '1430'; // Prima delle 14
   } else {
-    return 'sera'; // Dopo le 18
+    return '1730'; // Dopo le 18
   }
 };
 
