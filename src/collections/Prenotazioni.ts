@@ -66,9 +66,8 @@ export const Prenotazioni: CollectionConfig = {
       name: 'fasciaOraria',
       type: 'select',
       options: [
-        { label: 'Mattina', value: 'mattina' },
-        { label: 'Pomeriggio', value: 'pomeriggio' },
-        { label: 'Sera', value: 'sera' },
+        { label: '14:30', value: '1430' },
+        { label: '17:30', value: '1730' },
       ],
       required: true,
       defaultValue: getFasciaOrariaDefault(), // Imposta il valore predefinito in base all'ora
