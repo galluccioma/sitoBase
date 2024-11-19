@@ -8,12 +8,15 @@ interface Biglietto {
   id: string;
   titolo: string;
   prezzo: number;
+  fasciaOraria: string;
+
 }
 
 interface Carrello {
   biglietto: Biglietto;
   quantità: number;
   id: string;
+  fasciaOrariaSelezionata:string;
 }
 
 interface Prenotazione {
@@ -23,7 +26,6 @@ interface Prenotazione {
   usato: boolean;
   numeroDiTelefono: string;
   email: string;
-  fasciaOraria: string;
   biglietti: Biglietto[];
   carrello: Carrello[];
 }
@@ -230,7 +232,6 @@ const Validazione: React.FC = () => {
                 <p>Usato: {prenotazione.usato ? 'Sì' : 'No'}</p>
                 <p>Telefono: {prenotazione.numeroDiTelefono}</p>
                 <p>Email: {prenotazione.email}</p>
-                <p>Fascia Oraria: {prenotazione.fasciaOraria}</p>
 
                 {qrData && (
                   <div className="mt-4">
@@ -253,6 +254,9 @@ const Validazione: React.FC = () => {
                           </p>
                           <p>
                             <strong>Prezzo:</strong> €{item.biglietto.prezzo}
+                          </p>
+                          <p>
+                          <strong>Fascia oraria:</strong> {item.fasciaOrariaSelezionata}
                           </p>
                           <p>
                             <strong>Quantità:</strong> {item.quantità}

@@ -12,11 +12,11 @@ export interface Config {
   };
   collections: {
     prenotazioni: Prenotazioni;
+    biglietti: Biglietti;
+    disponibilita: Disponibilita;
     'form-submissions': FormSubmission;
     aggiornamenti: Aggiornamenti;
     notizie: Notizie;
-    biglietti: Biglietti;
-    disponibilita: Disponibilita;
     categories: Category;
     tags: Tag;
     media: Media;
@@ -27,11 +27,11 @@ export interface Config {
   };
   collectionsSelect?: {
     prenotazioni: PrenotazioniSelect<false> | PrenotazioniSelect<true>;
+    biglietti: BigliettiSelect<false> | BigliettiSelect<true>;
+    disponibilita: DisponibilitaSelect<false> | DisponibilitaSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
     aggiornamenti: AggiornamentiSelect<false> | AggiornamentiSelect<true>;
     notizie: NotizieSelect<false> | NotizieSelect<true>;
-    biglietti: BigliettiSelect<false> | BigliettiSelect<true>;
-    disponibilita: DisponibilitaSelect<false> | DisponibilitaSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     tags: TagsSelect<false> | TagsSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
@@ -106,6 +106,19 @@ export interface Biglietti {
     fasciaOraria: '10:00' | '14:00' | '15:00';
     id?: string | null;
   }[];
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "disponibilita".
+ */
+export interface Disponibilita {
+  id: string;
+  tipoBiglietto: 'visita_guidata' | 'atelier';
+  fasciaOraria: '10:00' | '14:00' | '15:00';
+  data: string;
+  disponibilità: number;
   updatedAt: string;
   createdAt: string;
 }
@@ -222,19 +235,6 @@ export interface Notizie {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "disponibilita".
- */
-export interface Disponibilita {
-  id: string;
-  tipoBiglietto: 'visita_guidata' | 'atelier';
-  fasciaOraria: '10:00' | '14:00' | '15:00';
-  data: string;
-  disponibilità: number;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "users".
  */
 export interface User {
@@ -266,6 +266,14 @@ export interface PayloadLockedDocument {
         value: string | Prenotazioni;
       } | null)
     | ({
+        relationTo: 'biglietti';
+        value: string | Biglietti;
+      } | null)
+    | ({
+        relationTo: 'disponibilita';
+        value: string | Disponibilita;
+      } | null)
+    | ({
         relationTo: 'form-submissions';
         value: string | FormSubmission;
       } | null)
@@ -276,14 +284,6 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'notizie';
         value: string | Notizie;
-      } | null)
-    | ({
-        relationTo: 'biglietti';
-        value: string | Biglietti;
-      } | null)
-    | ({
-        relationTo: 'disponibilita';
-        value: string | Disponibilita;
       } | null)
     | ({
         relationTo: 'categories';
@@ -366,6 +366,36 @@ export interface PrenotazioniSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "biglietti_select".
+ */
+export interface BigliettiSelect<T extends boolean = true> {
+  titolo?: T;
+  descrizione?: T;
+  prezzo?: T;
+  tipoBiglietto?: T;
+  fasceOrarie?:
+    | T
+    | {
+        fasciaOraria?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "disponibilita_select".
+ */
+export interface DisponibilitaSelect<T extends boolean = true> {
+  tipoBiglietto?: T;
+  fasciaOraria?: T;
+  data?: T;
+  disponibilità?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "form-submissions_select".
  */
 export interface FormSubmissionsSelect<T extends boolean = true> {
@@ -405,36 +435,6 @@ export interface NotizieSelect<T extends boolean = true> {
   description?: T;
   content?: T;
   image?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "biglietti_select".
- */
-export interface BigliettiSelect<T extends boolean = true> {
-  titolo?: T;
-  descrizione?: T;
-  prezzo?: T;
-  tipoBiglietto?: T;
-  fasceOrarie?:
-    | T
-    | {
-        fasciaOraria?: T;
-        id?: T;
-      };
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "disponibilita_select".
- */
-export interface DisponibilitaSelect<T extends boolean = true> {
-  tipoBiglietto?: T;
-  fasciaOraria?: T;
-  data?: T;
-  disponibilità?: T;
   updatedAt?: T;
   createdAt?: T;
 }
