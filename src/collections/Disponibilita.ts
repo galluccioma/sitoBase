@@ -7,12 +7,12 @@ export const Disponibilita: CollectionConfig = {
     create: () => true,
   },
   admin: {
-    useAsTitle: 'id',
-    defaultColumns: ['tipoBiglietto', 'fasciaOraria', 'data', 'disponibilità'],
+    useAsTitle: 'data',
+    defaultColumns: ['data', 'tipoBiglietto', 'fasciaOraria',  'disponibilità'],
   },
   labels: {
-    singular: 'Slot di disponibilità',
-    plural: 'Slot di disponibilità',
+    singular: 'Disponibilità',
+    plural: 'Disponibilità',
   },
   fields: [
     {
