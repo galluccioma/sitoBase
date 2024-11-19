@@ -38,6 +38,13 @@ export const Disponibilita: CollectionConfig = {
       name: 'data',
       type: 'date',
       required: true,
+      admin: {
+        date: {
+          pickerAppearance: 'dayOnly', // Visualizza solo giorno/mese/anno
+          displayFormat: 'dd/MM/yyyy', // Formatta la data come giorno/mese/anno
+
+        },
+      },
     },
     {
       name: 'disponibilità',
