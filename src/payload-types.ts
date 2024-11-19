@@ -16,6 +16,7 @@ export interface Config {
     aggiornamenti: Aggiornamenti;
     notizie: Notizie;
     biglietti: Biglietti;
+    disponibilita: Disponibilita;
     categories: Category;
     tags: Tag;
     media: Media;
@@ -30,6 +31,7 @@ export interface Config {
     aggiornamenti: AggiornamentiSelect<false> | AggiornamentiSelect<true>;
     notizie: NotizieSelect<false> | NotizieSelect<true>;
     biglietti: BigliettiSelect<false> | BigliettiSelect<true>;
+    disponibilita: DisponibilitaSelect<false> | DisponibilitaSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     tags: TagsSelect<false> | TagsSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
@@ -79,15 +81,13 @@ export interface Prenotazioni {
   carrello: {
     biglietto: string | Biglietti;
     quantità: number;
+    fasciaOrariaSelezionata: '10:00' | '14:00' | '15:00';
     id?: string | null;
   }[];
   dataPrenotazione: string;
-  fasciaOraria: '14:30' | '17:30';
   utente: string;
   email?: string | null;
-  numeroDiTelefono?: string | null;
   stato?: ('nuovo' | 'attesa_pagamento' | 'respinto' | 'completato') | null;
-  usato?: boolean | null;
   totaleCarrello?: number | null;
   updatedAt: string;
   createdAt: string;
@@ -99,8 +99,13 @@ export interface Prenotazioni {
 export interface Biglietti {
   id: string;
   titolo: string;
-  prezzo?: number | null;
   descrizione?: string | null;
+  prezzo: number;
+  tipoBiglietto: 'visita_guidata' | 'atelier';
+  fasceOrarie: {
+    fasciaOraria: '10:00' | '14:00' | '15:00';
+    id?: string | null;
+  }[];
   updatedAt: string;
   createdAt: string;
 }
@@ -217,6 +222,19 @@ export interface Notizie {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "disponibilita".
+ */
+export interface Disponibilita {
+  id: string;
+  tipoBiglietto: 'visita_guidata' | 'atelier';
+  fasciaOraria: '10:00' | '14:00' | '15:00';
+  data: string;
+  disponibilità: number;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "users".
  */
 export interface User {
@@ -262,6 +280,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'biglietti';
         value: string | Biglietti;
+      } | null)
+    | ({
+        relationTo: 'disponibilita';
+        value: string | Disponibilita;
       } | null)
     | ({
         relationTo: 'categories';
@@ -331,15 +353,13 @@ export interface PrenotazioniSelect<T extends boolean = true> {
     | {
         biglietto?: T;
         quantità?: T;
+        fasciaOrariaSelezionata?: T;
         id?: T;
       };
   dataPrenotazione?: T;
-  fasciaOraria?: T;
   utente?: T;
   email?: T;
-  numeroDiTelefono?: T;
   stato?: T;
-  usato?: T;
   totaleCarrello?: T;
   updatedAt?: T;
   createdAt?: T;
@@ -394,8 +414,27 @@ export interface NotizieSelect<T extends boolean = true> {
  */
 export interface BigliettiSelect<T extends boolean = true> {
   titolo?: T;
-  prezzo?: T;
   descrizione?: T;
+  prezzo?: T;
+  tipoBiglietto?: T;
+  fasceOrarie?:
+    | T
+    | {
+        fasciaOraria?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "disponibilita_select".
+ */
+export interface DisponibilitaSelect<T extends boolean = true> {
+  tipoBiglietto?: T;
+  fasciaOraria?: T;
+  data?: T;
+  disponibilità?: T;
   updatedAt?: T;
   createdAt?: T;
 }

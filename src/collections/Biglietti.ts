@@ -1,5 +1,4 @@
-// Eventi.ts
-import type { CollectionConfig } from 'payload';
+import { CollectionConfig } from 'payload';
 
 export const Biglietti: CollectionConfig = {
   slug: 'biglietti',
@@ -8,9 +7,8 @@ export const Biglietti: CollectionConfig = {
     create: () => true,
   },
   admin: {
-    useAsTitle: "titolo",
-    defaultColumns: ['titolo', 'descrizione', 'fasceOrarie'],
-   
+    useAsTitle: 'titolo',
+    defaultColumns: ['titolo', 'descrizione', 'prezzo', 'tipoBiglietto'],
   },
   labels: {
     singular: 'Biglietto',
@@ -18,17 +16,45 @@ export const Biglietti: CollectionConfig = {
   },
   fields: [
     {
-      name: "titolo",
-      type: "text",
-      required: true
+      name: 'titolo',
+      type: 'text',
+      required: true,
     },
     {
-      name: "prezzo",
-      type: "number",
+      name: 'descrizione',
+      type: 'textarea',
+      required: false,
     },
     {
-      name: "descrizione",
-      type: "textarea"
+      name: 'prezzo',
+      type: 'number',
+      required: true,
     },
-  ]
+    {
+      name: 'tipoBiglietto',
+      type: 'select',
+      options: [
+        { label: 'Visita Guidata', value: 'visita_guidata' },
+        { label: 'Atelier', value: 'atelier' },
+      ],
+      required: true,
+    },
+    {
+      name: 'fasceOrarie', 
+      type: 'array',
+      required: true,
+      fields: [
+        {
+          name: 'fasciaOraria',
+          type: 'select',
+          options: [
+            { label: '10:00', value: '10:00' },
+            { label: '14:00', value: '14:00' },
+            { label: '15:00', value: '15:00' },
+          ],
+          required: true,
+        },
+      ],
+    },
+  ],
 };

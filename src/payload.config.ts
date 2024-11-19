@@ -28,6 +28,7 @@ import { FormSubmission } from './collections/Formsubmission' // Collezione per 
 import { Biglietti } from './collections/Biglietti' // Collezione biglietti
 import { Prenotazioni } from './collections/Prenotazioni'
 import { Aggiornamenti } from './collections/Aggiornamenti'  // Collezione Mostre
+import { Disponibilita } from './collections/Disponibilita'
 
 // Determina il percorso corrente del file
 const filename = fileURLToPath(import.meta.url)
@@ -63,6 +64,7 @@ export default buildConfig({
     Aggiornamenti,        // Collezione mostre
     Notizie,        // Collezione per il blog
     Biglietti,    // Collezione per i biglietti
+    Disponibilita, //Slot disponibilita
     Categories,  // Collezione delle categorie
     Tags,        // Collezione dei tag
     Media,       // Collezione per i media

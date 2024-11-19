@@ -1,38 +1,17 @@
-import type { CollectionConfig } from 'payload';
-import { sendSummaryEmail, sendClientConfirmationWithQRCode, sendPaymentFailureNotification  } from '../mail/emailService';
-
-
-const defaultMail = 'galluccioma@gmail.com';
-
-// FASCIA ORARIA AUTOMATICA
-const getFasciaOrariaDefault = () => {
-  const currentHour = new Date().getHours(); // Ottieni l'ora corrente
-  if (currentHour < 14) {
-    return '14:30'; // Prima delle 14
-  } else {
-    return '17:30'; // Dopo le 18
-  }
-};
-
-// Define the ItemType interface for items in the carrello
-interface ItemType {
-  biglietto: {
-    title: string; // Assuming biglietto has a title
-  };
-  quantità: number; // Assuming quantità is a number
-}
+import { CollectionConfig } from 'payload';
+import { sendClientConfirmationWithQRCode } from '../mail/emailService';
 
 export const Prenotazioni: CollectionConfig = {
   slug: 'prenotazioni',
   admin: {
-    useAsTitle: "id",
-    defaultColumns: ['dataPrenotazione', 'stato', 'usato', 'totaleCarrello',  'utente', 'email'],
+    useAsTitle: 'id',
+    defaultColumns: ['dataPrenotazione', 'stato', 'usato', 'totaleCarrello', 'utente', 'email'],
   },
   labels: {
     singular: 'Prenotazione',
     plural: 'Prenotazioni',
   },
-  fields: [  
+  fields: [
     {
       name: 'carrello',
       type: 'array',
@@ -47,13 +26,21 @@ export const Prenotazioni: CollectionConfig = {
         {
           name: 'quantità',
           type: 'number',
-          min: 1, // Quantità minima di 1 biglietto per evento
-          defaultValue:1,
+          min: 1,
+          required: true,
+        },
+        {
+          name: 'fasciaOrariaSelezionata',
+          type: 'select',
+          options: [
+            { label: '10:00', value: '10:00' },
+            { label: '14:00', value: '14:00' },
+            { label: '15:00', value: '15:00' },
+          ],
           required: true,
         },
       ],
     },
-    
     {
       name: 'dataPrenotazione',
       type: 'date',
@@ -61,30 +48,14 @@ export const Prenotazioni: CollectionConfig = {
       defaultValue: new Date().toISOString(),
     },
     {
-      name: 'fasciaOraria',
-      type: 'select',
-      options: [
-        { label: '14:30', value: '14:30' },
-        { label: '17:30', value: '17:30' },
-      ],
-      required: true,
-      defaultValue: getFasciaOrariaDefault(), // Imposta il valore predefinito in base all'ora
-    },
-    {
       name: 'utente',
       type: 'text',
       required: true,
-      defaultValue: 'Prenotazione in cassa',
     },
     {
       name: 'email',
       type: 'text',
-      defaultValue: 'Prenotazione in cassa',
-    },
-    {
-      name: 'numeroDiTelefono',
-      type: 'text',
-      defaultValue: 'Prenotazione in cassa',
+      required: false,
     },
     {
       name: 'stato',
@@ -96,18 +67,6 @@ export const Prenotazioni: CollectionConfig = {
         { value: 'completato', label: 'Completato' },
       ],
       defaultValue: 'nuovo',
-      admin: {
-        position: 'sidebar',
-      },
-    },
-    {
-      name: 'usato',
-          type: 'checkbox', 
-          label: 'Biglietto usato',
-          defaultValue: false,
-          admin: {
-            position: 'sidebar',
-          },
     },
     {
       name: "totaleCarrello",
@@ -117,69 +76,74 @@ export const Prenotazioni: CollectionConfig = {
         readOnly: true,
       },
     },
-    
   ],
   hooks: {
-    beforeChange: [
-      async ({ data, req }) => {
-        try {
-          // Recupera il carrello con i biglietti e le quantità
-          const carrello = data.carrello;
-      
-          // Variabile per accumulare il totale
-          let totaleCarrello = 0;
-      
-          // Itera su ogni biglietto nel carrello
-          for (const item of carrello) {
-            // Recupera il biglietto per ottenere il prezzo
-            const biglietto = await req.payload.findByID({
-              collection: 'biglietti',
-              id: item.biglietto,
-            });
-    
-            // Verifica se il biglietto esiste e ha un prezzo valido
-            if (!biglietto || biglietto.prezzo == null) {
-              throw new Error(`Il biglietto con ID ${item.biglietto} non esiste o non ha un prezzo valido.`);
-            }
-    
-            // Calcola il totale per questo biglietto
-            const prezzoBiglietto = biglietto.prezzo;
-            const quantità = item.quantità;
-    
-            // Somma il prezzo per la quantità
-            totaleCarrello += prezzoBiglietto * quantità;
-          }
-    
-          // Applica lo sconto (se presente)
-          if (data.sconto && data.sconto > 0) {
-            totaleCarrello = totaleCarrello * (1 - data.sconto / 100);
-          }
-    
-          // Aggiorna il totale nel documento
-          data.totaleCarrello = totaleCarrello;
-        } catch (error) {
-          console.error('Errore nel calcolo del totale:', error);
-          throw new Error('Errore nel calcolo del totale del carrello.');
-        }
-      },
-    ],
-    
     afterChange: [
-      async ({ operation, doc, previousDoc, req }) => {
-       if (operation === 'update') {
-          if (doc.stato === 'completato') {
-            // Invio della mail di conferma con QR code
-            await sendClientConfirmationWithQRCode({ doc, req });
-          } else if (doc.stato === 'respinto') {
-            // Invio della mail di mancato pagamento
-            await sendPaymentFailureNotification({ doc, req });
-          } else if (doc.stato === 'attesa_pagamento') {
-            // Invio della mail di riepilogo per attesa pagamento
-            await sendSummaryEmail({ doc, req, state: doc.stato });
+      async ({ operation, doc, req }) => {
+        if (operation === 'create' && doc.stato === 'nuovo') {
+          // Loop through each item in the cart
+          for (const item of doc.carrello) {
+            const itemId = item.biglietto;
+            const fasciaOrariaSelezionata = item.fasciaOrariaSelezionata;
+            const requestedQuantity = item.quantità;
+
+            // Recuperiamo il tipo di biglietto selezionato
+            const tipoBiglietto = await req.payload.findByID({
+              collection: 'biglietti',
+              id: itemId,
+            });
+
+            if (!tipoBiglietto) {
+              throw new Error(`Biglietto con ID ${itemId} non trovato.`);
+            }
+
+            const tipoBigliettoSelezionato = tipoBiglietto.tipoBiglietto;
+
+            // Verifica la disponibilità esistente per la tipologia di biglietto, fascia oraria e data specifica
+            const existingDisponibilita = await req.payload.find({
+              collection: 'disponibilita',
+              where: {
+                tipoBiglietto: { equals: tipoBigliettoSelezionato }, // Filtra per tipoBiglietto
+                fasciaOraria: { equals: fasciaOrariaSelezionata },   // Filtra per fasciaOraria
+                data: { equals: doc.dataPrenotazione },             // Filtra per data
+              },
+            });
+
+            if (existingDisponibilita.docs.length === 0) {
+              // Se non esiste un record di disponibilità, crea una nuova disponibilità
+              const postiDisponibili = tipoBigliettoSelezionato === 'visita_guidata' ? 25 : 18;
+
+              await req.payload.create({
+                collection: 'disponibilita',
+                data: {
+                  tipoBiglietto: tipoBigliettoSelezionato,
+                  fasciaOraria: fasciaOrariaSelezionata,
+                  data: doc.dataPrenotazione,
+                  disponibilità: postiDisponibili - requestedQuantity, // Riduci la disponibilità in base alla richiesta
+                },
+              });
+            } else {
+              // Se esiste una disponibilità, aggiorniamo il valore
+              const availableSlot = existingDisponibilita.docs[0];
+              const newDisponibilita = availableSlot.disponibilità - requestedQuantity;
+
+              // Verifica se la disponibilità è sufficiente
+              if (newDisponibilita < 0) {
+                throw new Error(`Non ci sono abbastanza posti disponibili per la fascia oraria ${fasciaOrariaSelezionata} alla data ${doc.dataPrenotazione}.`);
+              }
+
+              // Aggiorniamo la disponibilità con il nuovo valore
+              await req.payload.update({
+                collection: 'disponibilita',
+                id: availableSlot.id,
+                data: {
+                  disponibilità: newDisponibilita,
+                },
+              });
+            }
           }
         }
       },
     ],
-    
   },
 };
