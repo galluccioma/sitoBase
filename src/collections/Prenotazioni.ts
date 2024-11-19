@@ -1,5 +1,5 @@
-import { CollectionConfig } from 'payload';
-import { sendClientConfirmationWithQRCode } from '../mail/emailService';
+import { CollectionConfig } from 'payload'
+import { sendClientConfirmationWithQRCode } from '../mail/emailService'
 
 export const Prenotazioni: CollectionConfig = {
   slug: 'prenotazioni',
@@ -33,9 +33,10 @@ export const Prenotazioni: CollectionConfig = {
           name: 'fasciaOrariaSelezionata',
           type: 'select',
           options: [
-            { label: '10:00', value: '10:00' },
-            { label: '14:00', value: '14:00' },
-            { label: '15:00', value: '15:00' },
+            { label: '11:30', value: '11:30' },
+            { label: '14:30', value: '14:30' },
+            { label: '15:30', value: '15:30' },
+            { label: '17:00', value: '17:00' },
           ],
           required: true,
         },
@@ -75,8 +76,8 @@ export const Prenotazioni: CollectionConfig = {
       defaultValue: 'nuovo',
     },
     {
-      name: "totaleCarrello",
-      type: "number",
+      name: 'totaleCarrello',
+      type: 'number',
       admin: {
         position: 'sidebar',
         readOnly: true,
@@ -108,29 +109,31 @@ export const Prenotazioni: CollectionConfig = {
             normalizedDate.setUTCHours(0, 0, 0, 0); // Porta la data a mezzanotte UTC
             const isoDateOnly = normalizedDate.toISOString().split('T')[0]; // Estrai solo giorno/mese/anno
     
+            // Verifica la disponibilità della fascia oraria per la data e tipo biglietto
             const existingDisponibilita = await req.payload.find({
               collection: 'disponibilita',
               where: {
                 tipoBiglietto: { equals: tipoBigliettoSelezionato },
                 fasciaOraria: { equals: fasciaOrariaSelezionata },
                 data: {
-                  // Confronta solo giorno/mese/anno
-                  gte: `${isoDateOnly}T00:00:00.000Z`,
+                  gte: `${isoDateOnly}T00:00:00.000Z`, // Confronta solo giorno/mese/anno
                   lte: `${isoDateOnly}T23:59:59.999Z`,
                 },
               },
             });
     
             if (existingDisponibilita.docs.length === 0) {
-              const postiDisponibili = tipoBigliettoSelezionato === 'visita_guidata' ? 25 : 18;
+              // Se non esistono disponibilità, crea una nuova voce
+              const postiDisponibili = tipoBigliettoSelezionato === 'visita_guidata' ? 25 : 18; // Puoi modificare il numero di posti a seconda del tipo di biglietto
     
+              // Crea una nuova voce in disponibilità
               await req.payload.create({
                 collection: 'disponibilita',
                 data: {
                   tipoBiglietto: tipoBigliettoSelezionato,
                   fasciaOraria: fasciaOrariaSelezionata,
                   data: normalizedDate.toISOString(),
-                  disponibilità: postiDisponibili - requestedQuantity,
+                  disponibilità: postiDisponibili - requestedQuantity, // Aggiorna la disponibilità
                 },
               });
             } else {
@@ -143,6 +146,7 @@ export const Prenotazioni: CollectionConfig = {
                 );
               }
     
+              // Aggiorna la disponibilità esistente
               await req.payload.update({
                 collection: 'disponibilita',
                 id: availableSlot.id,
@@ -154,7 +158,5 @@ export const Prenotazioni: CollectionConfig = {
       },
     ]
     
-    
-  }
-  
-};
+  },
+}

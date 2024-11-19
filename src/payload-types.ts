@@ -81,7 +81,7 @@ export interface Prenotazioni {
   carrello: {
     biglietto: string | Biglietti;
     quantità: number;
-    fasciaOrariaSelezionata: '10:00' | '14:00' | '15:00';
+    fasciaOrariaSelezionata: '11:30' | '14:30' | '15:30' | '17:00';
     id?: string | null;
   }[];
   dataPrenotazione: string;
@@ -103,7 +103,11 @@ export interface Biglietti {
   prezzo: number;
   tipoBiglietto: 'visita_guidata' | 'atelier';
   fasceOrarie: {
-    fasciaOraria: '10:00' | '14:00' | '15:00';
+    giorno: 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday' | 'saturday' | 'sunday';
+    fasce: {
+      fasciaOraria: '11:30' | '14:30' | '15:30' | '17:00';
+      id?: string | null;
+    }[];
     id?: string | null;
   }[];
   updatedAt: string;
@@ -116,7 +120,7 @@ export interface Biglietti {
 export interface Disponibilita {
   id: string;
   tipoBiglietto: 'visita_guidata' | 'atelier';
-  fasciaOraria: '10:00' | '14:00' | '15:00';
+  fasciaOraria: '11:30' | '14:30' | '15:30' | '17:00';
   data: string;
   disponibilità: number;
   updatedAt: string;
@@ -376,7 +380,13 @@ export interface BigliettiSelect<T extends boolean = true> {
   fasceOrarie?:
     | T
     | {
-        fasciaOraria?: T;
+        giorno?: T;
+        fasce?:
+          | T
+          | {
+              fasciaOraria?: T;
+              id?: T;
+            };
         id?: T;
       };
   updatedAt?: T;

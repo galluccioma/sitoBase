@@ -1,4 +1,4 @@
-import { CollectionConfig } from 'payload';
+import { CollectionConfig } from 'payload'
 
 export const Disponibilita: CollectionConfig = {
   slug: 'disponibilita',
@@ -8,7 +8,7 @@ export const Disponibilita: CollectionConfig = {
   },
   admin: {
     useAsTitle: 'data',
-    defaultColumns: ['data', 'tipoBiglietto', 'fasciaOraria',  'disponibilità'],
+    defaultColumns: ['data', 'tipoBiglietto', 'fasciaOraria', 'disponibilità'],
   },
   labels: {
     singular: 'Disponibilità',
@@ -28,9 +28,10 @@ export const Disponibilita: CollectionConfig = {
       name: 'fasciaOraria',
       type: 'select',
       options: [
-        { label: '10:00', value: '10:00' },
-        { label: '14:00', value: '14:00' },
-        { label: '15:00', value: '15:00' },
+        { label: '11:30', value: '11:30' },
+        { label: '14:30', value: '14:30' },
+        { label: '15:30', value: '15:30' },
+        { label: '17:00', value: '17:00' },
       ],
       required: true,
     },
@@ -42,7 +43,6 @@ export const Disponibilita: CollectionConfig = {
         date: {
           pickerAppearance: 'dayOnly', // Visualizza solo giorno/mese/anno
           displayFormat: 'dd/MM/yyyy', // Formatta la data come giorno/mese/anno
-
         },
       },
     },
@@ -53,4 +53,4 @@ export const Disponibilita: CollectionConfig = {
       min: 0,
     },
   ],
-};
+}
