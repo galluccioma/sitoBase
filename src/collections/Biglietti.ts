@@ -1,4 +1,4 @@
-import { CollectionConfig } from 'payload';
+import { CollectionConfig } from 'payload'
 
 export const Biglietti: CollectionConfig = {
   slug: 'biglietti',

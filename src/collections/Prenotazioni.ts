@@ -1,5 +1,5 @@
 import { CollectionConfig } from 'payload'
-import { sendClientConfirmationWithQRCode } from '../mail/emailService'
+// import { sendClientConfirmationWithQRCode } from '../mail/emailService'
 
 export const Prenotazioni: CollectionConfig = {
   slug: 'prenotazioni',
