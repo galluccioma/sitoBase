@@ -115,10 +115,10 @@ export const Prenotazioni: CollectionConfig = {
               where: {
                 tipoBiglietto: { equals: tipoBigliettoSelezionato },
                 fasciaOraria: { equals: fasciaOrariaSelezionata },
-                data: {
-                  gte: `${isoDateOnly}T00:00:00.000Z`, // Confronta solo giorno/mese/anno
-                  lte: `${isoDateOnly}T23:59:59.999Z`,
-                },
+                data: { 
+                  // Utilizziamo il confronto basato sul giorno senza l'ora
+                  equals: `${isoDateOnly}T00:00:00.000Z`
+                }
               },
             });
     
