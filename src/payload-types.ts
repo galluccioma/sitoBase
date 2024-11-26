@@ -25,7 +25,8 @@ export interface Config {
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
   };
-  collectionsSelect?: {
+  collectionsJoins: {};
+  collectionsSelect: {
     prenotazioni: PrenotazioniSelect<false> | PrenotazioniSelect<true>;
     biglietti: BigliettiSelect<false> | BigliettiSelect<true>;
     disponibilita: DisponibilitaSelect<false> | DisponibilitaSelect<true>;
@@ -44,14 +45,14 @@ export interface Config {
     defaultIDType: string;
   };
   globals: {};
-  globalsSelect?: {};
+  globalsSelect: {};
   locale: 'en' | 'it';
   user: User & {
     collection: 'users';
   };
-  jobs?: {
+  jobs: {
     tasks: unknown;
-    workflows?: unknown;
+    workflows: unknown;
   };
 }
 export interface UserAuthOperations {
