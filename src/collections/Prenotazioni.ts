@@ -92,7 +92,7 @@ export const Prenotazioni: CollectionConfig = {
   ],
   hooks: {
     afterChange: [
-      async ({ operation, doc, req, res }) => {
+      async ({ operation, doc, req }) => {
         try {
           if (operation === 'create' && doc.stato === 'nuovo') {
     
@@ -109,8 +109,6 @@ export const Prenotazioni: CollectionConfig = {
               });
     
               if (!tipoBiglietto) {
-                const errorMessage = `Biglietto con ID ${itemId} non trovato.`;
-                res.status(400).json({ error: errorMessage });
                 return;  // Esci dall'operazione se il biglietto non è trovato
               }
     
@@ -138,7 +136,6 @@ export const Prenotazioni: CollectionConfig = {
     
                 if (newDisponibilita < 0) {
                   const errorMessage = `Non ci sono abbastanza posti disponibili per il biglietto ${itemId} nella fascia oraria ${fasciaOrariaSelezionata} il ${isoDateOnly}.`;
-                  res.status(400).json({ error: errorMessage });
                   return;  // Esci dall'operazione se non ci sono abbastanza posti
                 }
     
@@ -159,7 +156,6 @@ export const Prenotazioni: CollectionConfig = {
                 } else {
                   // In caso di tipo di biglietto non previsto
                   const errorMessage = `Tipo di biglietto non supportato: ${tipoBigliettoSelezionato}`;
-                  res.status(400).json({ error: errorMessage });
                   return;  // Esci se il tipo di biglietto non è valido
                 }
     
@@ -177,7 +173,6 @@ export const Prenotazioni: CollectionConfig = {
           }
         } catch (error) {
           // Gestione degli errori
-          res.status(500).json({ error: 'Errore interno del server', message: error.message });
         }
       },
     ],    
