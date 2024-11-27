@@ -1,13 +1,6 @@
 import { CollectionConfig, FieldHook } from 'payload';
 import payload from 'payload';
 
-import {
-  HTMLConverterFeature,
-  lexicalEditor,
-  lexicalHTML
-} from '@payloadcms/richtext-lexical'
-
-
 // 'data' is all of the incoming values for the document
 const formatSlug: FieldHook = async ({ value, data }) => {
   // return formatted version of title if exists, else return unmodified value
