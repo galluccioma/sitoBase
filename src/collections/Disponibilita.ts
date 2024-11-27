@@ -41,8 +41,8 @@ export const Disponibilita: CollectionConfig = {
       required: true,
       admin: {
         date: {
-          pickerAppearance: 'dayOnly', // Visualizza solo giorno/mese/anno
-          displayFormat: 'dd/MM/yyyy', // Formatta la data come giorno/mese/anno
+          pickerAppearance: 'dayOnly',
+          displayFormat: 'dd/MM/yyyy',
         },
       },
     },
@@ -53,4 +53,4 @@ export const Disponibilita: CollectionConfig = {
       min: 0,
     },
   ],
-}
+};

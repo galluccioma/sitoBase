@@ -103,14 +103,6 @@ export interface Biglietti {
   descrizione?: string | null;
   prezzo: number;
   tipoBiglietto: 'visita_guidata' | 'atelier';
-  fasceOrarie: {
-    giorno: 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday' | 'saturday' | 'sunday';
-    fasce: {
-      fasciaOraria: '11:30' | '14:30' | '15:30' | '17:00';
-      id?: string | null;
-    }[];
-    id?: string | null;
-  }[];
   updatedAt: string;
   createdAt: string;
 }
@@ -378,18 +370,6 @@ export interface BigliettiSelect<T extends boolean = true> {
   descrizione?: T;
   prezzo?: T;
   tipoBiglietto?: T;
-  fasceOrarie?:
-    | T
-    | {
-        giorno?: T;
-        fasce?:
-          | T
-          | {
-              fasciaOraria?: T;
-              id?: T;
-            };
-        id?: T;
-      };
   updatedAt?: T;
   createdAt?: T;
 }
