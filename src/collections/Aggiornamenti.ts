@@ -66,24 +66,6 @@ export const Aggiornamenti: CollectionConfig = {
       }
     },
     
-    {
-      name: 'category',
-      type: 'relationship',
-      relationTo: 'categories',
-      admin: {
-        position: 'sidebar',
-      }
-    },
-    {
-      name: 'tags',
-      type: 'relationship',
-      relationTo: 'tags',
-      hasMany: true,
-      admin: {
-        position: 'sidebar',
-      }
-    },
-
     //MAIN 
     {
       name: 'title',
@@ -101,18 +83,11 @@ export const Aggiornamenti: CollectionConfig = {
       },
     },
     {
-      name: 'content',
-      type: 'richText',
-      editor: lexicalEditor({
-        features: ({ defaultFeatures }) => [
-          ...defaultFeatures,
-          // The HTMLConverter Feature is the feature which manages the HTML serializers.
-          // If you do not pass any arguments to it, it will use the default serializers.
-          HTMLConverterFeature({}),
-        ],
-      }),
+      name: 'link',
+      type: 'text',
+      label: 'Link',
+      defaultValue:"https://musesaccademia.pages.dev/booking"
     },
-    lexicalHTML('content', { name: 'content_html' }),
     {
       name: 'image',
       type: 'upload',

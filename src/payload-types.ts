@@ -139,45 +139,12 @@ export interface Aggiornamenti {
   id: string;
   slug: string;
   status?: ('draft' | 'published') | null;
-  category?: (string | null) | Category;
-  tags?: (string | Tag)[] | null;
   title: string;
   description: string;
-  content?: {
-    root: {
-      type: string;
-      children: {
-        type: string;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  } | null;
-  content_html?: string | null;
+  link?: string | null;
   image?: (string | null) | Media;
   updatedAt: string;
   createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "categories".
- */
-export interface Category {
-  id: string;
-  categorie?: string | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "tags".
- */
-export interface Tag {
-  id: string;
-  tag?: string | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -229,6 +196,22 @@ export interface Notizie {
   image?: (string | null) | Media;
   updatedAt: string;
   createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "categories".
+ */
+export interface Category {
+  id: string;
+  categorie?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "tags".
+ */
+export interface Tag {
+  id: string;
+  tag?: string | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -403,12 +386,9 @@ export interface FormSubmissionsSelect<T extends boolean = true> {
 export interface AggiornamentiSelect<T extends boolean = true> {
   slug?: T;
   status?: T;
-  category?: T;
-  tags?: T;
   title?: T;
   description?: T;
-  content?: T;
-  content_html?: T;
+  link?: T;
   image?: T;
   updatedAt?: T;
   createdAt?: T;
