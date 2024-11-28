@@ -30,6 +30,9 @@ import { Prenotazioni } from './collections/Prenotazioni'
 import { Aggiornamenti } from './collections/Aggiornamenti'  // Collezione Mostre
 import { Disponibilita } from './collections/Disponibilita'
 
+//import dei globali
+import {Banner} from './globals/Banner'
+
 // Determina il percorso corrente del file
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -71,6 +74,9 @@ export default buildConfig({
     Users,        // Collezione utenti
   ],
   
+  globals:[
+    Banner,     // Globale banner
+  ],
   
   editor: lexicalEditor({}), // Configurazione per l'editor di testo Lexical
   

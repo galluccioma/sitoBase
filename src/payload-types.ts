@@ -44,8 +44,12 @@ export interface Config {
   db: {
     defaultIDType: string;
   };
-  globals: {};
-  globalsSelect: {};
+  globals: {
+    banner: Banner;
+  };
+  globalsSelect: {
+    banner: BannerSelect<false> | BannerSelect<true>;
+  };
   locale: 'en' | 'it';
   user: User & {
     collection: 'users';
@@ -87,7 +91,7 @@ export interface Prenotazioni {
   }[];
   dataPrenotazione: string;
   utente?: string | null;
-  email: string;
+  email?: string | null;
   stato?: ('nuovo' | 'attesa_pagamento' | 'respinto' | 'completato') | null;
   totaleCarrello?: number | null;
   updatedAt: string;
@@ -492,6 +496,32 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   batch?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "banner".
+ */
+export interface Banner {
+  id: string;
+  status?: ('draft' | 'published') | null;
+  title: string;
+  description: string;
+  link?: string | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "banner_select".
+ */
+export interface BannerSelect<T extends boolean = true> {
+  status?: T;
+  title?: T;
+  description?: T;
+  link?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
