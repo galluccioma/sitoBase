@@ -11,7 +11,7 @@ export const Prenotazioni: CollectionConfig = {
   },
   admin: {
     useAsTitle: 'id',
-    defaultColumns: ['dataPrenotazione', 'stato', 'usato', 'totaleCarrello', 'utente', 'email'],
+    defaultColumns: ['dataPrenotazione', 'stato', 'usato', 'totaleCarrello', 'email'],
   },
   labels: {
     singular: 'Prenotazione',
@@ -63,12 +63,12 @@ export const Prenotazioni: CollectionConfig = {
     {
       name: 'utente',
       type: 'text',
-      required: true,
+
     },
     {
       name: 'email',
       type: 'text',
-      required: false,
+      required: true,
     },
     {
       name: 'stato',
