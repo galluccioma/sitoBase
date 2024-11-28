@@ -68,7 +68,7 @@ export const Prenotazioni: CollectionConfig = {
     {
       name: 'email',
       type: 'text',
-      required: true,
+      
     },
     {
       name: 'stato',
