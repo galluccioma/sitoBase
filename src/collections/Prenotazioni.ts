@@ -1,8 +1,5 @@
-import { CollectionConfig } from 'payload'
-import payload from 'payload';  
-
-// import { sendClientConfirmationWithQRCode } from '../mail/emailService'
-
+import { CollectionConfig } from 'payload';
+import payload from 'payload';
 
 export const Prenotazioni: CollectionConfig = {
   slug: 'prenotazioni',
@@ -63,12 +60,10 @@ export const Prenotazioni: CollectionConfig = {
     {
       name: 'utente',
       type: 'text',
-
     },
     {
       name: 'email',
       type: 'text',
-      
     },
     {
       name: 'stato',
@@ -95,30 +90,29 @@ export const Prenotazioni: CollectionConfig = {
       async ({ operation, doc, req }) => {
         try {
           if (operation === 'create' && doc.stato === 'nuovo') {
-    
             // Itera attraverso ogni elemento del carrello della prenotazione
             for (const item of doc.carrello) {
-              const itemId = item.biglietto.id;  // Accedi solo all'ID del biglietto
+              const itemId = item.biglietto.id;
               const fasciaOrariaSelezionata = item.fasciaOrariaSelezionata;
               const requestedQuantity = item.quantità;
-    
+
               // Recupera il tipo di biglietto dal database utilizzando solo l'ID
               const tipoBiglietto = await req.payload.findByID({
                 collection: 'biglietti',
-                id: itemId, // Passa solo l'ID del biglietto
+                id: itemId,
               });
-    
+
               if (!tipoBiglietto) {
-                return;  // Esci dall'operazione se il biglietto non è trovato
+                return; // Esci se il biglietto non è trovato
               }
-    
+
               const tipoBigliettoSelezionato = tipoBiglietto.tipoBiglietto;
-    
+
               // Normalizza la data per il confronto
               const normalizedDate = new Date(doc.dataPrenotazione);
               normalizedDate.setUTCHours(0, 0, 0, 0); // Porta la data a mezzanotte UTC
               const isoDateOnly = normalizedDate.toISOString().split('T')[0]; // Estrai solo giorno/mese/anno
-    
+
               // Verifica la disponibilità della fascia oraria per la data e tipo biglietto
               const existingDisponibilita = await req.payload.find({
                 collection: 'disponibilita',
@@ -128,17 +122,18 @@ export const Prenotazioni: CollectionConfig = {
                   data: { equals: isoDateOnly }, // Solo la parte della data (giorno)
                 },
               });
-    
+
               // Se la disponibilità esiste, aggiorna
               if (existingDisponibilita.docs.length > 0) {
                 const availableSlot = existingDisponibilita.docs[0];
                 const newDisponibilita = availableSlot.disponibilità - requestedQuantity;
-    
+
+                // Verifica che la disponibilità non scenda sotto 0
                 if (newDisponibilita < 0) {
                   const errorMessage = `Non ci sono abbastanza posti disponibili per il biglietto ${itemId} nella fascia oraria ${fasciaOrariaSelezionata} il ${isoDateOnly}.`;
-                  return;  // Esci dall'operazione se non ci sono abbastanza posti
+                  throw new Error(errorMessage); // Lancia un errore che impedirà il completamento dell'operazione
                 }
-    
+
                 await req.payload.update({
                   collection: 'disponibilita',
                   id: availableSlot.id,
@@ -147,18 +142,23 @@ export const Prenotazioni: CollectionConfig = {
               } else {
                 // Se non ci sono disponibilità, crea una nuova voce
                 let disponibilitaIniziale;
-    
+
                 // Assegna la disponibilità iniziale in base al tipo di biglietto
                 if (tipoBigliettoSelezionato === 'visita_guidata') {
-                  disponibilitaIniziale = 25 - requestedQuantity;  // 25 - (biglietti selezionati)
+                  disponibilitaIniziale = 25 - requestedQuantity; // 25 - (biglietti selezionati)
                 } else if (tipoBigliettoSelezionato === 'atelier') {
-                  disponibilitaIniziale = 18 - requestedQuantity;  // 18 - (biglietti selezionati)
+                  disponibilitaIniziale = 18 - requestedQuantity; // 18 - (biglietti selezionati)
                 } else {
-                  // In caso di tipo di biglietto non previsto
                   const errorMessage = `Tipo di biglietto non supportato: ${tipoBigliettoSelezionato}`;
-                  return;  // Esci se il tipo di biglietto non è valido
+                  throw new Error(errorMessage); // Lancia un errore se il tipo di biglietto non è valido
                 }
-    
+
+                // Verifica se la disponibilità iniziale è negativa
+                if (disponibilitaIniziale < 0) {
+                  const errorMessage = `Non ci sono abbastanza posti disponibili per il biglietto ${itemId} nella fascia oraria ${fasciaOrariaSelezionata} il ${isoDateOnly}.`;
+                  throw new Error(errorMessage); // Lancia un errore se la disponibilità è negativa
+                }
+
                 await req.payload.create({
                   collection: 'disponibilita',
                   data: {
@@ -172,12 +172,10 @@ export const Prenotazioni: CollectionConfig = {
             }
           }
         } catch (error) {
-          // Gestione degli errori
+          console.error('Errore durante l\'elaborazione della prenotazione:', error.message);
+          throw new Error(error.message); // Lancia l'errore che impedirà la creazione o aggiornamento
         }
       },
-    ],    
-    
-  }
-  
-  
-}
+    ],
+  },
+};
