@@ -69,14 +69,11 @@ export const Prenotazioni: CollectionConfig = {
       name: 'stato',
       type: 'radio',
       options: [
-        { value: 'nuovo', label: 'Nuovo' },
         { value: 'attesa_pagamento', label: 'Attesa Pagamento' },
-        { value: 'respinto', label: 'Respinto' },
         { value: 'completato', label: 'Completato' },
       ],
-      defaultValue: 'nuovo',
+      defaultValue: 'attesa_pagamento',
     },
-    
     {
       name: 'totaleCarrello',
       type: 'number',
@@ -90,7 +87,7 @@ export const Prenotazioni: CollectionConfig = {
     afterChange: [
       async ({ operation, doc, req }) => {
         try {
-          if (operation === 'create' && doc.stato === 'nuovo') {
+          if (operation === 'create') {
             // Itera attraverso ogni elemento del carrello della prenotazione
             for (const item of doc.carrello) {
               const itemId = item.biglietto.id;

@@ -92,7 +92,7 @@ export interface Prenotazioni {
   dataPrenotazione: string;
   utente?: string | null;
   email?: string | null;
-  stato?: ('nuovo' | 'attesa_pagamento' | 'respinto' | 'completato') | null;
+  stato?: ('attesa_pagamento' | 'completato') | null;
   totaleCarrello?: number | null;
   updatedAt: string;
   createdAt: string;
