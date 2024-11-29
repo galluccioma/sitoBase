@@ -88,6 +88,7 @@ export const Prenotazioni: CollectionConfig = {
       async ({ operation, doc, req }) => {
         try {
           if (operation === 'create') {
+            let totaleCarrello = 0; // Inizializza la variabile per il totale del carrello
             // Itera attraverso ogni elemento del carrello della prenotazione
             for (const item of doc.carrello) {
               const itemId = item.biglietto.id;
@@ -105,6 +106,8 @@ export const Prenotazioni: CollectionConfig = {
               }
 
               const tipoBigliettoSelezionato = tipoBiglietto.tipoBiglietto;
+              const prezzoBiglietto = tipoBiglietto.prezzo; // Assumiamo che il biglietto abbia un campo "prezzo"
+              totaleCarrello += prezzoBiglietto * requestedQuantity;
 
               // Normalizza la data per il confronto
               const normalizedDate = new Date(doc.dataPrenotazione);
@@ -168,6 +171,14 @@ export const Prenotazioni: CollectionConfig = {
                 });
               }
             }
+            console.log(`Totale carrello: ${totaleCarrello}`);
+            await req.payload.update({
+              collection: 'prenotazioni',
+              id: doc.id,
+              data: {
+                totaleCarrello: totaleCarrello, // Imposta il totale calcolato
+              },
+            });
           }
         } catch (error) {
           console.error('Errore durante l\'elaborazione della prenotazione:', error.message);
