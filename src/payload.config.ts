@@ -141,35 +141,17 @@ export default buildConfig({
     }),
 
     stripePlugin({
-      stripeSecretKey: process.env.STRIPE_SECRET_KEY || "none",
-      stripeWebhooksEndpointSecret: process.env.STRIPE_WEBHOOKS_ENDPOINT_SECRET,
+      stripeSecretKey: process.env.STRIPE_SECRET_KEY || "none",  // La tua chiave segreta Stripe
+      stripeWebhooksEndpointSecret: process.env.STRIPE_WEBHOOKS_ENDPOINT_SECRET,  // Segreto del webhook (se lo usi)
+      rest: true,  // Abilita il proxy per l'API REST di Stripe
       webhooks: {
-        'checkout.session.completed': async ({ event, stripe, payload }) => {
-          const session = event.data.object; // La sessione di pagamento completata
-  
-          // Recupera l'ID della prenotazione associata
-          const prenotazioneId = session.client_reference_id;
-  
-          // Recupera la prenotazione dal database
-          const prenotazione = await payload.findByID({
-            collection: 'prenotazioni',
-            id: prenotazioneId,
-          });
-  
-          if (prenotazione) {
-            // Aggiorna lo stato della prenotazione in "completato" e "pagato"
-            await payload.update({
-              collection: 'prenotazioni',
-              id: prenotazioneId,
-              data: {
-                stato: 'completato',
-              },
-            });
-  
-            console.log(`Prenotazione ${prenotazioneId} aggiornata a "completato"`);
-          } else {
-            console.log(`Prenotazione con ID ${prenotazioneId} non trovata`);
-          }
+        'payment_intent.succeeded': ({ event, stripe, payload }) => {
+          console.log('Pagamento riuscito:', event);
+          // Aggiungi qui la logica da eseguire quando un pagamento è riuscito
+        },
+        'payment_intent.failed': ({ event, stripe, payload }) => {
+          console.log('Pagamento fallito:', event);
+          // Aggiungi la logica per il fallimento del pagamento
         },
       },
     }),
