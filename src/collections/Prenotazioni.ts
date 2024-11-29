@@ -174,6 +174,45 @@ export const Prenotazioni: CollectionConfig = {
           throw new Error(error.message); // Lancia l'errore che impedirà la creazione o aggiornamento
         }
       },
+      async ({ operation, doc, req }) => {
+        try {
+          if (operation === 'create' || operation === 'update') {
+            let totaleCarrello = 0; // Inizializza la variabile per il totale del carrello
+            // Itera attraverso ogni elemento del carrello della prenotazione
+            for (const item of doc.carrello) {
+              const itemId = item.biglietto.id;
+              const requestedQuantity = item.quantità;
+
+              // Recupera il biglietto per ottenere il prezzo
+              const biglietto = await req.payload.findByID({
+                collection: 'biglietti',
+                id: itemId,
+              });
+
+              if (!biglietto || biglietto.prezzo == null) {
+                throw new Error(`Il biglietto con ID ${itemId} non esiste o non ha un prezzo valido.`);
+              }
+
+              const prezzoBiglietto = biglietto.prezzo;
+
+              // Somma il prezzo per la quantità
+              totaleCarrello += prezzoBiglietto * requestedQuantity;
+            }
+
+            // Aggiorna il totale nel documento
+            await req.payload.update({
+              collection: 'prenotazioni',
+              id: doc.id,
+              data: {
+                totaleCarrello: totaleCarrello, // Imposta il totale calcolato
+              },
+            });
+          }
+        } catch (error) {
+          console.error('Errore nel calcolo del totale:', error);
+          throw new Error('Errore nel calcolo del totale del carrello.');
+        }
+      },
     ],
   },
 };
