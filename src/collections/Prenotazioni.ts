@@ -76,6 +76,7 @@ export const Prenotazioni: CollectionConfig = {
       ],
       defaultValue: 'nuovo',
     },
+    
     {
       name: 'totaleCarrello',
       type: 'number',
