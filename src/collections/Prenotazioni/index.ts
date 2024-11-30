@@ -1,5 +1,5 @@
-import { CollectionConfig } from 'payload';
-import payload from 'payload';
+import { CollectionConfig } from 'payload'
+import payload from 'payload'
 import { generateDisponibilita } from './hooks/generateDisponibilita'
 
 export const Prenotazioni: CollectionConfig = {
@@ -174,7 +174,7 @@ export const Prenotazioni: CollectionConfig = {
       //     throw new Error(error.message); // Lancia l'errore che impedirà la creazione o aggiornamento
       //   }
       // },
- generateDisponibilita
+      generateDisponibilita,
     ],
   },
-};
+}

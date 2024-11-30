@@ -6,9 +6,12 @@ export const generateDisponibilita: AfterChangeHook<Prenotazioni> = async ({ ope
       if (operation === 'create') {
         // Itera attraverso ogni elemento del carrello della prenotazione
         for (const item of doc.carrello) {
-          const itemId = (item.biglietto as Biglietti).id;
+       
           const fasciaOrariaSelezionata = item.fasciaOrariaSelezionata;
           const requestedQuantity = item.quantità;
+
+          const { biglietto } = item
+          const itemId = typeof biglietto === 'object' ? biglietto.id : biglietto
 
           // Recupera il tipo di biglietto dal database utilizzando solo l'ID
           const tipoBiglietto = await req.payload.findByID({
