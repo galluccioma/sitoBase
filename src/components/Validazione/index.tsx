@@ -3,7 +3,6 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { QRCodeSVG } from 'qrcode.react';
 import { Html5Qrcode } from 'html5-qrcode';
 
-
 interface Biglietto {
   id: string;
   titolo: string;
@@ -21,11 +20,9 @@ interface Carrello {
 
 interface Prenotazione {
   id: string;
-  stato: string;
-  utente: string;
-  usato: boolean;
-  numeroDiTelefono: string;
   email: string;
+  stato: string;
+  usato: boolean;
   biglietti: Biglietto[];
   carrello: Carrello[];
 }
@@ -194,13 +191,13 @@ const Validazione: React.FC = () => {
 
 
   return (
-      <section className="flex flex-col items-start justify-top bg-white text-black ">
-        <div className="gap-6 w-full max-w-4xl">
-          <h2 className="text-3xl my-6">Validazione Prenotazione</h2>
-          <div className='bg-[#f5f5f5] p-6'>
+      <section className="tw-flex tw-flex-col tw-items-start tw-justify-top tw-bg-white tw-text-black ">
+        <div className="tw-gap-6 tw-w-full wt-max-w-4xl">
+          <h2 className="tw-text-3xl wt-my-6">Validazione Prenotazione</h2>
+          <div className='tw-bg-[#f5f5f5] tw-p-6'>
                 <input
                   type="text"
-                  className="border border-black/40 focus:border-black/70 p-4 w-full "
+                  className="tw-border tw-border-black/40 tw-focus:border-black/70 tw-p-4 tw-w-full "
                   placeholder="Inserisci ID prenotazione"
                   value={id}
                   onChange={(e) => setId(e.target.value)}
@@ -208,7 +205,7 @@ const Validazione: React.FC = () => {
                 <button
                   onClick={() => handleSearch(id)}
                   disabled={loading}
-                  className="bg-black text-white text-lg flex p-2 mt-4 items-center justify-center uppercase rounded-sm w-full"
+                  className="tw-bg-black tw-text-white tw-text-lg tw-flex tw-p-2 tw-mt-4 tw-items-center tw-justify-center tw-uppercase wt-rounded-sm wt-w-full"
                 >
                   {loading ? 'Cercando...' : 'Cerca'}
                 </button>
@@ -216,39 +213,37 @@ const Validazione: React.FC = () => {
                 {/* Button to start/stop QR scanning */}
                 <button
                   onClick={() => setScanning(prev => !prev)}
-                  className="bg-zinc-200 border text-black text-lg flex p-2 mt-4 items-center justify-center uppercase rounded-sm w-full"
+                  className="tw-bg-zinc-200 tw-border tw-text-black tw-text-lg tw-flex tw-p-2 tw-mt-4 tw-items-center tw-justify-center tw-uppercase tw-rounded-sm tw-w-full"
                 >
                   {scanning ? 'Ferma Scansione' : 'Scansiona QR'}
                 </button>
           </div>
           {prenotazione && (
-            <section className="flex items-top mx-auto max-w-6xl bg-white text-black gap-6 p-6">
+            <section className="tw-flex tw-items-top tw-mx-auto tw-max-w-6xl tw-bg-white tw-text-black tw-gap-6 tw-p-6">
               {/* Reservation Details Column */}
-              <div className="flex-grow ">
-                <h2 className="text-lg font-bold">Dettagli Prenotazione</h2>
+              <div className="tw-flex-grow ">
+                <h2 className="tw-text-lg tw-font-bold">Dettagli Prenotazione</h2>
                 <p>ID: {prenotazione.id}</p>
-                <p>Stato: {prenotazione.stato}</p>
-                <p>Utente: {prenotazione.utente}</p>
-                <p>Usato: {prenotazione.usato ? 'Sì' : 'No'}</p>
-                <p>Telefono: {prenotazione.numeroDiTelefono}</p>
                 <p>Email: {prenotazione.email}</p>
+                <p>Stato: {prenotazione.stato}</p>
+                <p>Usato: {prenotazione.usato ? 'Sì' : 'No'}</p>
 
                 {qrData && (
-                  <div className="mt-4">
-                    <h3 className="text-lg font-bold">QR Prenotazione</h3>
+                  <div className="tw-mt-4">
+                    <h3 className="tw-text-lg tw-font-bold">QR Prenotazione</h3>
                     <QRCodeSVG value={qrData} size={128} />
                   </div>
                 )}
               </div>
 
               {/* Tickets in Cart Column */}
-              <div className="flex-grow">
+              <div className="tw-flex-grow">
                 {prenotazione.carrello && prenotazione.carrello.length > 0 ? (
                   <>
-                    <h3 className="text-lg font-bold">Biglietti nel Carrello</h3>
-                    <div className="grid grid-cols-1 gap-6">
+                    <h3 className="tw-text-lg tw-font-bold">Biglietti nel Carrello</h3>
+                    <div className="tw-grid tw-grid-cols-1 tw-gap-6">
                       {prenotazione.carrello.map((item) => (
-                        <div key={item.id} className="border p-2 my-2">
+                        <div key={item.id} className="tw-border tw-p-2 tw-my-2">
                           <p>
                             <strong>Titolo:</strong> {item.biglietto.titolo}
                           </p>
@@ -271,7 +266,7 @@ const Validazione: React.FC = () => {
 
                 <button
                   onClick={handleUpdate}
-                  className="bg-black text-white flex p-2 gap-2 items-center justify-center uppercase text-sm rounded-sm w-full mt-4"
+                  className="tw-bg-black tw-text-white tw-flex tw-p-2 tw-gap-2 tw-items-center tw-justify-center tw-ppercase tw-text-sm tw-rounded-sm tw-w-full tw-mt-4"
                 >
                   Valida Prenotazione
                 </button>
@@ -280,7 +275,7 @@ const Validazione: React.FC = () => {
           )}
         </div>
         {/* QR Reader Element */}
-        <div id="qr-reader" className='mt-4' style={{ width: "100px", height: "100px" }} />
+        <div id="qr-reader" className='tw-mt-4' style={{ width: "100px", height: "100px" }} />
 
 {error && <p style={{ color: 'red' }}>{error}</p>}
       </section>

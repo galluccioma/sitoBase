@@ -139,22 +139,6 @@ export default buildConfig({
         endpoint: process.env.S3_ENDPOINT, // Endpoint S3 (es. per server compatibili con S3)
       },
     }),
-
-    stripePlugin({
-      stripeSecretKey: process.env.STRIPE_SECRET_KEY || "none",  // La tua chiave segreta Stripe
-      stripeWebhooksEndpointSecret: process.env.STRIPE_WEBHOOKS_ENDPOINT_SECRET,  // Segreto del webhook (se lo usi)
-      rest: true,  // Abilita il proxy per l'API REST di Stripe
-      webhooks: {
-        'payment_intent.succeeded': ({ event, stripe, payload }) => {
-          console.log('Pagamento riuscito:', event);
-          // Aggiungi qui la logica da eseguire quando un pagamento è riuscito
-        },
-        'payment_intent.failed': ({ event, stripe, payload }) => {
-          console.log('Pagamento fallito:', event);
-          // Aggiungi la logica per il fallimento del pagamento
-        },
-      },
-    }),
   ],
 
   //Paypal
