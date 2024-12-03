@@ -113,6 +113,7 @@ export const Notizie: CollectionConfig = {
         ],
       }),
     },
+    lexicalHTML('content', { name: 'content_html' }),
     {
       name: 'image',
       type: 'upload',

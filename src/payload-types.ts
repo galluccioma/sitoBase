@@ -195,6 +195,7 @@ export interface Notizie {
     };
     [k: string]: unknown;
   } | null;
+  content_html?: string | null;
   image?: (string | null) | Media;
   updatedAt: string;
   createdAt: string;
@@ -395,6 +396,7 @@ export interface NotizieSelect<T extends boolean = true> {
   title?: T;
   description?: T;
   content?: T;
+  content_html?: T;
   image?: T;
   updatedAt?: T;
   createdAt?: T;
