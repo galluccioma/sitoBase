@@ -1,8 +1,16 @@
 import { CollectionConfig, FieldHook } from 'payload';
 
 
-import {lexicalEditor,} from '@payloadcms/richtext-lexical'
-
+import {
+  HTMLConverterFeature,
+  lexicalEditor,
+  lexicalHTML,
+  UploadFeature,
+  HeadingFeature,
+  FixedToolbarFeature,
+  InlineToolbarFeature,
+  HorizontalRuleFeature
+} from '@payloadcms/richtext-lexical'
 
 // 'data' is all of the incoming values for the document
 const formatSlug: FieldHook = async ({ value, data }) => {
@@ -92,10 +100,16 @@ export const Notizie: CollectionConfig = {
       name: 'content',
       type: 'richText',
       editor: lexicalEditor({
-        features: ({ defaultFeatures }) => [
-          ...defaultFeatures,
+        features: ({ rootFeatures }) => [
+          ...rootFeatures,
           // The HTMLConverter Feature is the feature which manages the HTML serializers.
           // If you do not pass any arguments to it, it will use the default serializers.
+          HTMLConverterFeature({}),
+          HeadingFeature({ enabledHeadingSizes: ['h1', 'h2', 'h3', 'h4'] }),
+          FixedToolbarFeature(),
+          InlineToolbarFeature(),
+          HorizontalRuleFeature(),
+          UploadFeature()
         ],
       }),
     },
