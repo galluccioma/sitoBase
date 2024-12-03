@@ -92,6 +92,7 @@ export interface Prenotazioni {
   stato?: ('attesa_pagamento' | 'completato') | null;
   usato?: boolean | null;
   totaleCarrello?: number | null;
+  sconto?: number | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -330,6 +331,7 @@ export interface PrenotazioniSelect<T extends boolean = true> {
   stato?: T;
   usato?: T;
   totaleCarrello?: T;
+  sconto?: T;
   updatedAt?: T;
   createdAt?: T;
 }

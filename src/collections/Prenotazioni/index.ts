@@ -93,6 +93,13 @@ export const Prenotazioni: CollectionConfig = {
         position: 'sidebar',
       },
     },
+    {
+      name: 'sconto',
+      type: 'number',
+      admin: {
+        position: 'sidebar',
+      },
+    },
   ],
   hooks: {
     beforeChange: [
