@@ -189,13 +189,13 @@ const Validazione: React.FC = () => {
   }
 
   return (
-    <section className="tw-flex tw-flex-col tw-items-start tw-justify-top tw-bg-white tw-text-black ">
-      <div className="tw-gap-6 tw-w-full wt-max-w-4xl">
-        <h2 className="tw-text-3xl wt-my-6">Validazione Prenotazione</h2>
-        <div className="tw-bg-gray tw-p-6">
+    <section className="flex flex-col items-start justify-top bg-white text-black ">
+      <div className="gap-6 w-full wt-max-w-4xl">
+        <h2 className="text-3xl wt-my-6">Validazione Prenotazione</h2>
+        <div className="bg-gray p-6">
           <input
             type="text"
-            className="tw-border tw-border-black-40 tw-focus:border-black-70 tw-p-4 tw-w-full "
+            className="border border-black-40 focus:border-black-70 p-4 w-full "
             placeholder="Inserisci ID prenotazione"
             value={id}
             onChange={(e) => setId(e.target.value)}
@@ -203,7 +203,7 @@ const Validazione: React.FC = () => {
           <button
             onClick={() => handleSearch(id)}
             disabled={loading}
-            className="tw-bg-black tw-text-white tw-text-lg tw-flex tw-p-2 tw-mt-4 tw-items-center tw-justify-center tw-uppercase tw-w-full"
+            className="bg-black text-white text-lg flex p-2 mt-4 items-center justify-center uppercase w-full"
           >
             {loading ? 'Cercando...' : 'Cerca'}
           </button>
@@ -211,26 +211,26 @@ const Validazione: React.FC = () => {
           {/* Button to start/stop QR scanning */}
           <button
             onClick={() => setScanning((prev) => !prev)}
-            className="tw-bg-zinc-200 tw-border tw-text-black tw-text-lg tw-flex tw-p-2 tw-mt-4 tw-items-center tw-justify-center tw-uppercase tw-rounded-sm tw-w-full"
+            className="bg-zinc-200 border text-black text-lg flex p-2 mt-4 items-center justify-center uppercase rounded-sm w-full"
           >
             {scanning ? 'Ferma Scansione' : 'Scansiona QR'}
           </button>
         </div>
         {prenotazione && (
-          <section className="tw-flex tw-items-top tw-mx-auto tw-max-w-6xl tw-bg-white tw-text-black tw-gap-6 tw-p-6">
+          <section className="flex items-top mx-auto max-w-6xl bg-white text-black gap-6 p-6">
             {/* Reservation Details Column */}
-            <div className="tw-flex   tw-p-6">
+            <div className="flex   p-6">
               {qrData && (
-                <div className="tw-mt-4 tw-p-6">
+                <div className="mt-4 p-6">
                   <QRCodeSVG value={qrData} size={128} />
                 </div>
               )}
               <div>
-                <h2 className="tw-text-lg tw-font-bold">Dettagli Prenotazione</h2>
+                <h2 className="text-lg font-bold">Dettagli Prenotazione</h2>
                 <p>ID: {prenotazione.id}</p>
                 <p>Email: {prenotazione.email}</p>
                 <p>Stato: {prenotazione.stato}</p>
-                <p className="tw-text-lg tw-font-bold">
+                <p className="text-lg font-bold">
                   {' '}
                   Usato: {prenotazione.usato ? 'Sì' : 'No'}
                 </p>
@@ -238,13 +238,13 @@ const Validazione: React.FC = () => {
             </div>
 
             {/* Tickets in Cart Column */}
-            <div className="tw-flex-grow">
+            <div className="flex-grow">
               {prenotazione.carrello && prenotazione.carrello.length > 0 ? (
                 <>
-                  <h3 className="tw-text-lg tw-font-bold">Biglietti nel Carrello</h3>
-                  <div className="tw-grid tw-grid-cols-1 tw-gap-6">
+                  <h3 className="text-lg font-bold">Biglietti nel Carrello</h3>
+                  <div className="grid grid-cols-1 gap-6">
                     {prenotazione.carrello.map((item) => (
-                      <div key={item.id} className="tw-border tw-p-2 tw-my-2">
+                      <div key={item.id} className="border p-2 my-2">
                         <p>
                           <strong>Titolo:</strong> {item.biglietto.titolo}
                         </p>
@@ -268,7 +268,7 @@ const Validazione: React.FC = () => {
               {!prenotazione.usato && (
                 <button
                   onClick={handleUpdate}
-                  className="tw-bg-red tw-text-white tw-flex tw-p-2 tw-items-center tw-justify-center tw-uppercase tw-text-lg tw-w-full tw-mt-4">
+                  className="bg-red text-white flex p-2 items-center justify-center uppercase text-lg w-full mt-4">
                   Valida Prenotazione {}
                 </button>
               )}
@@ -277,7 +277,7 @@ const Validazione: React.FC = () => {
         )}
       </div>
       {/* QR Reader Element */}
-      <div id="qr-reader" className="tw-mt-4" style={{ width: '100px', height: '100px' }} />
+      <div id="qr-reader" className="mt-4" style={{ width: '100px', height: '100px' }} />
 
       {error && <p style={{ color: 'red' }}>{error}</p>}
     </section>

@@ -73,6 +73,9 @@ export const Prenotazioni: CollectionConfig = {
         { value: 'completato', label: 'Completato' },
       ],
       defaultValue: 'attesa_pagamento',
+      admin: {
+        position: 'sidebar',
+      },
     },
     {
       name: 'usato',
