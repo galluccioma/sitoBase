@@ -3,7 +3,7 @@ import type { AfterChangeHook } from "node_modules/payload/dist/collections/conf
 
 export const generateDisponibilita: AfterChangeHook<Prenotazioni> = async ({ operation, doc, req }) => {
     try {
-      if (operation === 'create' || operation === 'update'  && doc.stato === 'completato') {
+      if ( operation === 'update'  && doc.stato === 'completato') {
         // Itera attraverso ogni elemento del carrello della prenotazione
         for (const item of doc.carrello) {
        
