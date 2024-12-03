@@ -1,93 +1,93 @@
-'use client';
-import React, { useState, useEffect, useCallback } from 'react';
-import { QRCodeSVG } from 'qrcode.react';
-import { Html5Qrcode } from 'html5-qrcode';
+'use client'
+import React, { useState, useEffect, useCallback } from 'react'
+import { QRCodeSVG } from 'qrcode.react'
+import { Html5Qrcode } from 'html5-qrcode'
+
+import './styles.scss'
 
 interface Biglietto {
-  id: string;
-  titolo: string;
-  prezzo: number;
-  fasciaOraria: string;
-
+  id: string
+  titolo: string
+  prezzo: number
+  fasciaOraria: string
 }
 
 interface Carrello {
-  biglietto: Biglietto;
-  quantità: number;
-  id: string;
-  fasciaOrariaSelezionata:string;
+  biglietto: Biglietto
+  quantità: number
+  id: string
+  fasciaOrariaSelezionata: string
 }
 
 interface Prenotazione {
-  id: string;
-  email: string;
-  stato: string;
-  usato: boolean;
-  biglietti: Biglietto[];
-  carrello: Carrello[];
+  id: string
+  email: string
+  stato: string
+  usato: boolean
+  biglietti: Biglietto[]
+  carrello: Carrello[]
 }
 
-
 const Validazione: React.FC = () => {
-  const [id, setId] = useState('');
-  const [prenotazione, setPrenotazione] = useState<Prenotazione | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
-  const [qrData, setQrData] = useState<string | null>(null);
-  const [html5QrCode, setHtml5QrCode] = useState<Html5Qrcode | null>(null);
-  const [scanning, setScanning] = useState(false);
-  const [cameraPermission, setCameraPermission] = useState<boolean | null>(null);
+  const [id, setId] = useState('')
+  const [prenotazione, setPrenotazione] = useState<Prenotazione | null>(null)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
+  const [qrData, setQrData] = useState<string | null>(null)
+  const [html5QrCode, setHtml5QrCode] = useState<Html5Qrcode | null>(null)
+  const [scanning, setScanning] = useState(false)
+  const [cameraPermission, setCameraPermission] = useState<boolean | null>(null)
 
   const onScanSuccess = useCallback((decodedText: string) => {
-    setId(decodedText);
-    setScanning(false); 
-    handleSearch(decodedText);
-  }, []);
+    setId(decodedText)
+    setScanning(false)
+    handleSearch(decodedText)
+  }, [])
 
   const onScanFailed = useCallback((errorMessage: string) => {
-    console.warn(`Scansione fallita: ${errorMessage}`);
-  }, []);
+    console.warn(`Scansione fallita: ${errorMessage}`)
+  }, [])
 
   const checkCameraPermission = useCallback(async () => {
     // Verifica se il consenso è già salvato nel localStorage
-    const storedPermission = localStorage.getItem('cameraPermission');
-    
+    const storedPermission = localStorage.getItem('cameraPermission')
+
     if (storedPermission === 'granted') {
       // Permesso già concesso
-      setCameraPermission(true);
-      return;
+      setCameraPermission(true)
+      return
     } else if (storedPermission === 'denied') {
       // Permesso negato
-      setCameraPermission(false);
-      return;
+      setCameraPermission(false)
+      return
     }
 
     // Mostra un avviso che spiega perché hai bisogno del permesso
     const userConsent = window.confirm(
-      "Questa applicazione richiede accesso alla tua fotocamera per scansionare i codici QR. Vuoi concedere il permesso?"
-    );
+      'Questa applicazione richiede accesso alla tua fotocamera per scansionare i codici QR. Vuoi concedere il permesso?',
+    )
 
     if (userConsent) {
       // Richiedi accesso alla fotocamera
       try {
-        await navigator.mediaDevices.getUserMedia({ video: true });
-        setCameraPermission(true);
-        localStorage.setItem('cameraPermission', 'granted'); // Salva il permesso nel localStorage
+        await navigator.mediaDevices.getUserMedia({ video: true })
+        setCameraPermission(true)
+        localStorage.setItem('cameraPermission', 'granted') // Salva il permesso nel localStorage
       } catch (error) {
-        console.error('Accesso alla camera negato:', error);
-        setCameraPermission(false);
-        localStorage.setItem('cameraPermission', 'denied'); // Salva il permesso nel localStorage
+        console.error('Accesso alla camera negato:', error)
+        setCameraPermission(false)
+        localStorage.setItem('cameraPermission', 'denied') // Salva il permesso nel localStorage
       }
     } else {
-      setCameraPermission(false);
-      localStorage.setItem('cameraPermission', 'denied'); // Salva il permesso nel localStorage
+      setCameraPermission(false)
+      localStorage.setItem('cameraPermission', 'denied') // Salva il permesso nel localStorage
     }
-  }, []);
+  }, [])
 
   const startScanner = useCallback(async () => {
     if (!html5QrCode) {
-      const qrCode = new Html5Qrcode('qr-reader');
-      setHtml5QrCode(qrCode);
+      const qrCode = new Html5Qrcode('qr-reader')
+      setHtml5QrCode(qrCode)
 
       try {
         await qrCode.start(
@@ -97,191 +97,191 @@ const Validazione: React.FC = () => {
             qrbox: { width: 250, height: 250 },
           },
           onScanSuccess,
-          onScanFailed
-        );
+          onScanFailed,
+        )
       } catch (error) {
-        console.error('Errore durante l\'avvio dello scanner QR:', error);
-        setError('Errore nell\'accesso alla fotocamera. Assicurati che il dispositivo abbia una fotocamera e che l\'accesso sia consentito.');
+        console.error("Errore durante l'avvio dello scanner QR:", error)
+        setError(
+          "Errore nell'accesso alla fotocamera. Assicurati che il dispositivo abbia una fotocamera e che l'accesso sia consentito.",
+        )
       }
     }
-  }, [html5QrCode, onScanSuccess, onScanFailed]);
+  }, [html5QrCode, onScanSuccess, onScanFailed])
 
   const stopScanner = useCallback(async () => {
     if (html5QrCode && html5QrCode.isScanning) {
-      await html5QrCode.stop();
-      html5QrCode.clear();
-      setHtml5QrCode(null);
+      await html5QrCode.stop()
+      html5QrCode.clear()
+      setHtml5QrCode(null)
     }
-  }, [html5QrCode]);
+  }, [html5QrCode])
 
   useEffect(() => {
-    checkCameraPermission();
-  }, [checkCameraPermission]);
+    checkCameraPermission()
+  }, [checkCameraPermission])
 
   useEffect(() => {
     if (scanning) {
       if (cameraPermission) {
-        startScanner();
+        startScanner()
       } else {
-        setError('Permesso della fotocamera non concesso.');
+        setError('Permesso della fotocamera non concesso.')
       }
     } else {
-      stopScanner();
+      stopScanner()
     }
 
     return () => {
-      stopScanner(); // Assicurati di fermare lo scanner quando il componente si smonta o quando 'scanning' cambia
-    };
-  }, [scanning, cameraPermission, startScanner, stopScanner]);
+      stopScanner() // Assicurati di fermare lo scanner quando il componente si smonta o quando 'scanning' cambia
+    }
+  }, [scanning, cameraPermission, startScanner, stopScanner])
 
   const handleUpdate = async () => {
     if (!prenotazione) {
-      setError('Nessuna prenotazione da aggiornare.');
-      return;
+      setError('Nessuna prenotazione da aggiornare.')
+      return
     }
 
-    try {
       const response = await fetch(`/api/prenotazioni/${prenotazione.id}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ usato: true }),
-      });
+      })
 
       if (!response.ok) {
-        throw new Error("Errore durante l'aggiornamento dello stato.");
+        throw new Error("Errore durante l'aggiornamento dello stato.")
       }
 
-      setPrenotazione((prev) => (prev ? { ...prev, usato: true } : prev));
-    } catch (err: any) {
-      setError(err.message || "Errore durante l'aggiornamento dello stato.");
-    }
-  };
+      setPrenotazione((prev) => (prev ? { ...prev, usato: true } : prev))
+    
+  }
 
   const handleSearch = async (searchId: string) => {
-    setLoading(true);
-    setError('');
-  
-    if (!searchId.trim()) {
-      setError('ID prenotazione non valido.');
-      setLoading(false);
-      setScanning(false);   // Stop scanner if the ID is invalid
-      return;
-    }
-  
-    try {
-      const response = await fetch(`/api/prenotazioni/${searchId}`);
-  
-      if (!response.ok) {
-        throw new Error('Prenotazione non trovata.');
-      }
-  
-      const data = await response.json();
-      setPrenotazione(data);
-      setQrData(data.id);
-      await stopScanner();  // Ensure scanner stops as soon as a valid ID is found
-      setScanning(false);   // Update state after stopping scanner
-    } catch (err: any) {
-      setError(err.message || 'Errore durante la ricerca.');
-    } finally {
-      setLoading(false);
-    }
-  };
+    setLoading(true)
+    setError('')
 
+    if (!searchId.trim()) {
+      setError('ID prenotazione non valido.')
+      setLoading(false)
+      setScanning(false) // Stop scanner if the ID is invalid
+      return
+    }
+
+    try {
+      const response = await fetch(`/api/prenotazioni/${searchId}`)
+
+      if (!response.ok) {
+        throw new Error('Prenotazione non trovata.')
+      }
+
+      const data = await response.json()
+      setPrenotazione(data)
+      setQrData(data.id)
+      await stopScanner() // Ensure scanner stops as soon as a valid ID is found
+      setScanning(false) // Update state after stopping scanner
+    } catch (err: any) {
+      setError(err.message || 'Errore durante la ricerca.')
+    } finally {
+      setLoading(false)
+    }
+  }
 
   return (
-      <section className="tw-flex tw-flex-col tw-items-start tw-justify-top tw-bg-white tw-text-black ">
-        <div className="tw-gap-6 tw-w-full wt-max-w-4xl">
-          <h2 className="tw-text-3xl wt-my-6">Validazione Prenotazione</h2>
-          <div className='tw-bg-[#f5f5f5] tw-p-6'>
-                <input
-                  type="text"
-                  className="tw-border tw-border-black/40 tw-focus:border-black/70 tw-p-4 tw-w-full "
-                  placeholder="Inserisci ID prenotazione"
-                  value={id}
-                  onChange={(e) => setId(e.target.value)}
-                />
-                <button
-                  onClick={() => handleSearch(id)}
-                  disabled={loading}
-                  className="tw-bg-black tw-text-white tw-text-lg tw-flex tw-p-2 tw-mt-4 tw-items-center tw-justify-center tw-uppercase wt-rounded-sm wt-w-full"
-                >
-                  {loading ? 'Cercando...' : 'Cerca'}
-                </button>
+    <section className="tw-flex tw-flex-col tw-items-start tw-justify-top tw-bg-white tw-text-black ">
+      <div className="tw-gap-6 tw-w-full wt-max-w-4xl">
+        <h2 className="tw-text-3xl wt-my-6">Validazione Prenotazione</h2>
+        <div className="tw-bg-gray tw-p-6">
+          <input
+            type="text"
+            className="tw-border tw-border-black-40 tw-focus:border-black-70 tw-p-4 tw-w-full "
+            placeholder="Inserisci ID prenotazione"
+            value={id}
+            onChange={(e) => setId(e.target.value)}
+          />
+          <button
+            onClick={() => handleSearch(id)}
+            disabled={loading}
+            className="tw-bg-black tw-text-white tw-text-lg tw-flex tw-p-2 tw-mt-4 tw-items-center tw-justify-center tw-uppercase tw-w-full"
+          >
+            {loading ? 'Cercando...' : 'Cerca'}
+          </button>
 
-                {/* Button to start/stop QR scanning */}
-                <button
-                  onClick={() => setScanning(prev => !prev)}
-                  className="tw-bg-zinc-200 tw-border tw-text-black tw-text-lg tw-flex tw-p-2 tw-mt-4 tw-items-center tw-justify-center tw-uppercase tw-rounded-sm tw-w-full"
-                >
-                  {scanning ? 'Ferma Scansione' : 'Scansiona QR'}
-                </button>
-          </div>
-          {prenotazione && (
-            <section className="tw-flex tw-items-top tw-mx-auto tw-max-w-6xl tw-bg-white tw-text-black tw-gap-6 tw-p-6">
-              {/* Reservation Details Column */}
-              <div className="tw-flex-grow ">
+          {/* Button to start/stop QR scanning */}
+          <button
+            onClick={() => setScanning((prev) => !prev)}
+            className="tw-bg-zinc-200 tw-border tw-text-black tw-text-lg tw-flex tw-p-2 tw-mt-4 tw-items-center tw-justify-center tw-uppercase tw-rounded-sm tw-w-full"
+          >
+            {scanning ? 'Ferma Scansione' : 'Scansiona QR'}
+          </button>
+        </div>
+        {prenotazione && (
+          <section className="tw-flex tw-items-top tw-mx-auto tw-max-w-6xl tw-bg-white tw-text-black tw-gap-6 tw-p-6">
+            {/* Reservation Details Column */}
+            <div className="tw-flex   tw-p-6">
+              {qrData && (
+                <div className="tw-mt-4 tw-p-6">
+                  <QRCodeSVG value={qrData} size={128} />
+                </div>
+              )}
+              <div>
                 <h2 className="tw-text-lg tw-font-bold">Dettagli Prenotazione</h2>
                 <p>ID: {prenotazione.id}</p>
                 <p>Email: {prenotazione.email}</p>
                 <p>Stato: {prenotazione.stato}</p>
-                <p>Usato: {prenotazione.usato ? 'Sì' : 'No'}</p>
-
-                {qrData && (
-                  <div className="tw-mt-4">
-                    <h3 className="tw-text-lg tw-font-bold">QR Prenotazione</h3>
-                    <QRCodeSVG value={qrData} size={128} />
-                  </div>
-                )}
+                <p className="tw-text-lg tw-font-bold">
+                  {' '}
+                  Usato: {prenotazione.usato ? 'Sì' : 'No'}
+                </p>
               </div>
+            </div>
 
-              {/* Tickets in Cart Column */}
-              <div className="tw-flex-grow">
-                {prenotazione.carrello && prenotazione.carrello.length > 0 ? (
-                  <>
-                    <h3 className="tw-text-lg tw-font-bold">Biglietti nel Carrello</h3>
-                    <div className="tw-grid tw-grid-cols-1 tw-gap-6">
-                      {prenotazione.carrello.map((item) => (
-                        <div key={item.id} className="tw-border tw-p-2 tw-my-2">
-                          <p>
-                            <strong>Titolo:</strong> {item.biglietto.titolo}
-                          </p>
-                          <p>
-                            <strong>Prezzo:</strong> €{item.biglietto.prezzo}
-                          </p>
-                          <p>
+            {/* Tickets in Cart Column */}
+            <div className="tw-flex-grow">
+              {prenotazione.carrello && prenotazione.carrello.length > 0 ? (
+                <>
+                  <h3 className="tw-text-lg tw-font-bold">Biglietti nel Carrello</h3>
+                  <div className="tw-grid tw-grid-cols-1 tw-gap-6">
+                    {prenotazione.carrello.map((item) => (
+                      <div key={item.id} className="tw-border tw-p-2 tw-my-2">
+                        <p>
+                          <strong>Titolo:</strong> {item.biglietto.titolo}
+                        </p>
+                        <p>
+                          <strong>Prezzo:</strong> €{item.biglietto.prezzo}
+                        </p>
+                        <p>
                           <strong>Fascia oraria:</strong> {item.fasciaOrariaSelezionata}
-                          </p>
-                          <p>
-                            <strong>Quantità:</strong> {item.quantità}
-                          </p>
-                        </div>
-                      ))}
-                    </div>
-                  </>
-                ) : (
-                  <p>Nessun biglietto nel carrello.</p>
-                )}
+                        </p>
+                        <p>
+                          <strong>Quantità:</strong> {item.quantità}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </>
+              ) : (
+                <p>Nessun biglietto nel carrello.</p>
+              )}
 
+              {!prenotazione.usato && (
                 <button
                   onClick={handleUpdate}
-                  className="tw-bg-black tw-text-white tw-flex tw-p-2 tw-gap-2 tw-items-center tw-justify-center tw-ppercase tw-text-sm tw-rounded-sm tw-w-full tw-mt-4"
-                >
-                  Valida Prenotazione
+                  className="tw-bg-red tw-text-white tw-flex tw-p-2 tw-items-center tw-justify-center tw-uppercase tw-text-lg tw-w-full tw-mt-4">
+                  Valida Prenotazione {}
                 </button>
-              </div>
-            </section>
-          )}
-        </div>
-        {/* QR Reader Element */}
-        <div id="qr-reader" className='tw-mt-4' style={{ width: "100px", height: "100px" }} />
+              )}
+            </div>
+          </section>
+        )}
+      </div>
+      {/* QR Reader Element */}
+      <div id="qr-reader" className="tw-mt-4" style={{ width: '100px', height: '100px' }} />
 
-{error && <p style={{ color: 'red' }}>{error}</p>}
-      </section>
-  );
-};
-
-
+      {error && <p style={{ color: 'red' }}>{error}</p>}
+    </section>
+  )
+}
 
 export default Validazione

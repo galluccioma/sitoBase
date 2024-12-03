@@ -1,4 +1,7 @@
 import { PayloadRequest } from 'payload';
+import type { AfterChangeHook } from "node_modules/payload/dist/collections/config/types";
+import { Prenotazioni } from "@/payload-types";
+
 
 const defaultMail = 'info@musesaccademia.it';
 import QRCode from 'qrcode'; // Importazione corretta della libreria QRCode
@@ -58,6 +61,16 @@ export const sendClientConfirmationWithQRCode = async ({ doc, req }: { doc: any,
   // Genera il QR code come buffer
   const qrCodeBuffer = await generateQRCode(doc.id);
   
+  // Prepara la lista dei biglietti nel carrello
+  const carrelloHTML = doc.carrello.map((item: any) => `
+  
+    <li style="margin: 10px 0; border: 1px solid #ddd; padding: 10px; border-radius: 5px;">
+      <p><strong>ID del Biglietto:</strong> ${item.biglietto}</p>
+      <p><strong>Fascia oraria:</strong> ${item.fasciaOrariaSelezionata}</p>
+      <p><strong>Quantità:</strong> ${item.quantità}</p>
+    </li>
+  `).join(''); // Unisce tutti i biglietti in un'unica stringa HTML
+
   // HTML dell'email con l'immagine inline referenziata dal Content-ID
   const html = `
   <div style="font-family: Arial, sans-serif; line-height: 1.6; background-color: #f4f4f4; padding: 20px;">
@@ -67,8 +80,11 @@ export const sendClientConfirmationWithQRCode = async ({ doc, req }: { doc: any,
       <ul style="list-style-type: none; padding: 0;">
         <li style="margin: 10px 0;"><strong>Email:</strong> ${doc.email}</li>
         <li style="margin: 10px 0;"><strong>Data Prenotazione:</strong> ${new Date(doc.dataPrenotazione).toLocaleDateString('it-IT')}</li>
-        <li style="margin: 10px 0;"><strong>Fascia Oraria:</strong> ${doc.fasciaOraria}</li>
-        <li style="margin: 10px 0;"><strong>Numero di Telefono:</strong> ${doc.numeroDiTelefono}</li>
+        <li style="margin: 10px 0;"><strong>Totale pagato:</strong> ${doc.totaleCarrello}</li>
+      </ul>
+       <h3 style="color: #333;">Biglietti:</h3>
+      <ul style="list-style-type: none; padding: 0;">
+        ${carrelloHTML} <!-- Inserisce la lista dinamica -->
       </ul>
       <h3 style="color: #333;">L'ID della tua prenotazione:</h3>
       <p style="color: #555; font-weight: bold;">${doc.id}</p>
@@ -105,3 +121,9 @@ export const sendClientConfirmationWithQRCode = async ({ doc, req }: { doc: any,
     ],
   });
 };
+
+export const InvioBiglietto: AfterChangeHook<Prenotazioni> = async ({ operation, doc, req }) => {
+  if (operation === 'create' || operation === 'update') {
+  // Invio della mail di conferma con QR code
+  await sendClientConfirmationWithQRCode({ doc, req });
+}}

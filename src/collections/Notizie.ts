@@ -70,16 +70,7 @@ export const Notizie: CollectionConfig = {
         position: 'sidebar',
       }
     },
-    {
-      name: 'tags',
-      type: 'relationship',
-      relationTo: 'tags',
-      hasMany: true,
-      admin: {
-        position: 'sidebar',
-      }
-    },
-
+  
     //MAIN 
     {
       name: 'title',

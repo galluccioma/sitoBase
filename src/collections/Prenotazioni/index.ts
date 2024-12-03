@@ -2,6 +2,8 @@ import { CollectionConfig } from 'payload'
 import payload from 'payload'
 import { generateDisponibilita } from './hooks/generateDisponibilita'
 import { calcoloTotale } from './hooks/calcoloTotale'
+import { InvioBiglietto } from '@/mail/emailService'
+
 
 export const Prenotazioni: CollectionConfig = {
   slug: 'prenotazioni',
@@ -60,10 +62,6 @@ export const Prenotazioni: CollectionConfig = {
       },
     },
     {
-      name: 'utente',
-      type: 'text',
-    },
-    {
       name: 'email',
       type: 'text',
     },
@@ -75,6 +73,15 @@ export const Prenotazioni: CollectionConfig = {
         { value: 'completato', label: 'Completato' },
       ],
       defaultValue: 'attesa_pagamento',
+    },
+    {
+      name: 'usato',
+          type: 'checkbox', 
+          label: 'Biglietto usato',
+          defaultValue: false,
+          admin: {
+            position: 'sidebar',
+          },
     },
     {
       name: 'totaleCarrello',
@@ -90,6 +97,7 @@ export const Prenotazioni: CollectionConfig = {
     ],
     afterChange: [
       generateDisponibilita,
+      InvioBiglietto,
 
     ],
   },

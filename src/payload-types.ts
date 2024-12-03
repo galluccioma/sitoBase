@@ -18,7 +18,6 @@ export interface Config {
     aggiornamenti: Aggiornamenti;
     notizie: Notizie;
     categories: Category;
-    tags: Tag;
     media: Media;
     users: User;
     'payload-locked-documents': PayloadLockedDocument;
@@ -34,7 +33,6 @@ export interface Config {
     aggiornamenti: AggiornamentiSelect<false> | AggiornamentiSelect<true>;
     notizie: NotizieSelect<false> | NotizieSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
-    tags: TagsSelect<false> | TagsSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
@@ -90,9 +88,9 @@ export interface Prenotazioni {
     id?: string | null;
   }[];
   dataPrenotazione: string;
-  utente?: string | null;
   email?: string | null;
   stato?: ('attesa_pagamento' | 'completato') | null;
+  usato?: boolean | null;
   totaleCarrello?: number | null;
   updatedAt: string;
   createdAt: string;
@@ -179,7 +177,6 @@ export interface Notizie {
   slug: string;
   status?: ('draft' | 'published') | null;
   category?: (string | null) | Category;
-  tags?: (string | Tag)[] | null;
   title: string;
   description: string;
   content?: {
@@ -208,14 +205,6 @@ export interface Notizie {
 export interface Category {
   id: string;
   categorie?: string | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "tags".
- */
-export interface Tag {
-  id: string;
-  tag?: string | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -272,10 +261,6 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'categories';
         value: string | Category;
-      } | null)
-    | ({
-        relationTo: 'tags';
-        value: string | Tag;
       } | null)
     | ({
         relationTo: 'media';
@@ -341,9 +326,9 @@ export interface PrenotazioniSelect<T extends boolean = true> {
         id?: T;
       };
   dataPrenotazione?: T;
-  utente?: T;
   email?: T;
   stato?: T;
+  usato?: T;
   totaleCarrello?: T;
   updatedAt?: T;
   createdAt?: T;
@@ -405,7 +390,6 @@ export interface NotizieSelect<T extends boolean = true> {
   slug?: T;
   status?: T;
   category?: T;
-  tags?: T;
   title?: T;
   description?: T;
   content?: T;
@@ -419,13 +403,6 @@ export interface NotizieSelect<T extends boolean = true> {
  */
 export interface CategoriesSelect<T extends boolean = true> {
   categorie?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "tags_select".
- */
-export interface TagsSelect<T extends boolean = true> {
-  tag?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

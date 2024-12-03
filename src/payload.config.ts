@@ -25,7 +25,6 @@ import { fileURLToPath } from 'url'
 import { Users } from './collections/Users' // Collezione utenti
 import { Media } from './collections/Media' // Collezione media
 import { Categories } from './collections/Categories' // Collezione categorie
-import { Tags } from './collections/Tags' // Collezione tag
 import { Notizie } from './collections/Notizie' // Collezione articoli del blog
 import { FormSubmission } from './collections/Formsubmission' // Collezione per invii di moduli
 import { Biglietti } from './collections/Biglietti' // Collezione biglietti
@@ -72,7 +71,6 @@ export default buildConfig({
     Aggiornamenti,        // Collezione mostre
     Notizie,        // Collezione per il blog
     Categories,  // Collezione delle categorie
-    Tags,        // Collezione dei tag
     Media,       // Collezione per i media
     Users,        // Collezione utenti
   ],
