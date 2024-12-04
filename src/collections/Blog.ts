@@ -1,6 +1,4 @@
 import { CollectionConfig, FieldHook } from 'payload';
-
-
 import {
   HTMLConverterFeature,
   lexicalEditor,
@@ -12,6 +10,7 @@ import {
   HorizontalRuleFeature
 } from '@payloadcms/richtext-lexical'
 
+
 // 'data' is all of the incoming values for the document
 const formatSlug: FieldHook = async ({ value, data }) => {
   // return formatted version of title if exists, else return unmodified value
@@ -19,8 +18,8 @@ const formatSlug: FieldHook = async ({ value, data }) => {
 };
 
 
-export const Notizie: CollectionConfig = {
-  slug: 'notizie', // Nome della collezione nel database e URL
+export const Blog: CollectionConfig = {
+  slug: 'blog', // Nome della collezione nel database e URL
   admin: {
     useAsTitle: "title",
     defaultColumns: ['title', 'category', 'image', 'tags', 'status'],
@@ -30,8 +29,8 @@ export const Notizie: CollectionConfig = {
     read: () => true,
   },
   labels: {
-    singular: 'Notizia',
-    plural: 'Notizie',
+    singular: 'Blog Post',
+    plural: 'Blog Posts',
   },
   fields: [
 
@@ -78,7 +77,7 @@ export const Notizie: CollectionConfig = {
         position: 'sidebar',
       }
     },
-  
+    
     //MAIN 
     {
       name: 'title',

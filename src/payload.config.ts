@@ -25,7 +25,7 @@ import { fileURLToPath } from 'url'
 import { Users } from './collections/Users' // Collezione utenti
 import { Media } from './collections/Media' // Collezione media
 import { Categories } from './collections/Categories' // Collezione categorie
-import { Notizie } from './collections/Notizie' // Collezione articoli del blog
+import { Blog } from './collections/Blog'
 import { FormSubmission } from './collections/Formsubmission' // Collezione per invii di moduli
 import { Biglietti } from './collections/Biglietti' // Collezione biglietti
 import { Prenotazioni } from './collections/Prenotazioni'
@@ -69,7 +69,7 @@ export default buildConfig({
     Disponibilita, //Slot disponibilita
     FormSubmission, // Collezione degli invii del modulo
     Aggiornamenti,        // Collezione mostre
-    Notizie,        // Collezione per il blog
+    Blog,        // Collezione per il blog
     Categories,  // Collezione delle categorie
     Media,       // Collezione per i media
     Users,        // Collezione utenti
