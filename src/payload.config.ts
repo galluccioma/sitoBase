@@ -16,6 +16,7 @@ import { nodemailerAdapter } from '@payloadcms/email-nodemailer'
 import { stripePlugin } from '@payloadcms/plugin-stripe'
 
 //Plugin
+
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import path from 'path'
 import sharp from 'sharp'
@@ -62,6 +63,7 @@ export default buildConfig({
       afterDashboard:['@/components/Validazione'],
     },
   },
+
   
   collections: [
     Prenotazioni,// Collezione per le prenotazioni
