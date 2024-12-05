@@ -36,6 +36,7 @@ import { Disponibilita } from './collections/Disponibilita'
 //import dei globali
 import {Banner} from './globals/Banner'
 
+
 // Determina il percorso corrente del file
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -45,8 +46,8 @@ export default buildConfig({
   admin: {
     user: Users.slug, // Collezione per la gestione degli utenti amministrativi
     meta: {
-      titleSuffix: 'Backend -io', // Suffisso del titolo nel pannello admin
-      description: 'Backend powered by -io', // Descrizione del backend
+      titleSuffix: 'Umazing Backend', // Suffisso del titolo nel pannello admin
+      description: 'Backend powered by umazing', // Descrizione del backend
       icons: [
         {
           type: 'Logo', // Tipo di icona
@@ -158,7 +159,7 @@ export default buildConfig({
     },
   }),
   cors:[
-    "http://localhost:4000", //test
+    // "http://localhost:4000", //test
     "https://musesaccademia.pages.dev", //production
     "https://www.accademiaessenze.it",
     "https://accademiaessenze.it",

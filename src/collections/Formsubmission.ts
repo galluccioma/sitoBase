@@ -1,6 +1,6 @@
 import { CollectionConfig } from 'payload';
-const defaultMail='galluccioma@gmail.com';
 
+import { defaultMail } from '@/utilities/const';
 
 export const FormSubmission: CollectionConfig = {
   slug: 'form-submissions',

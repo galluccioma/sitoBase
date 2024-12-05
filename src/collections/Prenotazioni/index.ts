@@ -1,8 +1,8 @@
 import { CollectionConfig } from 'payload'
-import payload from 'payload'
+
 import { generateDisponibilita } from './hooks/generateDisponibilita'
 import { calcoloTotale } from './hooks/calcoloTotale'
-import { InvioBiglietto } from '@/mail/emailService'
+import { InvioBiglietto } from './mail/emailBiglietto'
 
 
 export const Prenotazioni: CollectionConfig = {

@@ -1,0 +1,1 @@
+export const defaultMail='galluccioma@gmail.com'

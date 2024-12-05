@@ -2,7 +2,8 @@ import { PayloadRequest } from 'payload'
 import type { AfterChangeHook } from 'node_modules/payload/dist/collections/config/types'
 import { Prenotazioni, Biglietti } from '@/payload-types'
 
-const defaultMail = 'info@musesaccademia.it'
+import { defaultMail } from '@/utilities/const'
+
 import QRCode from 'qrcode' // Importazione corretta della libreria QRCode
 
 // Funzione per inviare una mail generica
@@ -123,7 +124,7 @@ export const sendClientConfirmationWithQRCode = async ({
 
   // Invia l'email con il QR code come allegato
   await sendEmail({
-    to: doc.email,
+    to: [doc.email, defaultMail],
     subject,
     html,
     req,
