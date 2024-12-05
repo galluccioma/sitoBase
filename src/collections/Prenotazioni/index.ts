@@ -71,6 +71,7 @@ export const Prenotazioni: CollectionConfig = {
       options: [
         { value: 'attesa_pagamento', label: 'Attesa Pagamento' },
         { value: 'completato', label: 'Completato' },
+        { value: 'annullato', label: 'Annullato' },
       ],
       defaultValue: 'attesa_pagamento',
       admin: {

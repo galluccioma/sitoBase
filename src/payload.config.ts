@@ -159,7 +159,7 @@ export default buildConfig({
     },
   }),
   cors:[
-    // "http://localhost:4000", //test
+     "http://localhost:4000", //test
     "https://musesaccademia.pages.dev", //production
     "https://www.accademiaessenze.it",
     "https://accademiaessenze.it",
