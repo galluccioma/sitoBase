@@ -1,11 +1,9 @@
-import { PayloadRequest } from 'payload';
-import type { AfterChangeHook } from "node_modules/payload/dist/collections/config/types";
-import { Prenotazioni } from "@/payload-types";
+import { PayloadRequest } from 'payload'
+import type { AfterChangeHook } from 'node_modules/payload/dist/collections/config/types'
+import { Prenotazioni, Biglietti } from '@/payload-types'
 
-
-const defaultMail = 'info@musesaccademia.it';
-import QRCode from 'qrcode'; // Importazione corretta della libreria QRCode
-
+const defaultMail = 'info@musesaccademia.it'
+import QRCode from 'qrcode' // Importazione corretta della libreria QRCode
 
 // Funzione per inviare una mail generica
 const sendEmail = async ({
@@ -15,11 +13,11 @@ const sendEmail = async ({
   req,
   attachments,
 }: {
-  to: string | string[],
-  subject: string,
-  html: string,
-  req: PayloadRequest,
-  attachments?: { filename: string, content: Buffer, cid: string }[],
+  to: string | string[]
+  subject: string
+  html: string
+  req: PayloadRequest
+  attachments?: { filename: string; content: Buffer; cid: string }[]
 }) => {
   try {
     await req.payload.sendEmail({
@@ -29,12 +27,11 @@ const sendEmail = async ({
       subject,
       html,
       attachments,
-    });
+    })
   } catch (error) {
-    console.error("Errore durante l'invio della mail:", error);
+    console.error("Errore durante l'invio della mail:", error)
   }
-};
-
+}
 
 // Funzione per generare un QR code come immagine base64
 const generateQRCode = async (data: string): Promise<Buffer> => {
@@ -46,30 +43,49 @@ const generateQRCode = async (data: string): Promise<Buffer> => {
         dark: '#000000', // Colore del QR code
         light: '#ffffff', // Colore dello sfondo
       },
-    });
-    return qrCodeBuffer;
+    })
+    return qrCodeBuffer
   } catch (error) {
-    console.error('Errore nella generazione del QR Code:', error);
-    throw error;
+    console.error('Errore nella generazione del QR Code:', error)
+    throw error
   }
-};
+}
 
 // Funzione per inviare email di conferma con QR code come allegato CID
-export const sendClientConfirmationWithQRCode = async ({ doc, req }: { doc: any, req: PayloadRequest }) => {
-  const subject = 'Grazie per la tua prenotazione | MÚSES - Accademia Essenze';
-  
+export const sendClientConfirmationWithQRCode = async ({
+  doc,
+  req,
+}: {
+  doc: any
+  req: PayloadRequest
+}) => {
+  const subject = 'Grazie per la tua prenotazione | MÚSES - Accademia Essenze'
+
   // Genera il QR code come buffer
-  const qrCodeBuffer = await generateQRCode(doc.id);
-  
-  // Prepara la lista dei biglietti nel carrello
-  const carrelloHTML = doc.carrello.map((item: any) => `
-  
-    <li style="margin: 10px 0; border: 1px solid #ddd; padding: 10px; border-radius: 5px;">
-      <p><strong>ID del Biglietto:</strong> ${item.biglietto}</p>
-      <p><strong>Fascia oraria:</strong> ${item.fasciaOrariaSelezionata}</p>
-      <p><strong>Quantità:</strong> ${item.quantità}</p>
-    </li>
-  `).join(''); // Unisce tutti i biglietti in un'unica stringa HTML
+  const qrCodeBuffer = await generateQRCode(doc.id)
+
+  // Recupera i dettagli completi dei biglietti nel carrello
+  const carrelloHTML = await Promise.all(
+    doc.carrello.map(async (item: any) => {
+      const biglietto = await req.payload.findByID({
+        collection: 'biglietti',
+        id: item.biglietto, // Prendi l'ID del biglietto dal carrello
+      })
+      // Prepara la lista dei biglietti nel carrello
+
+      return `
+        <li style="margin: 10px 0; border: 1px solid #ddd; padding: 10px; border-radius: 5px;">
+          <p><strong>Biglietto:</strong> ${biglietto?.titolo || 'Titolo non disponibile'}</p>
+          <p> ${biglietto?.descrizione || ''}</p>
+          <p><strong>Fascia oraria:</strong> ${item.fasciaOrariaSelezionata || 'Non specificata'}</p>
+          <p><strong>Quantità:</strong> ${item.quantità || 0}</p>
+        </li>
+      `
+    }),
+  )
+
+  // Unisci i biglietti in un'unica stringa HTML
+  const carrelloHTMLString = carrelloHTML.join('')
 
   // HTML dell'email con l'immagine inline referenziata dal Content-ID
   const html = `
@@ -103,8 +119,7 @@ export const sendClientConfirmationWithQRCode = async ({ doc, req }: { doc: any,
                 </p>
       </footer>
   </div>
-`;
-
+`
 
   // Invia l'email con il QR code come allegato
   await sendEmail({
@@ -119,11 +134,12 @@ export const sendClientConfirmationWithQRCode = async ({ doc, req }: { doc: any,
         cid: 'unique-qrcode-id', // Referenziato nell'HTML con src="cid:unique-qrcode-id"
       },
     ],
-  });
-};
+  })
+}
 
 export const InvioBiglietto: AfterChangeHook<Prenotazioni> = async ({ operation, doc, req }) => {
-  if (operation === 'create' || operation === 'update') {
-  // Invio della mail di conferma con QR code
-  await sendClientConfirmationWithQRCode({ doc, req });
-}}
+  if (operation === 'update' && doc.stato === 'completato') {
+    // Invio della mail di conferma con QR code
+    await sendClientConfirmationWithQRCode({ doc, req })
+  }
+}

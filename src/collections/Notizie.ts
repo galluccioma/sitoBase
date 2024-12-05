@@ -105,7 +105,7 @@ export const Notizie: CollectionConfig = {
           // The HTMLConverter Feature is the feature which manages the HTML serializers.
           // If you do not pass any arguments to it, it will use the default serializers.
           HTMLConverterFeature({}),
-          HeadingFeature({ enabledHeadingSizes: ['h1', 'h2', 'h3', 'h4'] }),
+          HeadingFeature({ enabledHeadingSizes: ['h2', 'h3', 'h4'] }),
           FixedToolbarFeature(),
           InlineToolbarFeature(),
           HorizontalRuleFeature(),
