@@ -1,4 +1,4 @@
-import { Prenotazioni, Biglietti } from "@/payload-types";
+import { Prenotazioni } from "@/payload-types";
 import type { AfterChangeHook } from "node_modules/payload/dist/collections/config/types";
 
 export const generateDisponibilita: AfterChangeHook<Prenotazioni> = async ({ operation, doc, req }) => {

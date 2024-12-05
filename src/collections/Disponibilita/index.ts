@@ -1,4 +1,7 @@
 import { CollectionConfig } from 'payload'
+import { eliminazioneDisponibilita } from './hooks/eliminazioneDisponibilita';
+
+
 
 export const Disponibilita: CollectionConfig = {
   slug: 'disponibilita',
@@ -8,7 +11,7 @@ export const Disponibilita: CollectionConfig = {
   },
   admin: {
     useAsTitle: 'data',
-    defaultColumns: ['data', 'tipoBiglietto', 'fasciaOraria', 'disponibilità'],
+    defaultColumns: ['data', 'fasciaOraria', 'tipoBiglietto',  'disponibilità'],
   },
   labels: {
     singular: 'Disponibilità',
@@ -53,4 +56,11 @@ export const Disponibilita: CollectionConfig = {
       min: 0,
     },
   ],
+  hooks: {
+    afterChange: [
+     eliminazioneDisponibilita
+    ]    
+  
+    
+  },
 };
