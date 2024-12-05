@@ -16,7 +16,7 @@ export interface Config {
     disponibilita: Disponibilita;
     'form-submissions': FormSubmission;
     aggiornamenti: Aggiornamenti;
-    notizie: Notizie;
+    blog: Blog;
     categories: Category;
     media: Media;
     users: User;
@@ -31,7 +31,7 @@ export interface Config {
     disponibilita: DisponibilitaSelect<false> | DisponibilitaSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
     aggiornamenti: AggiornamentiSelect<false> | AggiornamentiSelect<true>;
-    notizie: NotizieSelect<false> | NotizieSelect<true>;
+    blog: BlogSelect<false> | BlogSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
@@ -171,9 +171,9 @@ export interface Media {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "notizie".
+ * via the `definition` "blog".
  */
-export interface Notizie {
+export interface Blog {
   id: string;
   slug: string;
   status?: ('draft' | 'published') | null;
@@ -257,8 +257,8 @@ export interface PayloadLockedDocument {
         value: string | Aggiornamenti;
       } | null)
     | ({
-        relationTo: 'notizie';
-        value: string | Notizie;
+        relationTo: 'blog';
+        value: string | Blog;
       } | null)
     | ({
         relationTo: 'categories';
@@ -387,9 +387,9 @@ export interface AggiornamentiSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "notizie_select".
+ * via the `definition` "blog_select".
  */
-export interface NotizieSelect<T extends boolean = true> {
+export interface BlogSelect<T extends boolean = true> {
   slug?: T;
   status?: T;
   category?: T;
