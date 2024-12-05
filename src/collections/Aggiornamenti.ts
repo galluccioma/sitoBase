@@ -1,11 +1,6 @@
 import { CollectionConfig, FieldHook } from 'payload';
-import payload from 'payload';
 
-// 'data' is all of the incoming values for the document
-const formatSlug: FieldHook = async ({ value, data }) => {
-  // return formatted version of title if exists, else return unmodified value
-  return data?.title?.replace(/ /g, '-').toLowerCase() ?? value.replace(/ /g, '-').toLowerCase();
-};
+import { formatSlug } from '@/utilities/formatSlug';
 
 
 export const Aggiornamenti: CollectionConfig = {

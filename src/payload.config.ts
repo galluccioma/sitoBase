@@ -70,7 +70,7 @@ export default buildConfig({
     Biglietti,    // Collezione per i biglietti
     Disponibilita, //Slot disponibilita
     FormSubmission, // Collezione degli invii del modulo
-    Aggiornamenti,        // Collezione mostre
+    Aggiornamenti,  // Collezione mostre
     Blog,        // Collezione per il blog
     Categories,  // Collezione delle categorie
     Media,       // Collezione per i media
