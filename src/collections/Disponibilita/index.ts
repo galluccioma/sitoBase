@@ -56,9 +56,9 @@ export const Disponibilita: CollectionConfig = {
       min: 0,
     },
   ],
-  // hooks: {
-  //   afterChange: [
-  //    eliminazioneDisponibilita
-  //   ]    
-  // },
+  hooks: {
+    afterChange: [
+     eliminazioneDisponibilita
+    ]    
+  },
 };

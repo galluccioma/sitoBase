@@ -3,7 +3,6 @@ import type { AfterChangeHook } from 'node_modules/payload/dist/collections/conf
 import { Prenotazioni, Biglietti } from '@/payload-types'
 
 import { defaultMail } from '@/utilities/const'
-
 import QRCode from 'qrcode' // Importazione corretta della libreria QRCode
 
 // Funzione per inviare una mail generica
@@ -65,28 +64,7 @@ export const sendClientConfirmationWithQRCode = async ({
   // Genera il QR code come buffer
   const qrCodeBuffer = await generateQRCode(doc.id)
 
-  // Recupera i dettagli completi dei biglietti nel carrello
-  const carrelloHTML = await Promise.all(
-    doc.carrello.map(async (item: any) => {
-      const biglietto = await req.payload.findByID({
-        collection: 'biglietti',
-        id: item.biglietto, // Prendi l'ID del biglietto dal carrello
-      })
-      // Prepara la lista dei biglietti nel carrello
-
-      return `
-        <li style="margin: 10px 0; border: 1px solid #ddd; padding: 10px; border-radius: 5px;">
-          <p><strong>Biglietto:</strong> ${biglietto?.titolo || 'Titolo non disponibile'}</p>
-          <p> ${biglietto?.descrizione || ''}</p>
-          <p><strong>Fascia oraria:</strong> ${item.fasciaOrariaSelezionata || 'Non specificata'}</p>
-          <p><strong>Quantità:</strong> ${item.quantità || 0}</p>
-        </li>
-      `
-    }),
-  )
-
-  // Unisci i biglietti in un'unica stringa HTML
-  const carrelloHTMLString = carrelloHTML.join('')
+  
 
   // HTML dell'email con l'immagine inline referenziata dal Content-ID
   const html = `
@@ -98,10 +76,6 @@ export const sendClientConfirmationWithQRCode = async ({
         <li style="margin: 10px 0;"><strong>Email:</strong> ${doc.email}</li>
         <li style="margin: 10px 0;"><strong>Data Prenotazione:</strong> ${new Date(doc.dataPrenotazione).toLocaleDateString('it-IT')}</li>
         <li style="margin: 10px 0;"><strong>Totale pagato:</strong> ${doc.totaleCarrello}</li>
-      </ul>
-       <h3 style="color: #333;">Biglietti:</h3>
-      <ul style="list-style-type: none; padding: 0;">
-        ${carrelloHTML} <!-- Inserisce la lista dinamica -->
       </ul>
       <h3 style="color: #333;">L'ID della tua prenotazione:</h3>
       <p style="color: #555; font-weight: bold;">${doc.id}</p>
@@ -124,7 +98,7 @@ export const sendClientConfirmationWithQRCode = async ({
 
   // Invia l'email con il QR code come allegato
   await sendEmail({
-    to: [doc.email, defaultMail],
+    to: doc.email,
     subject,
     html,
     req,
@@ -139,7 +113,7 @@ export const sendClientConfirmationWithQRCode = async ({
 }
 
 export const InvioBiglietto: AfterChangeHook<Prenotazioni> = async ({ operation, doc, req }) => {
-  if (operation === 'update' && doc.stato === 'completato') {
+  if (operation === 'update' && doc.stato === 'pagato') {
     // Invio della mail di conferma con QR code
     await sendClientConfirmationWithQRCode({ doc, req })
   }

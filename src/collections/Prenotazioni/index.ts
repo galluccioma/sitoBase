@@ -9,6 +9,7 @@ export const Prenotazioni: CollectionConfig = {
   slug: 'prenotazioni',
   access: {
     create: () => true,
+    update:() => true,
   },
   admin: {
     useAsTitle: 'id',
@@ -71,7 +72,9 @@ export const Prenotazioni: CollectionConfig = {
       options: [
         { value: 'attesa_pagamento', label: 'Attesa Pagamento' },
         { value: 'annullato', label: 'Annullato' },
-        { value: 'completato', label: 'Completato' },
+        { value: 'completato', label: 'Completato' }
+        
+
       ],
       defaultValue: 'attesa_pagamento',
       admin: {
