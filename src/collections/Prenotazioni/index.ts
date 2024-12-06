@@ -107,7 +107,7 @@ export const Prenotazioni: CollectionConfig = {
       calcoloTotale,
     ],
     afterChange: [
-      generateDisponibilita,
+      // generateDisponibilita,
       InvioBiglietto,
 
     ],
