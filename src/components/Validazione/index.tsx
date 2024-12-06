@@ -23,7 +23,8 @@ interface Prenotazione {
   id: string
   email: string
   stato: string
-  usato: boolean
+  atelierUsato: boolean
+  visitaUsato: boolean
   biglietti: Biglietto[]
   carrello: Carrello[]
 }
@@ -136,26 +137,46 @@ const Validazione: React.FC = () => {
     }
   }, [scanning, cameraPermission, startScanner, stopScanner])
 
-  const handleUpdate = async () => {
+  const handleUpdateVisita = async () => {
     if (!prenotazione) {
       setError('Nessuna prenotazione da aggiornare.')
       return
     }
 
-      const response = await fetch(`/api/prenotazioni/${prenotazione.id}`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ usato: true }),
-      })
+    const response = await fetch(`/api/prenotazioni/${prenotazione.id}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ visitaUsato: true }),
+    })
 
-      if (!response.ok) {
-        throw new Error("Errore durante l'aggiornamento dello stato.")
-      }
+    if (!response.ok) {
+      throw new Error("Errore durante l'aggiornamento dello stato.")
+    }
 
-      setPrenotazione((prev) => (prev ? { ...prev, usato: true } : prev))
-    
+    setPrenotazione((prev) => (prev ? { ...prev, visitaUsato: true } : prev))
+  }
+
+  const handleUpdateAtelier = async () => {
+    if (!prenotazione) {
+      setError('Nessuna prenotazione da aggiornare.')
+      return
+    }
+
+    const response = await fetch(`/api/prenotazioni/${prenotazione.id}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ atelierUsato: true }),
+    })
+
+    if (!response.ok) {
+      throw new Error("Errore durante l'aggiornamento dello stato.")
+    }
+
+    setPrenotazione((prev) => (prev ? { ...prev, atelierUsato: true } : prev))
   }
 
   const handleSearch = async (searchId: string) => {
@@ -230,10 +251,14 @@ const Validazione: React.FC = () => {
                 <p>ID: {prenotazione.id}</p>
                 <p>Email: {prenotazione.email}</p>
                 <p>Stato: {prenotazione.stato}</p>
-                <p className="text-lg font-bold">
+                <p className={`text-lg font-bold ${!prenotazione.visitaUsato ? '' : 'text-red'}`}>
                   {' '}
-                  Usato: {prenotazione.usato ? 'Sì' : 'No'}
+                  Visita guidata già validata: {prenotazione.visitaUsato ? 'Sì' : 'No'}
                 </p>
+                <p className={`text-lg font-bold ${!prenotazione.atelierUsato ? '' : 'text-red'}`}>
+                  {' '}
+                  Atelier già validato: {prenotazione.atelierUsato ? 'Sì' : 'No'} 
+                  </p>
               </div>
             </div>
 
@@ -265,13 +290,21 @@ const Validazione: React.FC = () => {
                 <p>Nessun biglietto nel carrello.</p>
               )}
 
-              {!prenotazione.usato && (
-                <button
-                  onClick={handleUpdate}
-                  className="bg-red text-white flex p-2 items-center justify-center uppercase text-lg w-full mt-4">
-                  Valida Prenotazione {}
-                </button>
-              )}
+              <button
+                onClick={handleUpdateVisita}
+                className={`bg-red text-white flex p-2 items-center justify-center uppercase text-lg w-full mt-4 ${!prenotazione.visitaUsato ? '' : 'opacity-30 cursor-not-allowed'}`}
+                disabled={prenotazione.visitaUsato}
+              >
+                Valida Prenotazione
+              </button>
+
+              <button
+                onClick={handleUpdateAtelier}
+                className={`bg-red text-white flex p-2 items-center justify-center uppercase text-lg w-full mt-4 ${!prenotazione.visitaUsato ? '' : 'opacity-30 cursor-not-allowed'}`}
+                disabled={prenotazione.atelierUsato}
+              >
+                Valida Prenotazione
+              </button>
             </div>
           </section>
         )}

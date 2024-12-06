@@ -90,7 +90,8 @@ export interface Prenotazioni {
   dataPrenotazione: string;
   email?: string | null;
   stato?: ('attesa_pagamento' | 'annullato' | 'completato') | null;
-  usato?: boolean | null;
+  visitaUsato?: boolean | null;
+  atelierUsato?: boolean | null;
   totaleCarrello?: number | null;
   sconto?: number | null;
   updatedAt: string;
@@ -330,7 +331,8 @@ export interface PrenotazioniSelect<T extends boolean = true> {
   dataPrenotazione?: T;
   email?: T;
   stato?: T;
-  usato?: T;
+  visitaUsato?: T;
+  atelierUsato?: T;
   totaleCarrello?: T;
   sconto?: T;
   updatedAt?: T;

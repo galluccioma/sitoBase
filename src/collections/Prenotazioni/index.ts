@@ -82,9 +82,18 @@ export const Prenotazioni: CollectionConfig = {
       },
     },
     {
-      name: 'usato',
+      name: 'visitaUsato',
           type: 'checkbox', 
-          label: 'Biglietto usato',
+          label: 'Visita guidata validata',
+          defaultValue: false,
+          admin: {
+            position: 'sidebar',
+          },
+    },
+    {
+      name: 'atelierUsato',
+          type: 'checkbox', 
+          label: 'Atelier validato',
           defaultValue: false,
           admin: {
             position: 'sidebar',
