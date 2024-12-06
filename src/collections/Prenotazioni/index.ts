@@ -1,5 +1,5 @@
 import { CollectionConfig } from 'payload'
-
+import payload from 'payload'
 import { generateDisponibilita } from './hooks/generateDisponibilita'
 import { calcoloTotale } from './hooks/calcoloTotale'
 import { InvioBiglietto } from './mail/emailBiglietto'
@@ -70,8 +70,8 @@ export const Prenotazioni: CollectionConfig = {
       type: 'radio',
       options: [
         { value: 'attesa_pagamento', label: 'Attesa Pagamento' },
-        { value: 'completato', label: 'Completato' },
         { value: 'annullato', label: 'Annullato' },
+        { value: 'completato', label: 'Completato' },
       ],
       defaultValue: 'attesa_pagamento',
       admin: {
@@ -107,7 +107,7 @@ export const Prenotazioni: CollectionConfig = {
       calcoloTotale,
     ],
     afterChange: [
-      // generateDisponibilita,
+      generateDisponibilita,
       InvioBiglietto,
 
     ],
