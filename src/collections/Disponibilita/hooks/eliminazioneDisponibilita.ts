@@ -10,7 +10,7 @@ export const eliminazioneDisponibilita: AfterChangeHook<Disponibilita> = async (
     if (operation === 'create' || operation === 'update') {
       // Calcoliamo la data di Un giorno fa in millisecondi
       const today = new Date();
-      const twoDaysAgo = today.setDate(today.getDate() - 1); // Un giorno fa
+      const twoDaysAgo = today.setDate(today.getDate() - 3); // Un giorno fa
 
       console.log('Data Un giorno fa:', new Date(twoDaysAgo));
 

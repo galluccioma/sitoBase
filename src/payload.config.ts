@@ -12,9 +12,6 @@ import { s3Storage } from '@payloadcms/storage-s3'
 //Mail
 import { nodemailerAdapter } from '@payloadcms/email-nodemailer'
 
-//stripe
-import { stripePlugin } from '@payloadcms/plugin-stripe'
-
 //Plugin
 
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
@@ -27,11 +24,12 @@ import { Users } from './collections/Users' // Collezione utenti
 import { Media } from './collections/Media' // Collezione media
 import { Categories } from './collections/Categories' // Collezione categorie
 import { Blog } from './collections/Blog'
-import { FormSubmission } from './collections/Formsubmission' // Collezione per invii di moduli
+import { FormSubmission } from './collections/Formsubmission' //Collezione Form
 import { Biglietti } from './collections/Biglietti' // Collezione biglietti
 import { Prenotazioni } from './collections/Prenotazioni'
 import { Aggiornamenti } from './collections/Aggiornamenti'  // Collezione Mostre
 import { Disponibilita } from './collections/Disponibilita'
+import { Clienti } from './collections/Clienti'
 
 //import dei globali
 import {Banner} from './globals/Banner'
@@ -70,6 +68,7 @@ export default buildConfig({
     Prenotazioni,// Collezione per le prenotazioni
     Biglietti,    // Collezione per i biglietti
     Disponibilita, //Slot disponibilita
+    Clienti,
     FormSubmission, // Collezione degli invii del modulo
     Aggiornamenti,  // Collezione mostre
     Blog,        // Collezione per il blog

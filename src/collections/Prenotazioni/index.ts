@@ -1,6 +1,7 @@
 import { CollectionConfig } from 'payload'
 import payload from 'payload'
 import { generateDisponibilita } from './hooks/generateDisponibilita'
+import { generateClienti } from './hooks/generateClienti'
 import { calcoloTotale } from './hooks/calcoloTotale'
 import { InvioBiglietto } from './mail/emailBiglietto'
 
@@ -80,6 +81,7 @@ export const Prenotazioni: CollectionConfig = {
     {
       name: 'email',
       type: 'text',
+      defaultValue:'anonimo'
     },
     {
       name: 'stato',
@@ -135,8 +137,8 @@ export const Prenotazioni: CollectionConfig = {
     ],
     afterChange: [
       generateDisponibilita,
+      generateClienti,
       InvioBiglietto,
-
     ],
   },
 }

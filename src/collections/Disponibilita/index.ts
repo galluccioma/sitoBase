@@ -69,6 +69,7 @@ export const Disponibilita: CollectionConfig = {
       type: 'number',
       required: true,
       min: 0,
+      max:25,
     },
   ],
   hooks: {

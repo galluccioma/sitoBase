@@ -8,6 +8,9 @@ export const Banner: GlobalConfig = {
   access: {
     read: () => true, // Puoi specificare chi ha accesso a questa global (ad esempio, chiunque può leggere)
   },
+  label: {
+    singular: 'Banner Aggiornamento',
+  },
   fields: [
     // SIDEBAR ADMIN
     

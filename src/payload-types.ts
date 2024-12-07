@@ -14,6 +14,7 @@ export interface Config {
     prenotazioni: Prenotazioni;
     biglietti: Biglietti;
     disponibilita: Disponibilita;
+    clienti: Clienti;
     'form-submissions': FormSubmission;
     aggiornamenti: Aggiornamenti;
     blog: Blog;
@@ -29,6 +30,7 @@ export interface Config {
     prenotazioni: PrenotazioniSelect<false> | PrenotazioniSelect<true>;
     biglietti: BigliettiSelect<false> | BigliettiSelect<true>;
     disponibilita: DisponibilitaSelect<false> | DisponibilitaSelect<true>;
+    clienti: ClientiSelect<false> | ClientiSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
     aggiornamenti: AggiornamentiSelect<false> | AggiornamentiSelect<true>;
     blog: BlogSelect<false> | BlogSelect<true>;
@@ -122,6 +124,18 @@ export interface Disponibilita {
   data: string;
   giorno?: string | null;
   disponibilità: number;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "clienti".
+ */
+export interface Clienti {
+  id: string;
+  email?: string | null;
+  prenotazioni: (string | Prenotazioni)[];
+  spesa?: number | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -252,6 +266,10 @@ export interface PayloadLockedDocument {
         value: string | Disponibilita;
       } | null)
     | ({
+        relationTo: 'clienti';
+        value: string | Clienti;
+      } | null)
+    | ({
         relationTo: 'form-submissions';
         value: string | FormSubmission;
       } | null)
@@ -363,6 +381,17 @@ export interface DisponibilitaSelect<T extends boolean = true> {
   data?: T;
   giorno?: T;
   disponibilità?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "clienti_select".
+ */
+export interface ClientiSelect<T extends boolean = true> {
+  email?: T;
+  prenotazioni?: T;
+  spesa?: T;
   updatedAt?: T;
   createdAt?: T;
 }
