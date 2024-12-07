@@ -88,6 +88,7 @@ export interface Prenotazioni {
     id?: string | null;
   }[];
   dataPrenotazione: string;
+  giorno?: string | null;
   email?: string | null;
   stato?: ('attesa_pagamento' | 'annullato' | 'completato') | null;
   visitaUsato?: boolean | null;
@@ -119,6 +120,7 @@ export interface Disponibilita {
   tipoBiglietto: 'visita_guidata' | 'atelier';
   fasciaOraria: '11:30' | '14:30' | '15:30' | '17:00';
   data: string;
+  giorno?: string | null;
   disponibilità: number;
   updatedAt: string;
   createdAt: string;
@@ -329,6 +331,7 @@ export interface PrenotazioniSelect<T extends boolean = true> {
         id?: T;
       };
   dataPrenotazione?: T;
+  giorno?: T;
   email?: T;
   stato?: T;
   visitaUsato?: T;
@@ -358,6 +361,7 @@ export interface DisponibilitaSelect<T extends boolean = true> {
   tipoBiglietto?: T;
   fasciaOraria?: T;
   data?: T;
+  giorno?: T;
   disponibilità?: T;
   updatedAt?: T;
   createdAt?: T;

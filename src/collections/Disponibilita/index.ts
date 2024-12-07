@@ -11,8 +11,9 @@ export const Disponibilita: CollectionConfig = {
   },
   admin: {
     useAsTitle: 'data',
-    defaultColumns: ['data', 'fasciaOraria', 'tipoBiglietto',  'disponibilità'],
+    defaultColumns: ['data', 'giorno', 'fasciaOraria', 'tipoBiglietto',  'disponibilità'],
   },
+  
   labels: {
     singular: 'Disponibilità',
     plural: 'Disponibilità',
@@ -47,6 +48,20 @@ export const Disponibilita: CollectionConfig = {
           pickerAppearance: 'dayOnly',
           displayFormat: 'dd/MM/yyyy',
         },
+      },
+    },
+    {
+      name: 'giorno',
+      type: 'text',
+      admin: {
+        readOnly: true,
+      },
+      hooks: {
+        beforeChange: [({ data }) => {
+          const date = new Date(data?.data);
+          const daysOfWeek = ['Domenica', 'Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato'];
+          data!.giorno = daysOfWeek[date.getDay()];
+        }],
       },
     },
     {

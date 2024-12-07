@@ -13,7 +13,7 @@ export const Prenotazioni: CollectionConfig = {
   },
   admin: {
     useAsTitle: 'id',
-    defaultColumns: ['dataPrenotazione', 'stato', 'usato', 'totaleCarrello', 'email'],
+    defaultColumns: ['dataPrenotazione', 'giorno', 'stato', 'totaleCarrello', 'visitaUsato','atelierUsato', 'email'],
   },
   labels: {
     singular: 'Prenotazione',
@@ -52,6 +52,7 @@ export const Prenotazioni: CollectionConfig = {
     },
     {
       name: 'dataPrenotazione',
+      label: 'Data Prenotata',
       type: 'date',
       required: true,
       defaultValue: new Date().toISOString(),
@@ -60,6 +61,20 @@ export const Prenotazioni: CollectionConfig = {
           pickerAppearance: 'dayOnly',
           displayFormat: 'dd/MM/yyyy',
         },
+      },
+    },
+    {
+      name: 'giorno',
+      type: 'text',
+      admin: {
+        readOnly: true,
+      },
+      hooks: {
+        beforeChange: [({ data }) => {
+          const date = new Date(data?.dataPrenotazione);
+          const daysOfWeek = ['Domenica', 'Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato'];
+          data!.giorno = daysOfWeek[date.getDay()];
+        }],
       },
     },
     {
