@@ -292,18 +292,18 @@ const Validazione: React.FC = () => {
 
               <button
                 onClick={handleUpdateVisita}
-                className={`bg-red text-white flex p-2 items-center justify-center uppercase text-lg w-full mt-4 ${!prenotazione.visitaUsato ? '' : 'opacity-30 cursor-not-allowed'}`}
+                className={` button-validazione cursor-pointer  ${!prenotazione.visitaUsato ? '' : 'opacity-30 cursor-not-allowed'}`}
                 disabled={prenotazione.visitaUsato}
               >
-                Valida Prenotazione
+                Valida Visita Guidata
               </button>
 
               <button
                 onClick={handleUpdateAtelier}
-                className={`bg-red text-white flex p-2 items-center justify-center uppercase text-lg w-full mt-4 ${!prenotazione.visitaUsato ? '' : 'opacity-30 cursor-not-allowed'}`}
+                className={`button-validazione cursor-pointer ${!prenotazione.atelierUsato ? '' : 'opacity-30 cursor-not-allowed'}`}
                 disabled={prenotazione.atelierUsato}
               >
-                Valida Prenotazione
+                Valida Atelier
               </button>
             </div>
           </section>
