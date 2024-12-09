@@ -3,10 +3,9 @@ import type { AfterChangeHook } from "node_modules/payload/dist/collections/conf
 
 export const generateClienti: AfterChangeHook<Prenotazioni> = async ({ operation, doc, previousDoc, req }) => {
   try {
-    if ( operation === 'update'  && doc.stato === 'completato' && previousDoc.stato !== 'completato') {
+    if ( operation === 'update'  && doc.stato === 'completato' && previousDoc.stato === 'attesa_pagamento') {
       const clienteEmail = doc.email; // Assumendo che l'email del cliente sia nel documento della prenotazione
       const prenotazioneId = doc.id;
-      const totaleCarrello = doc.totaleCarrello; // Totale del carrello dalla prenotazione
 
       if (!clienteEmail) {
         throw new Error("L'email del cliente non è presente nel documento della prenotazione.");
@@ -24,19 +23,16 @@ export const generateClienti: AfterChangeHook<Prenotazioni> = async ({ operation
         // Cliente esistente, aggiorna le sue prenotazioni e la spesa
         const cliente = existingCliente.docs[0];
         const existingPrenotazioni = cliente.prenotazioni || [];
-        let spesaTotale = cliente.spesa || 0;
 
         // Verifica se l'ID della prenotazione è già presente
         if (!existingPrenotazioni.includes(prenotazioneId)) {
           existingPrenotazioni.push(prenotazioneId);
-          totaleCarrello ? spesaTotale += totaleCarrello : 0; // Aggiungi il totale del carrello alla spesa
 
           await req.payload.update({
             collection: 'clienti',
             id: cliente.id,
             data: { 
               prenotazioni: existingPrenotazioni,
-              spesa: spesaTotale,
             },
           });
         }
@@ -47,7 +43,6 @@ export const generateClienti: AfterChangeHook<Prenotazioni> = async ({ operation
           data: {
             email: clienteEmail,
             prenotazioni: [prenotazioneId],
-            spesa: totaleCarrello, // Inizializza la spesa con il totale del carrello
           },
         });
       }

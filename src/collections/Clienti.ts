@@ -24,10 +24,5 @@ export const Clienti: CollectionConfig = {
         required: true,
         hasMany:true,
       },
-      {
-        name:'spesa',
-        type: 'number',
-        defaultValue:0,
-      }
   ],
 }

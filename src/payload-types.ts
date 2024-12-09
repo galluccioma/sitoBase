@@ -135,7 +135,6 @@ export interface Clienti {
   id: string;
   email?: string | null;
   prenotazioni: (string | Prenotazioni)[];
-  spesa?: number | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -391,7 +390,6 @@ export interface DisponibilitaSelect<T extends boolean = true> {
 export interface ClientiSelect<T extends boolean = true> {
   email?: T;
   prenotazioni?: T;
-  spesa?: T;
   updatedAt?: T;
   createdAt?: T;
 }

@@ -113,7 +113,7 @@ export const sendClientConfirmationWithQRCode = async ({
 }
 
 export const InvioBiglietto: AfterChangeHook<Prenotazioni> = async ({ operation, doc, previousDoc, req }) => {
-  if (operation === 'update' && doc.stato === 'completato' && previousDoc.stato !== 'completato') {
+  if (operation === 'update' && doc.stato === 'completato' && previousDoc.stato === 'attesa_pagamento') {
     // Invio della mail di conferma con QR code
     await sendClientConfirmationWithQRCode({ doc, req })
   }
