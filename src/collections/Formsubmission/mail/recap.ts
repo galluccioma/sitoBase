@@ -1,4 +1,3 @@
-import { PayloadRequest } from 'payload';
 import type { AfterChangeHook } from 'node_modules/payload/dist/collections/config/types';
 import { FormSubmission } from '@/payload-types';
 import { defaultMail } from '@/utilities/const';

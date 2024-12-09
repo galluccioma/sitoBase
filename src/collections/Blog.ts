@@ -1,4 +1,4 @@
-import { CollectionConfig, FieldHook } from 'payload';
+import { CollectionConfig, FieldHook } from 'payload'
 import {
   HTMLConverterFeature,
   lexicalEditor,
@@ -7,19 +7,19 @@ import {
   HeadingFeature,
   FixedToolbarFeature,
   InlineToolbarFeature,
-  HorizontalRuleFeature
+  HorizontalRuleFeature,
 } from '@payloadcms/richtext-lexical'
 
-
-import { formatSlug } from '@/utilities/formatSlug';
-
+import { formatSlug } from '@/utilities/formatSlug'
 
 export const Blog: CollectionConfig = {
   slug: 'blog', // Nome della collezione nel database e URL
   admin: {
-    useAsTitle: "title",
+    useAsTitle: 'title',
     defaultColumns: ['title', 'category', 'image', 'tags', 'status'],
-   
+    livePreview: {
+      url: ({ data }) => `https://accademiaessenze.it/notizie/${data?.slug || 'https://accademiaessenze.it/notizie'}`,
+    },
   },
   access: {
     read: () => true,
@@ -28,23 +28,20 @@ export const Blog: CollectionConfig = {
     singular: 'Blog Post',
     plural: 'Blog Posts',
   },
-  fields: [
 
+  fields: [
     //SIDEBAR ADMIN
     {
-      name: "slug",
-      type: "text",
+      name: 'slug',
+      type: 'text',
       hooks: {
-        beforeChange: [
-          formatSlug,
-        ],
+        beforeChange: [formatSlug],
       },
       admin: {
         position: 'sidebar',
       },
       required: true,
-      unique:true,
-
+      unique: true,
     },
     {
       name: 'status',
@@ -62,26 +59,26 @@ export const Blog: CollectionConfig = {
       defaultValue: 'draft',
       admin: {
         position: 'sidebar',
-      }
+      },
     },
-    
+
     {
       name: 'category',
       type: 'relationship',
       relationTo: 'categories',
       admin: {
         position: 'sidebar',
-      }
+      },
     },
-    
-    //MAIN 
+
+    //MAIN
     {
       name: 'title',
       type: 'text',
       label: 'Title',
       required: true,
     },
-    
+
     {
       name: 'description',
       type: 'text',
@@ -104,7 +101,7 @@ export const Blog: CollectionConfig = {
           FixedToolbarFeature(),
           InlineToolbarFeature(),
           HorizontalRuleFeature(),
-          UploadFeature()
+          UploadFeature(),
         ],
       }),
     },
@@ -121,5 +118,4 @@ export const Blog: CollectionConfig = {
     },
   ],
   timestamps: true, // Automatically adds createdAt and updatedAt fields
-
-};
+}

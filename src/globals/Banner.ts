@@ -11,6 +11,11 @@ export const Banner: GlobalConfig = {
   label: {
     singular: 'Banner Aggiornamento',
   },
+  admin:{
+    livePreview:{
+      url:`https://accademiaessenze.it`
+    },
+  },
   fields: [
     // SIDEBAR ADMIN
     

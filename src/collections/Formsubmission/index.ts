@@ -1,6 +1,4 @@
 import { CollectionConfig } from 'payload';
-
-import { defaultMail } from '@/utilities/const';
 import { recapMail } from './mail/recap';
 
 export const FormSubmission: CollectionConfig = {

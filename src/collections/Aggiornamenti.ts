@@ -8,7 +8,11 @@ export const Aggiornamenti: CollectionConfig = {
   admin: {
     useAsTitle: "title",
     defaultColumns: ['title', 'category', 'image', 'tags', 'status'],
-   
+    livePreview:{
+      url:`https://accademiaessenze.it`
+      
+    },
+    
   },
   access: {
     read: () => true,
