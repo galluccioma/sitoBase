@@ -17,7 +17,7 @@ export const Blog: CollectionConfig = {
   slug: 'blog', // Nome della collezione nel database e URL
   admin: {
     useAsTitle: 'title',
-    defaultColumns: ['title', 'category', 'image', 'tags', 'status'],
+    defaultColumns: ['title', 'category', 'image', 'tags', '_status'],
     livePreview: {
       url: ({ data }) => `${frontend_URL}/notizie/${data?.slug} || '${frontend_URL}/notizie'}`,
     },
@@ -46,25 +46,6 @@ export const Blog: CollectionConfig = {
       required: true,
       unique: true,
     },
-    {
-      name: 'status',
-      type: 'radio',
-      options: [
-        {
-          value: 'draft',
-          label: 'Draft',
-        },
-        {
-          value: 'published',
-          label: 'Published',
-        },
-      ],
-      defaultValue: 'draft',
-      admin: {
-        position: 'sidebar',
-      },
-    },
-
     {
       name: 'category',
       type: 'relationship',

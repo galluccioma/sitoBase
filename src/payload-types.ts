@@ -157,7 +157,6 @@ export interface FormSubmission {
 export interface Aggiornamenti {
   id: string;
   slug: string;
-  status?: ('draft' | 'published') | null;
   title: string;
   description: string;
   link?: string | null;
@@ -193,7 +192,6 @@ export interface Media {
 export interface Blog {
   id: string;
   slug: string;
-  status?: ('draft' | 'published') | null;
   category?: (string | null) | Category;
   title: string;
   description: string;
@@ -412,7 +410,6 @@ export interface FormSubmissionsSelect<T extends boolean = true> {
  */
 export interface AggiornamentiSelect<T extends boolean = true> {
   slug?: T;
-  status?: T;
   title?: T;
   description?: T;
   link?: T;
@@ -427,7 +424,6 @@ export interface AggiornamentiSelect<T extends boolean = true> {
  */
 export interface BlogSelect<T extends boolean = true> {
   slug?: T;
-  status?: T;
   category?: T;
   title?: T;
   description?: T;
@@ -521,11 +517,10 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
  */
 export interface Banner {
   id: string;
-  status?: ('draft' | 'published') | null;
+  mostra?: boolean | null;
   title: string;
   description: string;
   link?: string | null;
-  _status?: ('draft' | 'published') | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -534,11 +529,10 @@ export interface Banner {
  * via the `definition` "banner_select".
  */
 export interface BannerSelect<T extends boolean = true> {
-  status?: T;
+  mostra?: T;
   title?: T;
   description?: T;
   link?: T;
-  _status?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

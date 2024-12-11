@@ -7,7 +7,7 @@ export const Banner: GlobalConfig = {
   access: {
     read: () => true, // Puoi specificare chi ha accesso a questa global (ad esempio, chiunque può leggere)
   },
-  versions: { drafts: true, max:3},
+
   label: {
     singular: 'Banner Aggiornamento',
   },
@@ -22,19 +22,10 @@ export const Banner: GlobalConfig = {
     // SIDEBAR ADMIN
     
     {
-      name: 'status',
-      type: 'radio',
-      options: [
-        {
-          value: 'draft',
-          label: 'Draft',
-        },
-        {
-          value: 'published',
-          label: 'Published',
-        },
-      ],
-      defaultValue: 'draft',
+      name: 'mostra',
+      type: 'checkbox',
+      label: 'mostra sul sito',
+      defaultValue: false,
       admin: {
         position: 'sidebar',
       },

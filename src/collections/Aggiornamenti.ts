@@ -7,7 +7,7 @@ export const Aggiornamenti: CollectionConfig = {
   slug: 'aggiornamenti', // Nome della collezione nel database e URL
   admin: {
     useAsTitle: "title",
-    defaultColumns: ['title', 'category', 'image', 'tags', 'status'],
+    defaultColumns: ['title', 'category', 'image', 'tags', '_status'],
     livePreview:{
       url:frontend_URL
     },
@@ -38,24 +38,6 @@ export const Aggiornamenti: CollectionConfig = {
       required: true,
       unique:true,
 
-    },
-    {
-      name: 'status',
-      type: 'radio',
-      options: [
-        {
-          value: 'draft',
-          label: 'Draft',
-        },
-        {
-          value: 'published',
-          label: 'Published',
-        },
-      ],
-      defaultValue: 'draft',
-      admin: {
-        position: 'sidebar',
-      }
     },
     
     //MAIN 
