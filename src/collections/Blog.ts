@@ -11,6 +11,7 @@ import {
 } from '@payloadcms/richtext-lexical'
 
 import { formatSlug } from '@/utilities/formatSlug'
+import { frontend_URL } from '@/utilities/const'
 
 export const Blog: CollectionConfig = {
   slug: 'blog', // Nome della collezione nel database e URL
@@ -18,12 +19,14 @@ export const Blog: CollectionConfig = {
     useAsTitle: 'title',
     defaultColumns: ['title', 'category', 'image', 'tags', 'status'],
     livePreview: {
-      url: ({ data }) => `https://accademiaessenze.it/notizie/${data?.slug || 'https://accademiaessenze.it/notizie'}`,
+      url: ({ data }) => `${frontend_URL}/notizie/${data?.slug} || '${frontend_URL}/notizie'}`,
     },
   },
   access: {
     read: () => true,
   },
+  versions: { drafts: true, maxPerDoc:3},
+
   labels: {
     singular: 'Blog Post',
     plural: 'Blog Posts',

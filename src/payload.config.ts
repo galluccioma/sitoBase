@@ -33,6 +33,7 @@ import { Clienti } from './collections/Clienti'
 
 //import dei globali
 import {Banner} from './globals/Banner'
+import { max } from 'lodash'
 
 
 // Determina il percorso corrente del file
@@ -82,7 +83,6 @@ export default buildConfig({
   ],
   
   editor: lexicalEditor({}), // Configurazione per l'editor di testo Lexical
-  
   secret: process.env.PAYLOAD_SECRET || '',
   serverURL:process.env.BKND_URL,
   typescript: {
@@ -97,6 +97,7 @@ export default buildConfig({
     url: process.env.MONGODB_URI || '',
   }),
 
+  //LINGUE
   i18n: {
     supportedLanguages: { it, en},
   },

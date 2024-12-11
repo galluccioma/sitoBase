@@ -164,6 +164,7 @@ export interface Aggiornamenti {
   image?: (string | null) | Media;
   updatedAt: string;
   createdAt: string;
+  _status?: ('draft' | 'published') | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -215,6 +216,7 @@ export interface Blog {
   image?: (string | null) | Media;
   updatedAt: string;
   createdAt: string;
+  _status?: ('draft' | 'published') | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -417,6 +419,7 @@ export interface AggiornamentiSelect<T extends boolean = true> {
   image?: T;
   updatedAt?: T;
   createdAt?: T;
+  _status?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -433,6 +436,7 @@ export interface BlogSelect<T extends boolean = true> {
   image?: T;
   updatedAt?: T;
   createdAt?: T;
+  _status?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -521,6 +525,7 @@ export interface Banner {
   title: string;
   description: string;
   link?: string | null;
+  _status?: ('draft' | 'published') | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -533,6 +538,7 @@ export interface BannerSelect<T extends boolean = true> {
   title?: T;
   description?: T;
   link?: T;
+  _status?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

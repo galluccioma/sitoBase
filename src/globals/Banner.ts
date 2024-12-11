@@ -1,6 +1,5 @@
 import { GlobalConfig, FieldHook } from 'payload';
-import payload from 'payload';
-
+import { frontend_URL } from '@/utilities/const';
 
 
 export const Banner: GlobalConfig = {
@@ -8,14 +7,17 @@ export const Banner: GlobalConfig = {
   access: {
     read: () => true, // Puoi specificare chi ha accesso a questa global (ad esempio, chiunque può leggere)
   },
+  versions: { drafts: true, max:3},
   label: {
     singular: 'Banner Aggiornamento',
   },
+  
   admin:{
     livePreview:{
-      url:`https://accademiaessenze.it`
+      url:frontend_URL
     },
   },
+  
   fields: [
     // SIDEBAR ADMIN
     

@@ -1,7 +1,7 @@
 import { CollectionConfig, FieldHook } from 'payload';
 
 import { formatSlug } from '@/utilities/formatSlug';
-
+import { frontend_URL } from '@/utilities/const';
 
 export const Aggiornamenti: CollectionConfig = {
   slug: 'aggiornamenti', // Nome della collezione nel database e URL
@@ -9,14 +9,14 @@ export const Aggiornamenti: CollectionConfig = {
     useAsTitle: "title",
     defaultColumns: ['title', 'category', 'image', 'tags', 'status'],
     livePreview:{
-      url:`https://accademiaessenze.it`
-      
+      url:frontend_URL
     },
     
   },
   access: {
     read: () => true,
   },
+  versions: { drafts: true, maxPerDoc:3},
   labels: {
     singular: 'Aggiornamento',
     plural: 'Aggiornamenti',
