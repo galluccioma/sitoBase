@@ -84,6 +84,7 @@ export default buildConfig({
   editor: lexicalEditor({}), // Configurazione per l'editor di testo Lexical
   
   secret: process.env.PAYLOAD_SECRET || '',
+  serverURL:process.env.BKND_URL,
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),
   },
