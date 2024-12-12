@@ -212,7 +212,6 @@ const Validazione: React.FC = () => {
   return (
     <section className="flex flex-col items-start justify-top bg-white text-black ">
       <div className="gap-6 w-full wt-max-w-4xl">
-        <h2 className="text-3xl wt-my-6">Validazione Prenotazione</h2>
         <div className="bg-gray p-6">
           <input
             type="text"
