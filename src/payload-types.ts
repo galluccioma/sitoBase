@@ -46,9 +46,11 @@ export interface Config {
   };
   globals: {
     banner: Banner;
+    validazione: Validazione;
   };
   globalsSelect: {
     banner: BannerSelect<false> | BannerSelect<true>;
+    validazione: ValidazioneSelect<false> | ValidazioneSelect<true>;
   };
   locale: 'en' | 'it';
   user: User & {
@@ -526,6 +528,15 @@ export interface Banner {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "validazione".
+ */
+export interface Validazione {
+  id: string;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "banner_select".
  */
 export interface BannerSelect<T extends boolean = true> {
@@ -533,6 +544,15 @@ export interface BannerSelect<T extends boolean = true> {
   title?: T;
   description?: T;
   link?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "validazione_select".
+ */
+export interface ValidazioneSelect<T extends boolean = true> {
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

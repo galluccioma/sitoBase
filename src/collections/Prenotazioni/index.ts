@@ -1,5 +1,4 @@
 import { CollectionConfig } from 'payload'
-import payload from 'payload'
 import { generateDisponibilita } from './hooks/generateDisponibilita'
 import { generateClienti } from './hooks/generateClienti'
 import { calcoloTotale } from './hooks/calcoloTotale'
@@ -130,6 +129,7 @@ export const Prenotazioni: CollectionConfig = {
         position: 'sidebar',
       },
     },
+
   ],
   hooks: {
     beforeChange: [

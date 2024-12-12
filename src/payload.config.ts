@@ -33,7 +33,8 @@ import { Clienti } from './collections/Clienti'
 
 //import dei globali
 import {Banner} from './globals/Banner'
-import { max } from 'lodash'
+import {Validazione} from './globals/Validazione'
+
 
 
 // Determina il percorso corrente del file
@@ -60,7 +61,6 @@ export default buildConfig({
         Logo:'@/components/Logo',
         Icon:'@/components/Icon',
       },
-      afterDashboard:['@/components/Validazione'],
     },
   },
 
@@ -80,6 +80,7 @@ export default buildConfig({
   
   globals:[
     Banner,     // Globale banner
+    Validazione
   ],
   
   editor: lexicalEditor({}), // Configurazione per l'editor di testo Lexical
