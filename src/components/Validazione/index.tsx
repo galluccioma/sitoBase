@@ -3,11 +3,10 @@ import React, { useState, useEffect, useCallback } from 'react'
 import { QRCodeSVG } from 'qrcode.react'
 import { Html5Qrcode } from 'html5-qrcode'
 
-import './styles.scss'
-
 interface Biglietto {
   id: string
   titolo: string
+  tipoBiglietto: string
   prezzo: number
   fasciaOraria: string
 }
@@ -37,6 +36,7 @@ const Validazione: React.FC = () => {
   const [qrData, setQrData] = useState<string | null>(null)
   const [html5QrCode, setHtml5QrCode] = useState<Html5Qrcode | null>(null)
   const [scanning, setScanning] = useState(false)
+
   const [cameraPermission, setCameraPermission] = useState<boolean | null>(null)
 
   const onScanSuccess = useCallback((decodedText: string) => {
@@ -44,6 +44,13 @@ const Validazione: React.FC = () => {
     setScanning(false)
     handleSearch(decodedText)
   }, [])
+
+  const hasAtelier=prenotazione?.carrello.some(
+    (item)=> item.biglietto.tipoBiglietto=='atelier'
+  );
+  const hasVisitaGuidata=prenotazione?.carrello.some(
+    (item)=> item.biglietto.tipoBiglietto=='visita_guidata'
+  );
 
   const onScanFailed = useCallback((errorMessage: string) => {
     console.warn(`Scansione fallita: ${errorMessage}`)
@@ -211,8 +218,8 @@ const Validazione: React.FC = () => {
 
   return (
     <section className="flex flex-col items-start justify-top bg-white text-black ">
-      <div className="gap-6 w-full wt-max-w-4xl">
-        <div className="bg-gray p-6">
+      <div className=" grid md:grid-cols-3 gap-6 w-full ">
+        <div className=" bg-gray p-6">
           <input
             type="text"
             className="border border-black-40 focus:border-black-70 p-4 w-full "
@@ -223,7 +230,7 @@ const Validazione: React.FC = () => {
           <button
             onClick={() => handleSearch(id)}
             disabled={loading}
-            className="bg-black text-white text-lg flex p-2 mt-4 items-center justify-center uppercase w-full"
+            className="bg-black text-white text-2xl flex p-2 mt-4 items-center justify-center uppercase w-full"
           >
             {loading ? 'Cercando...' : 'Cerca'}
           </button>
@@ -231,44 +238,52 @@ const Validazione: React.FC = () => {
           {/* Button to start/stop QR scanning */}
           <button
             onClick={() => setScanning((prev) => !prev)}
-            className="bg-zinc-200 border text-black text-lg flex p-2 mt-4 items-center justify-center uppercase rounded-sm w-full"
+            className="bg-zinc-200 border text-black text-2xl flex p-2 mt-4 items-center justify-center uppercase rounded-sm w-full"
           >
             {scanning ? 'Ferma Scansione' : 'Scansiona QR'}
           </button>
         </div>
         {prenotazione && (
-          <section className="flex items-top mx-auto max-w-6xl bg-white text-black gap-6 p-6">
+          <section className="md:col-span-2 items-top mx-auto max-w-6xl bg-white text-black gap-6 p-6">
             {/* Reservation Details Column */}
-            <div className="flex   p-6">
+            <div className="flex flex-col md:flex-row p-6">
               {qrData && (
-                <div className="mt-4 p-6">
+                <div className="mt-4 p-6 mx-auto">
                   <QRCodeSVG value={qrData} size={128} />
                 </div>
               )}
-              <div>
-                <h2 className="text-lg font-bold">Dettagli Prenotazione</h2>
-                <p>ID: {prenotazione.id}</p>
+              <div className='text-xl'>
+                <h2 className="text-2xl font-bold">Dettagli Prenotazione</h2>
+                <p className=''>ID: {prenotazione.id}</p>
                 <p>Email: {prenotazione.email}</p>
                 <p>Stato: {prenotazione.stato}</p>
-                <p className={`text-lg font-bold ${!prenotazione.visitaUsato ? '' : 'text-red'}`}>
+                
+                <>
+                {hasVisitaGuidata && (
+                <p className={`text-2xl p-2 font-bold text-green-500 bg-green-50 ${!prenotazione.visitaUsato ? '' : 'text-red-500 bg-red-100'}`}>
                   {' '}
                   Visita guidata già validata: {prenotazione.visitaUsato ? 'Sì' : 'No'}
                 </p>
-                <p className={`text-lg font-bold ${!prenotazione.atelierUsato ? '' : 'text-red'}`}>
+                )}
+                {hasAtelier && (
+                <p className={`text-2xl p-2 font-bold text-green-500 bg-green-50 ${!prenotazione.atelierUsato ? '' : 'text-red-500 bg-red-100'}`}>
                   {' '}
                   Atelier già validato: {prenotazione.atelierUsato ? 'Sì' : 'No'} 
                   </p>
+                  )}
+                  </>
+
               </div>
             </div>
 
             {/* Tickets in Cart Column */}
-            <div className="flex-grow">
+            <div className="flex-grow p-6">
               {prenotazione.carrello && prenotazione.carrello.length > 0 ? (
                 <>
-                  <h3 className="text-lg font-bold">Biglietti nel Carrello</h3>
-                  <div className="grid grid-cols-1 gap-6">
+                  <h3 className="text-2xl font-bold">Biglietti nel Carrello</h3>
+                  <div className="grid grid-cols-1 gap-6 text-xl">
                     {prenotazione.carrello.map((item) => (
-                      <div key={item.id} className="border p-2 my-2">
+                      <div key={item.id} className="border p-6 my-2 bg-gray-100">
                         <p>
                           <strong>Titolo:</strong> {item.biglietto.titolo}
                         </p>

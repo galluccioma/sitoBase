@@ -1,4 +1,5 @@
 import { buildConfig } from 'payload'
+import path from 'path'
 
 //import { postgresAdapter } from '@payloadcms/db-postgres'
 import { mongooseAdapter } from '@payloadcms/db-mongodb'
@@ -12,12 +13,14 @@ import { s3Storage } from '@payloadcms/storage-s3'
 //Mail
 import { nodemailerAdapter } from '@payloadcms/email-nodemailer'
 
-//Plugin
 
+
+//Plugin
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
-import path from 'path'
 import sharp from 'sharp'
 import { fileURLToPath } from 'url'
+import { stripePlugin } from '@payloadcms/plugin-stripe'
+
 
 // Import delle collezioni
 import { Users } from './collections/Users' // Collezione utenti
@@ -61,8 +64,9 @@ export default buildConfig({
         Logo:'@/components/Logo',
         Icon:'@/components/Icon',
       },
-    },
+    },    
   },
+  
 
   
   collections: [
@@ -89,11 +93,7 @@ export default buildConfig({
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),
   },
-  // db: postgresAdapter({
-  //   pool: {
-  //     connectionString: process.env.POSTGRES_URI || ''
-  //   }
-  // }),
+ 
   db: mongooseAdapter({
     url: process.env.MONGODB_URI || '',
   }),
@@ -125,6 +125,7 @@ export default buildConfig({
   sharp, // Usato per la gestione delle immagini (sharp)
 
   plugins: [
+
     s3Storage({
       collections: {
         media: {
@@ -142,9 +143,13 @@ export default buildConfig({
         endpoint: process.env.S3_ENDPOINT, // Endpoint S3 (es. per server compatibili con S3)
       },
     }),
+
+    stripePlugin({
+      stripeSecretKey: process.env.STRIPE_SECRET_KEY,
+    }),
   ],
 
-  //Paypal
+
   
   //Mail Adapter
   email: nodemailerAdapter({
@@ -160,6 +165,8 @@ export default buildConfig({
       },
     },
   }),
+
+  
   cors:[
      "http://localhost:4000", //test
     "https://musesaccademia.pages.dev", //production

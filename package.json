@@ -11,7 +11,9 @@
     "generate:types": "cross-env NODE_OPTIONS=--no-deprecation payload generate:types",
     "lint": "cross-env NODE_OPTIONS=--no-deprecation next lint",
     "payload": "cross-env NODE_OPTIONS=--no-deprecation payload",
-    "start": "cross-env NODE_OPTIONS=--no-deprecation next start"
+    "start": "cross-env NODE_OPTIONS=--no-deprecation next start",
+    "tailwind": "tailwindcss -i ./tailwind.css -o ./src/css/compiledTailwind.css --watch"
+    
   },
   "dependencies": {
     "@mongodb-js/zstd": "^1.2.2",
