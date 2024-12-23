@@ -1,7 +1,7 @@
 // next.config.mjs
 const nextConfig = {
     images: {
-      domains: ['localhost'], // Add your domain(s) here
+      domains: ['localhost', 'https://whitelabelcms.netlify.app/'], // Add your domain(s) here
     },
   };
   
