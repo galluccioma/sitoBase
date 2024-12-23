@@ -4,7 +4,7 @@ import Link from 'next/link';
 const CardBlog = ({ entry }) => {
   return (
     <Link
-      href={`/progetti/${entry.slug}`}
+      href={`/blog/${entry.slug}`}
       title="Tri BK Houses"
       className="text-sm 2xl:text-sm duration-300 hover:!opacity-100"
     >

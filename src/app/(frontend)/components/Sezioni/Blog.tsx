@@ -32,14 +32,14 @@ const Articoli = () => {
   }
 
   if (error) {
-    return <p>Si è verificato un errore: {error.message}</p>;
+    return <p>Si è verificato un errore</p>;
   }
 
   return (
     <section className="flex mx-auto max-w-6xl mt-36">
       <div className="px-8">
         <div className="grid lg:grid-cols-2 gap-8">
-          <div data-aos="fade-up" data-aos-duration="1500" data-aos-delay="500">
+          <div data-aos="fade-up" >
             <h2 className="text-2xl font-bold md:text-4xl">Esempi di successo.</h2>
             <p className="mt-4 text-slate-500 dark:text-slate-300">
               Abbiamo portato a termine numerosi progetti di grandi impianti fotovoltaici. Scopri come abbiamo semplificato il permitting per questi impianti in tutta Italia.
