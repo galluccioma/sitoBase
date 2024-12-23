@@ -1,0 +1,83 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+
+    @font-face {
+      font-family: "Jost";
+      src: url("/public/fonts/Jost-VariableFont_wght.ttf") format("ttf");
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+    
+    @font-face {
+      font-family: "Jost";
+      src: url("/public/fonts/Jost-Italic-VariableFont_wght.ttf") format("ttf");
+      font-weight: 700;
+      font-style: normal;
+      font-display: swap;
+    }
+  
+  ::selection {
+    background: #0c71bf80;
+  }
+  
+  html {
+    overflow-y: scroll;
+    color-scheme: light;
+    font-family: "Jost", sans-serif;
+    font-size: large;
+    scroll-behavior: smooth;
+  }
+  
+  h2, h3{
+    font-size: xx-large;
+    font-weight:600;
+  }
+  
+  html,
+  body {
+    @apply h-full w-full antialiased;
+    @apply bg-gray-200 dark:bg-slate-900;
+    @apply text-blue-950 dark:text-gray-200;
+    scroll-behavior: smooth;
+  
+  }
+  
+  body {
+    @apply relative flex flex-col;
+  }
+  
+  main {
+    @apply flex flex-col flex-1 bg-gray-200 dark:bg-slate-900;
+  }
+  
+  header {
+    @apply border-b;
+    @apply transition-all duration-300 ease-in-out;
+  }
+  
+  header:not(.scrolled) {
+    @apply bg-transparent border-transparent;
+  }
+  
+  header.scrolled {
+    @apply bg-white/75 dark:bg-black/50;
+    @apply border-black/10 dark:border-white/25;
+    @apply backdrop-blur-sm saturate-200;
+  }
+  
+  article {
+    @apply prose dark:prose-invert max-w-full pb-12;
+  }
+  
+  .page-heading {
+    @apply font-semibold text-black dark:text-gray-200 text-2xl;
+  }
+  
+  .blend {
+    @apply transition-all duration-300 ease-in-out;
+  }
+  }

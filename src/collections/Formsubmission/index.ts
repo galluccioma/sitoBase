@@ -7,8 +7,8 @@ export const FormSubmission: CollectionConfig = {
     create: () => true,
   },
   labels: {
-    singular: 'Feedback',
-    plural: 'Feedbacks',
+    singular: 'Compilaizone Form',
+    plural: 'Compilaizoni Form',
   },
   fields: [
     {

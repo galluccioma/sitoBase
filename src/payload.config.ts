@@ -27,7 +27,6 @@ import { Media } from './collections/Media' // Collezione media
 import { Categories } from './collections/Categories' // Collezione categorie
 import { Blog } from './collections/Blog'
 import { FormSubmission } from './collections/Formsubmission' //Collezione Form
-import { Disponibilita } from './collections/Disponibilita'
 
 
 //import dei globali
@@ -65,7 +64,6 @@ export default buildConfig({
 
   
   collections: [
-    Disponibilita, //Slot disponibilita
     FormSubmission, // Collezione degli invii del modulo
     Blog,        // Collezione per il blog
     Categories,  // Collezione delle categorie

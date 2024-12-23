@@ -11,7 +11,6 @@ export interface Config {
     users: UserAuthOperations;
   };
   collections: {
-    disponibilita: Disponibilita;
     'form-submissions': FormSubmission;
     blog: Blog;
     categories: Category;
@@ -23,7 +22,6 @@ export interface Config {
   };
   collectionsJoins: {};
   collectionsSelect: {
-    disponibilita: DisponibilitaSelect<false> | DisponibilitaSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
     blog: BlogSelect<false> | BlogSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
@@ -68,20 +66,6 @@ export interface UserAuthOperations {
     email: string;
     password: string;
   };
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "disponibilita".
- */
-export interface Disponibilita {
-  id: string;
-  tipoBiglietto: 'visita_guidata' | 'atelier';
-  fasciaOraria: '11:30' | '14:30' | '15:30' | '17:00';
-  data: string;
-  giorno?: string | null;
-  disponibilità: number;
-  updatedAt: string;
-  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -183,10 +167,6 @@ export interface PayloadLockedDocument {
   id: string;
   document?:
     | ({
-        relationTo: 'disponibilita';
-        value: string | Disponibilita;
-      } | null)
-    | ({
         relationTo: 'form-submissions';
         value: string | FormSubmission;
       } | null)
@@ -247,19 +227,6 @@ export interface PayloadMigration {
   batch?: number | null;
   updatedAt: string;
   createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "disponibilita_select".
- */
-export interface DisponibilitaSelect<T extends boolean = true> {
-  tipoBiglietto?: T;
-  fasciaOraria?: T;
-  data?: T;
-  giorno?: T;
-  disponibilità?: T;
-  updatedAt?: T;
-  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
