@@ -11,12 +11,8 @@ export interface Config {
     users: UserAuthOperations;
   };
   collections: {
-    prenotazioni: Prenotazioni;
-    biglietti: Biglietti;
     disponibilita: Disponibilita;
-    clienti: Clienti;
     'form-submissions': FormSubmission;
-    aggiornamenti: Aggiornamenti;
     blog: Blog;
     categories: Category;
     media: Media;
@@ -27,12 +23,8 @@ export interface Config {
   };
   collectionsJoins: {};
   collectionsSelect: {
-    prenotazioni: PrenotazioniSelect<false> | PrenotazioniSelect<true>;
-    biglietti: BigliettiSelect<false> | BigliettiSelect<true>;
     disponibilita: DisponibilitaSelect<false> | DisponibilitaSelect<true>;
-    clienti: ClientiSelect<false> | ClientiSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
-    aggiornamenti: AggiornamentiSelect<false> | AggiornamentiSelect<true>;
     blog: BlogSelect<false> | BlogSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
@@ -46,11 +38,9 @@ export interface Config {
   };
   globals: {
     banner: Banner;
-    validazione: Validazione;
   };
   globalsSelect: {
     banner: BannerSelect<false> | BannerSelect<true>;
-    validazione: ValidazioneSelect<false> | ValidazioneSelect<true>;
   };
   locale: 'en' | 'it';
   user: User & {
@@ -81,42 +71,6 @@ export interface UserAuthOperations {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "prenotazioni".
- */
-export interface Prenotazioni {
-  id: string;
-  carrello: {
-    biglietto: string | Biglietti;
-    quantità: number;
-    fasciaOrariaSelezionata: '11:30' | '14:30' | '15:30' | '17:00';
-    id?: string | null;
-  }[];
-  dataPrenotazione: string;
-  giorno?: string | null;
-  email?: string | null;
-  stato?: ('attesa_pagamento' | 'annullato' | 'completato') | null;
-  visitaUsato?: boolean | null;
-  atelierUsato?: boolean | null;
-  totaleCarrello?: number | null;
-  sconto?: number | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "biglietti".
- */
-export interface Biglietti {
-  id: string;
-  titolo: string;
-  descrizione?: string | null;
-  prezzo: number;
-  tipoBiglietto: 'visita_guidata' | 'atelier';
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "disponibilita".
  */
 export interface Disponibilita {
@@ -131,17 +85,6 @@ export interface Disponibilita {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "clienti".
- */
-export interface Clienti {
-  id: string;
-  email?: string | null;
-  prenotazioni: (string | Prenotazioni)[];
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "form-submissions".
  */
 export interface FormSubmission {
@@ -151,41 +94,6 @@ export interface FormSubmission {
   source?: string | null;
   updatedAt: string;
   createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "aggiornamenti".
- */
-export interface Aggiornamenti {
-  id: string;
-  slug: string;
-  title: string;
-  description: string;
-  link?: string | null;
-  image?: (string | null) | Media;
-  updatedAt: string;
-  createdAt: string;
-  _status?: ('draft' | 'published') | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "media".
- */
-export interface Media {
-  id: string;
-  alt?: string | null;
-  prefix?: string | null;
-  updatedAt: string;
-  createdAt: string;
-  url?: string | null;
-  thumbnailURL?: string | null;
-  filename?: string | null;
-  mimeType?: string | null;
-  filesize?: number | null;
-  width?: number | null;
-  height?: number | null;
-  focalX?: number | null;
-  focalY?: number | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -228,6 +136,26 @@ export interface Category {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "media".
+ */
+export interface Media {
+  id: string;
+  alt?: string | null;
+  prefix?: string | null;
+  updatedAt: string;
+  createdAt: string;
+  url?: string | null;
+  thumbnailURL?: string | null;
+  filename?: string | null;
+  mimeType?: string | null;
+  filesize?: number | null;
+  width?: number | null;
+  height?: number | null;
+  focalX?: number | null;
+  focalY?: number | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "users".
  */
 export interface User {
@@ -255,28 +183,12 @@ export interface PayloadLockedDocument {
   id: string;
   document?:
     | ({
-        relationTo: 'prenotazioni';
-        value: string | Prenotazioni;
-      } | null)
-    | ({
-        relationTo: 'biglietti';
-        value: string | Biglietti;
-      } | null)
-    | ({
         relationTo: 'disponibilita';
         value: string | Disponibilita;
       } | null)
     | ({
-        relationTo: 'clienti';
-        value: string | Clienti;
-      } | null)
-    | ({
         relationTo: 'form-submissions';
         value: string | FormSubmission;
-      } | null)
-    | ({
-        relationTo: 'aggiornamenti';
-        value: string | Aggiornamenti;
       } | null)
     | ({
         relationTo: 'blog';
@@ -338,42 +250,6 @@ export interface PayloadMigration {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "prenotazioni_select".
- */
-export interface PrenotazioniSelect<T extends boolean = true> {
-  carrello?:
-    | T
-    | {
-        biglietto?: T;
-        quantità?: T;
-        fasciaOrariaSelezionata?: T;
-        id?: T;
-      };
-  dataPrenotazione?: T;
-  giorno?: T;
-  email?: T;
-  stato?: T;
-  visitaUsato?: T;
-  atelierUsato?: T;
-  totaleCarrello?: T;
-  sconto?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "biglietti_select".
- */
-export interface BigliettiSelect<T extends boolean = true> {
-  titolo?: T;
-  descrizione?: T;
-  prezzo?: T;
-  tipoBiglietto?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "disponibilita_select".
  */
 export interface DisponibilitaSelect<T extends boolean = true> {
@@ -387,16 +263,6 @@ export interface DisponibilitaSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "clienti_select".
- */
-export interface ClientiSelect<T extends boolean = true> {
-  email?: T;
-  prenotazioni?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "form-submissions_select".
  */
 export interface FormSubmissionsSelect<T extends boolean = true> {
@@ -405,20 +271,6 @@ export interface FormSubmissionsSelect<T extends boolean = true> {
   source?: T;
   updatedAt?: T;
   createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "aggiornamenti_select".
- */
-export interface AggiornamentiSelect<T extends boolean = true> {
-  slug?: T;
-  title?: T;
-  description?: T;
-  link?: T;
-  image?: T;
-  updatedAt?: T;
-  createdAt?: T;
-  _status?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -528,15 +380,6 @@ export interface Banner {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "validazione".
- */
-export interface Validazione {
-  id: string;
-  updatedAt?: string | null;
-  createdAt?: string | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "banner_select".
  */
 export interface BannerSelect<T extends boolean = true> {
@@ -544,15 +387,6 @@ export interface BannerSelect<T extends boolean = true> {
   title?: T;
   description?: T;
   link?: T;
-  updatedAt?: T;
-  createdAt?: T;
-  globalType?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "validazione_select".
- */
-export interface ValidazioneSelect<T extends boolean = true> {
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

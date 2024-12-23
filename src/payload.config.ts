@@ -19,7 +19,6 @@ import { nodemailerAdapter } from '@payloadcms/email-nodemailer'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import sharp from 'sharp'
 import { fileURLToPath } from 'url'
-import { stripePlugin } from '@payloadcms/plugin-stripe'
 
 
 // Import delle collezioni
@@ -28,15 +27,11 @@ import { Media } from './collections/Media' // Collezione media
 import { Categories } from './collections/Categories' // Collezione categorie
 import { Blog } from './collections/Blog'
 import { FormSubmission } from './collections/Formsubmission' //Collezione Form
-import { Biglietti } from './collections/Biglietti' // Collezione biglietti
-import { Prenotazioni } from './collections/Prenotazioni'
-import { Aggiornamenti } from './collections/Aggiornamenti'  // Collezione Mostre
 import { Disponibilita } from './collections/Disponibilita'
-import { Clienti } from './collections/Clienti'
+
 
 //import dei globali
 import {Banner} from './globals/Banner'
-import {Validazione} from './globals/Validazione'
 
 
 
@@ -70,12 +65,8 @@ export default buildConfig({
 
   
   collections: [
-    Prenotazioni,// Collezione per le prenotazioni
-    Biglietti,    // Collezione per i biglietti
     Disponibilita, //Slot disponibilita
-    Clienti,
     FormSubmission, // Collezione degli invii del modulo
-    Aggiornamenti,  // Collezione mostre
     Blog,        // Collezione per il blog
     Categories,  // Collezione delle categorie
     Media,       // Collezione per i media
@@ -84,7 +75,6 @@ export default buildConfig({
   
   globals:[
     Banner,     // Globale banner
-    Validazione
   ],
   
   editor: lexicalEditor({}), // Configurazione per l'editor di testo Lexical
@@ -142,10 +132,6 @@ export default buildConfig({
         region: process.env.S3_REGION, // Regione S3
         endpoint: process.env.S3_ENDPOINT, // Endpoint S3 (es. per server compatibili con S3)
       },
-    }),
-
-    stripePlugin({
-      stripeSecretKey: process.env.STRIPE_SECRET_KEY,
     }),
   ],
 
