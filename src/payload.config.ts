@@ -43,13 +43,13 @@ export default buildConfig({
   admin: {
     user: Users.slug, // Collezione per la gestione degli utenti amministrativi
     meta: {
-      titleSuffix: 'Umazing Backend', // Suffisso del titolo nel pannello admin
+      titleSuffix: 'powered by Umazing', // Suffisso del titolo nel pannello admin
       description: 'Backend powered by umazing', // Descrizione del backend
       icons: [
         {
           type: 'Logo', // Tipo di icona
           rel: 'icon', // Relazione dell'icona (favicon)
-          url: '/favicon.svg', // Percorso dell'icona
+          url: '/ico/favicon.ico', // Percorso dell'icona
         },
       ],
     },

@@ -7,7 +7,7 @@ import Image from 'next/image';
    width={42} 
    height={42} 
    className="logo"
-      src="/favicon.svg"
+      src="/ico/favicon.ico"
       alt="Backend"
     />
 );

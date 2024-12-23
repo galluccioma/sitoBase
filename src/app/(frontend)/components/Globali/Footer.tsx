@@ -1,4 +1,4 @@
-import Nav from "./ui/Nav"
+import Nav from "./Nav"
 export default function Footer() {
   return (
     <footer className="bg-black">

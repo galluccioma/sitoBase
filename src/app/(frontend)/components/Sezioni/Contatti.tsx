@@ -1,5 +1,5 @@
 import Image from "next/image"
-import Form from "./ui/Form"
+import Form from "../UI/Form"
 export default function Contatti (){
   return (
 
