@@ -4,7 +4,7 @@ export default async function BlogPostPage({ params }) {
   
   const slug = await params.slug; 
 
-  const apiUrl = `https://whitelabelcms.netlify.app/api/blog?where[slug][equals]=${slug}`;
+  const apiUrl = `/api/blog?where[slug][equals]=${slug}`;
   
   const res = await fetch(apiUrl, { cache: 'no-store' });
 
@@ -56,6 +56,9 @@ export default async function BlogPostPage({ params }) {
           {post.description}</p>
         </div>
       </div>
+
+      <article className="article_styles" dangerouslySetInnerHTML={post?.content_html || " "}></article>
+
     </section>
   );
 }

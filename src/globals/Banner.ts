@@ -1,5 +1,6 @@
 import { GlobalConfig, FieldHook } from 'payload';
 import { frontend_URL } from '@/utilities/const';
+import { relationship } from 'node_modules/payload/dist/fields/validations';
 
 
 export const Banner: GlobalConfig = {
@@ -46,6 +47,22 @@ export const Banner: GlobalConfig = {
       admin: {
         placeholder: 'A brief summary of the blog post',
       },
+    },
+    {
+      name: 'image',
+      type: 'upload',
+      label: 'Image',
+      relationTo: 'media', // Assuming you have a media collection for uploads
+      admin: {
+        description: 'Upload an image to accompany the blog post',
+        position: 'sidebar',
+      },
+    },
+    {
+      name: 'cta',
+      type: 'text',
+      label: 'Cta',
+      defaultValue: "Scopri di più",
     },
     {
       name: 'link',

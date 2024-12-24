@@ -25,11 +25,11 @@ export const metadata = {
   openGraph: {
     title: 'My Awesome Website',
     description: 'Discover amazing content and services',
-    url: 'https://cre8stevedev.me',
+    url: 'https://umazing.it',
     siteName: 'My Awesome Website',
     images: [
       {
-        url: 'https://myawesomewebsite.com/og-image.jpg',
+        url: 'https://umazing.it/og-image.jpg',
         width: 1200, // This is the recommended size in pixels
         height: 630,
         alt: 'My Awesome Website og-image',
@@ -74,7 +74,7 @@ export const metadata = {
   },
 
   // Manifest
-  manifest: '/site.webmanifest',
+  // manifest: '/site.webmanifest',
 
   // App-specific metadata
   appleWebApp: {

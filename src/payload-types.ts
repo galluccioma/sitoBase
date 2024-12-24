@@ -341,6 +341,8 @@ export interface Banner {
   mostra?: boolean | null;
   title: string;
   description: string;
+  image?: (string | null) | Media;
+  cta?: string | null;
   link?: string | null;
   updatedAt?: string | null;
   createdAt?: string | null;
@@ -353,6 +355,8 @@ export interface BannerSelect<T extends boolean = true> {
   mostra?: T;
   title?: T;
   description?: T;
+  image?: T;
+  cta?: T;
   link?: T;
   updatedAt?: T;
   createdAt?: T;

@@ -11,11 +11,14 @@ import { BsFillCartFill, BsFillSaveFill } from 'react-icons/bs';
 import { RiTruckFill } from 'react-icons/ri';
 import { MdFavorite, MdHelp } from 'react-icons/md';
 import { FaUserFriends, FaWallet } from 'react-icons/fa';
+import BannerAggiornamenti from '../UI/BannerAggiornamenti';
 
 const Header = () => {
   const [nav, setNav] = useState(false);
 
   return (
+    <>
+    <BannerAggiornamenti/>
     <nav className="w-full mx-auto flex justify-between items-center px-12 py-4">
       {/* Left Side */}
       <div className="flex items-center">
@@ -108,6 +111,7 @@ const Header = () => {
         </nav>
       </div>
     </nav>
+    </>
   );
 };
 
