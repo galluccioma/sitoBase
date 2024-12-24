@@ -1,18 +1,23 @@
 import Image from "next/image";
+
 export default async function BlogPostPage({ params }) {
   
-  const slug = await Promise.resolve(params.slug); // Assicura un comportamento asincrono
-  
-  const apiUrl = `http://localhost:3000/api/blog?where[slug][equals]=${slug}`;
+  const slug = await params.slug; 
+
+  const apiUrl = `https://whitelabelcms.netlify.app/api/blog?where[slug][equals]=${slug}`;
   
   const res = await fetch(apiUrl, { cache: 'no-store' });
 
   if (!res.ok) {
+    // Handle error, e.g., display an error message
+    return <p>Error fetching data</p>;
   }
 
   const data = await res.json();
 
   if (!data.docs || !data.docs[0]) {
+    // Handle case where no post is found
+    return <p>Post not found</p>;
   }
 
   const post = data.docs[0];
