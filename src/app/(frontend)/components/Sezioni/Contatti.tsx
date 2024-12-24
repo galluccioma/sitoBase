@@ -6,9 +6,8 @@ export default function Contatti (){
 
 <section className="">
   <div className="px-8 pb-12 lg:pt-32">
-    <h1 className="text-balance text-3xl md:text-5xl lg:text-4xl text-black ">Contact us</h1>
-    <div className="flex pt-8 mt-40 border-t gap-8 items-center">
-      <div className=" flex flex-col">
+  <div className="grid grid-cols-1 md:grid-cols-3 pt-8 mt-40 border-t gap-8 items-center">
+      <div className=" flex flex-col col-span-1">
         <Image
           className="h-full object-cover object-center "
           src="/images/hero.avif"
@@ -16,14 +15,14 @@ export default function Contatti (){
           width={1000}
           height={400}
         ></Image>
-        <div className="w-full p-8 bg-black">
+        <div className="w-full p-8 bg-orange-600">
           <p className="text-3xl 2xl:text-6xl font-light text-white lg:text-pretty">
-            Thank you for contacting Quartiere international realty
+            Grazie per averci contattato
           </p>
           <p className="mt-6 text-pretty text-gray-200 2xl:text-lg lg:text-pretty">
-            Using the form below, please provide as much detailed information as possible. The
-            information you submit may be shared with our independently owned and operated
-            franchisee so that your concerns can be addressed.
+          Utilizzando il modulo sottostante, si prega di fornire informazioni il più possibile dettagliate. Le
+            informazioni inviate possono essere condivise con il nostro affiliato indipendente
+            franchisee, in modo che i vostri dubbi possano essere affrontati.
             <br />
             <br />
             <small>
@@ -33,7 +32,8 @@ export default function Contatti (){
           </p>
         </div>
       </div>
-      <div className=" w-full">
+      <div className=" w-full col-span-2">
+      <h2 className='text-orange-600 font-bold text-4xl text-center'>Contattaci ora per scoprire tutte le novità!</h2>
         <Form/>
       </div>
     </div>

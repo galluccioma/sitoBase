@@ -10,7 +10,7 @@ export default function Hero(){
     <div className="relative">
       <Image
         className="w-full h-[60vh] 2xl:h-[75vh] object-cover relative"
-        src="/images/hero.avif"
+        src="/images/hero.jpg"
         alt="hero"
         width={1080}
         height={700}

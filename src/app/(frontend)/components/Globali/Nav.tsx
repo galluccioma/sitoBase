@@ -26,7 +26,7 @@ export default function Nav (){
       ))}
       <a
         href="/contatti"
-        className="px-4 py-2 text-sm transition-all flex items-center justify-center text-white bg-yellow-500 hover:bg-yellow-600 h-8 ring-1 ring-inset ring-white/10"
+        className="px-4 py-2 text-sm transition-all flex items-center justify-center rounded-full text-white bg-orange-500 hover:bg-orange-600 h-8 ring-1 ring-inset ring-white/10"
       >
         Contattaci
       </a>
