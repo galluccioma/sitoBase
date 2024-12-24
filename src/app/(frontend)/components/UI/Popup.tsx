@@ -1,34 +1,35 @@
-'use client'
-import { useState, useEffect } from 'react'
-import { Banner } from '@/payload-types'
-import Link from 'next/link'
-import Image from 'next/image'
+"use client"; // Ensure this line is present at the top of your component
+
+import { useState, useEffect } from 'react';
+import { Banner } from '@/payload-types';
+import Link from 'next/link';
+import Image from 'next/image';
 
 export default function Popup() {
-  const [open, setOpen] = useState(true)
-  const [banner, setBanner] = useState<Banner | null>(null)
-
-  function Popup() {
-    sessionStorage.setItem('open', 'true')
-    setOpen(false)
-  }
-
-  const isOpened = sessionStorage.getItem('open')
+  const [open, setOpen] = useState(true); // Initial state for popup visibility
+  const [banner, setBanner] = useState<Banner | null>(null);
 
   useEffect(() => {
-    const fetchBanner = async () => {
-      const res = await fetch(`/api/globals/banner`)
-      const data = await res.json()
-      setBanner(data)
+    // Check for browser environment before accessing sessionStorage
+    if (typeof window !== 'undefined') {
+      const storedOpen = sessionStorage.getItem('open');
+      if (storedOpen) {
+        setOpen(JSON.parse(storedOpen));
+      }
     }
-    fetchBanner()
-  }, [])
 
-  if (!banner) return null
+    const fetchBanner = async () => {
+      const res = await fetch(`/api/globals/banner`);
+      const data = await res.json();
+      setBanner(data);
+    };
+    fetchBanner();
+  }, []);
 
+  if (!banner) return null;
   return (
     <div
-      className={`relative z-10 ${!isOpened ? 'block' : 'hidden'}`}
+      className={`relative z-10 ${!open ? 'block' : 'hidden'}`}
       aria-labelledby="modal-title"
       role="dialog"
       aria-modal="true"
