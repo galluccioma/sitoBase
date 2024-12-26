@@ -4,7 +4,7 @@ export default async function BlogPostPage({ params }) {
   
   const slug = await params.slug; 
 
-  const apiUrl = `/api/blog?where[slug][equals]=${slug}`;
+  const apiUrl = `https://whitelabelcms.netlify.app/api/blog?where[slug][equals]=${slug}`;
   
   const res = await fetch(apiUrl, { cache: 'no-store' });
 
