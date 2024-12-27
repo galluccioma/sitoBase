@@ -1,6 +1,6 @@
 import Hero from "../components/Sezioni/Hero";
 import Contatti from "../components/Sezioni/Contatti";
-import Foods from "../components/Sezioni/Food";
+import BlogPosts from "../components/Sezioni/BlogPosts";
 import Popup from "../components/UI/Popup";
 
 export default function Home() {
@@ -8,7 +8,7 @@ export default function Home() {
         <>
         <Hero/>
         <Popup/>
-        <Foods/>
+        <BlogPosts/>
         <Contatti/>
       </>
     );

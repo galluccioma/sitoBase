@@ -18,7 +18,7 @@ export const Blog: CollectionConfig = {
     useAsTitle: 'title',
     defaultColumns: ['title', 'category', 'image', 'tags', '_status'],
     livePreview: {
-      url: ({ data }) => `${process.env.FRONTEND_URL}/blog/${data?.slug} || '${process.env.FRONTEND_URL}/blog'}`,
+      url: ({ data }) => `${process.env.FRONTEND_URL}/blog/${data?.slug}`,
     },
   },
   access: {

@@ -1,6 +1,9 @@
 "use client"
 
 import React, { useState } from 'react';
+import Link from 'next/link';
+import { LINKS } from '../../utils/const';
+
 import {
   AiFillTag,
   AiOutlineClose,
@@ -8,9 +11,8 @@ import {
   AiOutlineSearch,
 } from 'react-icons/ai';
 import { BsFillCartFill, BsFillSaveFill } from 'react-icons/bs';
-import { RiTruckFill } from 'react-icons/ri';
-import { MdFavorite, MdHelp } from 'react-icons/md';
-import { FaUserFriends, FaWallet } from 'react-icons/fa';
+import { IoIosLink } from "react-icons/io";
+
 import BannerAggiornamenti from '../UI/BannerAggiornamenti';
 
 const Header = () => {
@@ -22,12 +24,13 @@ const Header = () => {
     <nav className="w-full mx-auto flex justify-between items-center px-12 py-4">
       {/* Left Side */}
       <div className="flex items-center">
+        
         <div className="cursor-pointer" onClick={() => setNav(!nav)}>
           <AiOutlineMenu size={30} className="hover:text-gray-400" />
         </div>
-        <h1 className="text-2xl sm:text-3xl lg:text-4xl px-2 ">
-          Best <span className="font-bold">Eats</span>
-        </h1>
+        <Link href='/' className="text-2xl sm:text-3xl lg:text-4xl px-2 ">
+          Sito <span className="font-bold">Standard</span>
+        </Link>
       </div>
       {/* Seach Input */}
       <div className="bg-gray-200 rounded-full flex items-center px-2 w-[200px] sm:w-[400px] lg:w-[500px]">
@@ -42,6 +45,8 @@ const Header = () => {
       <button className="bg-black text-white hidden md:flex items-center py-2 px-8 rounded-full hover:opacity-[.8] transition-all">
         <BsFillCartFill size={20} className="mr-2" /> Cart
       </button>
+
+
 
       {/* Mobile Menu */}
       {/* Overlay */}
@@ -72,41 +77,15 @@ const Header = () => {
         </h2>
         <nav>
           <ul className="flex flex-col p-4 text-gray-800">
-            <li className="hover:bg-gray-200 duration-200">
-              <a href="#" className="text-xl py-4 pl-2 flex">
-                <RiTruckFill size={25} className="mr-4" /> Orders
+
+            {LINKS.map((prop) =>  
+            <li key={prop.TEXT} className="hover:bg-gray-200 duration-200">
+              <a href={prop.HREF} className="text-xl py-4 pl-2 flex">
+                <IoIosLink size={25} className="mr-4" /> {prop.TEXT}
               </a>
             </li>
-            <li className="hover:bg-gray-200 duration-200">
-              <a href="#" className="text-xl py-4 pl-2 flex">
-                <MdFavorite size={25} className="mr-4" /> Favorites
-              </a>
-            </li>
-            <li className="hover:bg-gray-200 duration-200">
-              <a href="#" className="text-xl py-4 pl-2 flex">
-                <FaWallet size={25} className="mr-4" /> Wallet
-              </a>
-            </li>
-            <li className="hover:bg-gray-200 duration-200">
-              <a href="#" className="text-xl py-4 pl-2 flex">
-                <MdHelp size={25} className="mr-4" /> Help
-              </a>
-            </li>
-            <li className="hover:bg-gray-200 duration-200">
-              <a href="#" className="text-xl py-4 pl-2 flex">
-                <AiFillTag size={25} className="mr-4" /> Promotions
-              </a>
-            </li>
-            <li className="hover:bg-gray-200 duration-200">
-              <a href="#" className="text-xl py-4 pl-2 flex">
-                <BsFillSaveFill size={25} className="mr-4" /> BestOnes
-              </a>
-            </li>
-            <li className="hover:bg-gray-200 duration-200">
-              <a href="#" className="text-xl py-4 pl-2 flex">
-                <FaUserFriends size={25} className="mr-4" /> Invite Friends
-              </a>
-            </li>
+            )}
+            
           </ul>
         </nav>
       </div>

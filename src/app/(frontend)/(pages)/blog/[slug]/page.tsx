@@ -52,7 +52,7 @@ export default async function BlogPostPage({ params }) {
       </div>
 
       <article
-        className="article_styles"
+        className="max-w-7xl mx-auto [&>img]:w-80 "
         dangerouslySetInnerHTML={{
           __html: post.content_html,
         }}
