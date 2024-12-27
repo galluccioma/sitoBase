@@ -12,7 +12,7 @@ export default function Popup() {
   useEffect(() => {
     // Check for browser environment before accessing sessionStorage
     if (typeof window !== 'undefined') {
-      const storedOpen = sessionStorage.getItem('open');
+     const storedOpen = sessionStorage.getItem('open');
       if (storedOpen) {
         setOpen(JSON.parse(storedOpen));
       }
@@ -26,10 +26,17 @@ export default function Popup() {
     fetchBanner();
   }, []);
 
+  function removePopup(){
+    setOpen(false)
+    if (typeof window !== 'undefined') {
+     sessionStorage.setItem('open','false');
+    }
+  }
+
   if (!banner) return null;
   return (
     <div
-      className={`relative z-10 ${!open ? 'block' : 'hidden'}`}
+      className={`relative z-10 ${open ? 'block' : 'hidden'}`}
       aria-labelledby="modal-title"
       role="dialog"
       aria-modal="true"
@@ -54,7 +61,7 @@ export default function Popup() {
                   />
                   <div className="absolute inset-0 flex items-center justify-center text-white bg-black bg-opacity-75">
                     <button
-                      onClick={() => Popup()}
+                      onClick={() => removePopup()}
                       className=" align-middle select-none font-sans font-medium text-center uppercase transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none w-8 max-w-[32px] h-8 max-h-[32px] rounded-lg text-xs text-white hover:bg-white/10 active:bg-white/30 !absolute top-3 right-3"
                       type="button"
                     >
@@ -93,7 +100,7 @@ export default function Popup() {
                   </p>
                   <a className="inline-block" href="#">
                     <button
-                      onClick={() => Popup()}
+                      onClick={() => removePopup()}
                       className="flex items-center gap-2 px-6 py-3 font-sans text-xs font-bold text-center text-red-500 uppercase align-middle transition-all rounded-lg select-none hover:bg-pink-500/10 active:bg-pink-500/30 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
                       type="button"
                     >
