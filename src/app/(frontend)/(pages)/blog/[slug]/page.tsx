@@ -3,7 +3,7 @@ import Image from 'next/image'
 export default async function BlogPostPage({ params }) {
   const slug = await params.slug
 
-  const apiUrl = `https://whitelabelcms.netlify.app/api/blog?where[slug][equals]=${slug}`
+  const apiUrl = `${process.env.FRONTEND_URL}/api/blog?where[slug][equals]=${slug}`
 
   const res = await fetch(apiUrl, { cache: 'no-store' })
 
