@@ -12,15 +12,11 @@ import {
 } from 'react-icons/ai';
 import { BsFillCartFill, BsFillSaveFill } from 'react-icons/bs';
 import { IoIosLink } from "react-icons/io";
-
-import BannerAggiornamenti from '../UI/BannerAggiornamenti';
-
 const Header = () => {
   const [nav, setNav] = useState(false);
 
   return (
-    <>
-    <BannerAggiornamenti/>
+
     <nav className="w-full mx-auto flex justify-between items-center px-12 py-4">
       {/* Left Side */}
       <div className="flex items-center">
@@ -90,7 +86,6 @@ const Header = () => {
         </nav>
       </div>
     </nav>
-    </>
   );
 };
 

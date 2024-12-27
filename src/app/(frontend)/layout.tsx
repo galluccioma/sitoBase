@@ -4,6 +4,7 @@ import { Inter } from 'next/font/google'
 import Header from './components/Globali/Header'
 import Footer from './components/Globali/Footer'
 import './tailwind.css'
+import BannerAggiornamenti from './components/UI/BannerAggiornamenti'
 
 
 const inter = Inter({ subsets: ['latin'] })
@@ -117,6 +118,7 @@ export default function RootLayout({
        {/* <Head>
     </Head> */}
       <body className={inter.className}>
+        <BannerAggiornamenti/>
       <Header/>
         {children}
         <Footer/>

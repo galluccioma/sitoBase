@@ -1,17 +1,13 @@
 import Image from 'next/image'
-import axios from 'axios';
+
+import { fetchBlogPost } from '@/app/_data';
 
 export default async function BlogPostPage({ params }) {
-  const slug =  await params.slug
-  const apiUrl = `${process.env.FRONTEND_URL}/api/blog?where[slug][equals]=${slug}`
+  const slug =  params.slug
 
-  const response = await axios.get(apiUrl);
+  const getBlogPost =  fetchBlogPost
+  const post = await getBlogPost(slug)
 
-  if (response.status !== 200 || !response.data.docs || !response.data.docs[0]) {
-    // Handle case where no post is found or response is not okay
-    return <p>{response.status !== 200 ? 'Error fetching data' : 'Post not found'}</p>;
-  }
-  const post = response.data.docs[0];
 
 
   return (
@@ -20,7 +16,7 @@ export default async function BlogPostPage({ params }) {
         <div className="relative">
           <Image
             className="w-full h-[60vh] 2xl:h-[75vh] object-cover relative"
-            src={post.image.url}
+            src={post.image.url} 
             alt="hero"
             width={1080}
             height={700}
