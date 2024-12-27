@@ -91,7 +91,7 @@ const Foods = () => {
                 <p className="font-bold">{item.title}</p>
                 <p>
                   <span className="bg-orange-500 text-white p-2 rounded-full hover:text-orange-500 border-orange-500 hover:bg-orange-50">
-                    {item.category?.categorie || 'Uncategorized'} 
+                    {item.category.categorie || 'Uncategorized'} 
                   </span>
                 </p>
               </div>
