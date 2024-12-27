@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { fetchBlogPosts } from "@/app/_data";
+import { fetchCategory } from "@/app/_data";
 
 // Componente Server
 const LocalBlogPosts = async () => {
@@ -8,10 +9,38 @@ const LocalBlogPosts = async () => {
   const getBlogPosts =  fetchBlogPosts
   const blogPosts = await getBlogPosts()
 
+  const getCategory =  fetchCategory
+  const category = await getCategory()
+
 
   return (
     <div className="w-full m-auto px-8 py-12">
       <h2 className="text-orange-600 font-bold text-4xl text-center">Top Rated Menu Items</h2>
+
+      <div className="flex flex-col lg:flex-row justify-between">
+        {/* Filter Type */}
+        <div>
+          <p className="font-bold text-gray-700">Filter Type</p>
+          <div className="flex justify-between flex-wrap gap-4">
+            <button
+             key='All'
+              // onClick={() => filterType("All")}
+              className="bg-orange-500 text-white p-2 rounded-full hover:text-orange-500 border-orange-500 hover:bg-orange-50"
+            >
+              All
+            </button>
+            {category.map((item,index) => (
+              <button
+                key={index}
+                // onClick={() => filterType(category)}
+                className="bg-orange-500 text-white p-2 rounded-full hover:text-orange-500 border-orange-500 hover:bg-orange-50"
+              >
+                {item.categorie }
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
 
       {/* Visualizza i post */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 pt-4">

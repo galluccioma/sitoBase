@@ -117,6 +117,7 @@ export interface Blog {
 export interface Category {
   id: string;
   categorie?: string | null;
+  image?: (string | null) | Media;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -261,6 +262,7 @@ export interface BlogSelect<T extends boolean = true> {
  */
 export interface CategoriesSelect<T extends boolean = true> {
   categorie?: T;
+  image?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

@@ -3,7 +3,7 @@ import config from '@payload-config'
 import { draftMode } from 'next/headers.js'
 import { getPayload } from 'payload'
 
-import { Banner, Blog } from '@/payload-types'
+import { Banner, Blog, Category } from '@/payload-types'
 
 
 export const fetchBlogPosts = async (): Promise<Partial<Blog>[]> => {
@@ -22,6 +22,7 @@ export const fetchBlogPosts = async (): Promise<Partial<Blog>[]> => {
       },
       sort: '-publishedOn',
       where: {
+        _status: {equals: 'published',}
       },
     })
     return data.docs
@@ -55,7 +56,23 @@ export const fetchBlogPosts = async (): Promise<Partial<Blog>[]> => {
     return data.docs[0]
   }
 
-
+  export const fetchCategory = async (): Promise<Partial<Category>[]> => {
+    const payload = await getPayload({ config })
+  
+    const data = await payload.find({
+      collection: 'categories',
+      depth: 4,
+      limit: 300,
+      select: {
+        categorie: true,
+        image:true,
+      },
+      sort: '-publishedOn',
+      where: {
+      },
+    })
+    return data.docs
+  }
   export const fetchGlobalBanner = async (): Promise<Banner> => {
     const payload = await getPayload({ config })
   

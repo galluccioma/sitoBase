@@ -46,8 +46,8 @@ export default function Popup() {
           <div className="fixed inset-0 bg-black/75 transition-opacity" aria-hidden="true"></div>
           <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
             <div className="grid min-h-2xl h-full w-full place-items-center overflow-x-scroll rounded-lg p-6 lg:overflow-visible">
-              <div className="flex w-full max-w-[48rem] flex-row rounded-xl bg-white bg-clip-border text-gray-700 shadow-md">
-                <div className="relative w-2/5 m-0 overflow-hidden text-gray-700 bg-white shrink-0">
+              <div className="flex flex-col md:flex-row w-full max-w-[50rem]  rounded-xl bg-white bg-clip-border text-gray-700 shadow-md">
+                <div className="relative max-h-72 m-0 overflow-hidden text-gray-700 bg-white shrink-0">
                   <Image
                     width={300}
                     height={400}

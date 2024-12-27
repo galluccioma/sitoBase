@@ -1,5 +1,4 @@
 import Image from 'next/image'
-
 import { fetchBlogPost } from '@/app/_data';
 
 export default async function BlogPostPage({ params }) {
