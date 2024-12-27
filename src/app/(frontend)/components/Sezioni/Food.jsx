@@ -16,7 +16,7 @@ const Foods = () => {
   useEffect(() => {
     const fetchFoods = async () => {
       try {
-        const response = await fetch(`${process.env.FRONTEND_URL}/api/blog`); 
+        const response = await fetch(`/api/blog`); 
         const data = await response.json();
         setFoods(data.docs); 
         setOriginalFoods(data.docs); 

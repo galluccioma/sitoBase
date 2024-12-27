@@ -11,7 +11,6 @@ import {
 } from '@payloadcms/richtext-lexical'
 
 import { formatSlug } from '@/utilities/formatSlug'
-import { frontend_URL } from '@/utilities/const'
 
 export const Blog: CollectionConfig = {
   slug: 'blog', // Nome della collezione nel database e URL
@@ -19,7 +18,7 @@ export const Blog: CollectionConfig = {
     useAsTitle: 'title',
     defaultColumns: ['title', 'category', 'image', 'tags', '_status'],
     livePreview: {
-      url: ({ data }) => `${frontend_URL}/notizie/${data?.slug} || '${frontend_URL}/notizie'}`,
+      url: ({ data }) => `${process.env.FRONTEND_URL}/blog/${data?.slug} || '${process.env.FRONTEND_URL}/blog'}`,
     },
   },
   access: {
