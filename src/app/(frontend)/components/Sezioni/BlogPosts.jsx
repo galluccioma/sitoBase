@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
 // import { Blog } from "@/payload-types"; 
@@ -16,10 +17,9 @@ const Foods = () => {
   useEffect(() => {
     const fetchFoods = async () => {
       try {
-        const response = await fetch(`/api/blog`); 
-        const data = await response.json();
-        setFoods(data.docs); 
-        setOriginalFoods(data.docs); 
+        const response = await axios.get(`/api/blog`); 
+        setFoods(response.data.docs); 
+        setOriginalFoods(response.data.docs); 
         setLoading(false);
       } catch (error) {
         console.error("Errore durante il fetch dei dati:", error);
@@ -57,14 +57,15 @@ const Foods = () => {
           <p className="font-bold text-gray-700">Filter Type</p>
           <div className="flex justify-between flex-wrap gap-4">
             <button
+             key='All'
               onClick={() => filterType("All")}
               className="bg-orange-500 text-white p-2 rounded-full hover:text-orange-500 border-orange-500 hover:bg-orange-50"
             >
               All
             </button>
-            {uniqueCategories.map((category) => (
+            {uniqueCategories.map((category,index) => (
               <button
-                key={category}
+                key={index}
                 onClick={() => filterType(category)}
                 className="bg-orange-500 text-white p-2 rounded-full hover:text-orange-500 border-orange-500 hover:bg-orange-50"
               >

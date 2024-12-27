@@ -1,5 +1,6 @@
 "use client"
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
+import axios from 'axios';
 
 const Form = () => {
   const [firstname, setFirstname] = useState('');
@@ -28,15 +29,13 @@ const Form = () => {
 
     try {
 
-      const fetchForm = await fetch(`/api/form-submissions`, {
-        method: 'POST',
+      const response = await axios.post('/api/form-submissions', formData, {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
       });
 
-      if (fetchForm.ok) {
+      if (response.status === 200 || response.status === 201 ) {
         window.location.href = '/grazie';
       } else {
         alert('Errore nell\'invio del form.');

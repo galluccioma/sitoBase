@@ -28,6 +28,7 @@
     "@tailwindcss/typography": "^0.5.15",
     "@types/react-router": "^5.1.20",
     "aws4": "^1.13.2",
+    "axios": "^1.7.9",
     "cross-env": "^7.0.3",
     "graphql": "^16.9.0",
     "html5-qrcode": "^2.3.8",

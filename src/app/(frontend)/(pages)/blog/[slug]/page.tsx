@@ -1,25 +1,18 @@
 import Image from 'next/image'
+import axios from 'axios';
 
 export default async function BlogPostPage({ params }) {
-  const slug = await params.slug
-
+  const slug =  await params.slug
   const apiUrl = `${process.env.FRONTEND_URL}/api/blog?where[slug][equals]=${slug}`
 
-  const res = await fetch(apiUrl, { cache: 'no-store' })
+  const response = await axios.get(apiUrl);
 
-  if (!res.ok) {
-    // Handle error, e.g., display an error message
-    return <p>Error fetching data</p>
+  if (response.status !== 200 || !response.data.docs || !response.data.docs[0]) {
+    // Handle case where no post is found or response is not okay
+    return <p>{response.status !== 200 ? 'Error fetching data' : 'Post not found'}</p>;
   }
+  const post = response.data.docs[0];
 
-  const data = await res.json()
-
-  if (!data.docs || !data.docs[0]) {
-    // Handle case where no post is found
-    return <p>Post not found</p>
-  }
-
-  const post = data.docs[0]
 
   return (
     <section className="">
