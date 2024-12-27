@@ -1,5 +1,4 @@
 import { GlobalConfig, FieldHook } from 'payload';
-import { frontend_URL } from '@/utilities/const';
 import { relationship } from 'node_modules/payload/dist/fields/validations';
 
 
@@ -15,7 +14,7 @@ export const Banner: GlobalConfig = {
   
   admin:{
     livePreview:{
-      url:frontend_URL
+      url:process.env.FRONTEND_URL
     },
   },
   
